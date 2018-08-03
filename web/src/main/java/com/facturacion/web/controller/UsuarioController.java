@@ -1,12 +1,15 @@
 package com.facturacion.web.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.facturacion.web.Utils.RestResponse;
@@ -35,25 +38,20 @@ public class UsuarioController {
 	
 	private boolean validar(Usuario user){
     	boolean valido= true;
-    	if (user.getRolId() == null ||user.getRolId()==0l) {
-            //context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!, El Rol es obligatorio",""));
-            valido = false;         
-        }
-    	if (user.getClave() == null || user.getClave().equals("")) {
-            //context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!, La Clave es obligatoria",""));
-            valido = false;         
-        }
-    	if (user.getLogin() == null || user.getLogin().equals("")) {
-            //context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!, El login es obligatorio",""));
-            valido = false;         
-//        }else{
-//        	Usuario u=usuarioService.getByName(getLogin().toUpperCase());
-//        	if(u!=null){
-//        		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!, El Usuario ya existe",""));
-//                valido = false;         
-//        	}
-//        	//hacer la parte de que busca usaurio por login
-        }
+    	
     	return valido;
+	}
+	
+	@RequestMapping(value="/getUsuarioById", method=RequestMethod.GET )
+	@CrossOrigin
+	public Usuario getUsuarioById(@RequestParam("usuarioId") String usuarioId) {
+		return usuarioService.getById(usuarioId);
+	}
+	
+	@RequestMapping(value="/getUsuarioByLogin", method=RequestMethod.GET )
+	@CrossOrigin
+	public Usuario getUsuarioByLogin(@RequestParam("login") String login) {
+		List<Usuario> usuario= usuarioService.getByLogin(login);
+		return usuario.isEmpty()?null:usuario.get(0);
 	}
 }
