@@ -9,7 +9,7 @@
         <h1>Ingrese aquí</h1>
         <form #loginForm="ngForm" (ngSubmit)="loginUsuario()" >
           <label for="username">Usuario</label>
-          <input type="text"  id="username" name="username" [(ngModel)]="usuario.nombre"  
+          <input type="text"  id="username" name="username" [(ngModel)]="usuario.nombre"  autofocus 
           placeholder="Ingrese su usuario" class="form-control" required #username="ngModel"/> 
           <div [hidden]="username.valid || username.pristine"
                class="alert alert-danger">

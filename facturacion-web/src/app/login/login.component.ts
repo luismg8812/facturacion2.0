@@ -1,3 +1,4 @@
+import { ConfigService } from './../config.service';
 import { LoginService } from '../login/login.service';
 import { Component, OnInit } from '@angular/core';
 import { UsuarioModel } from '../model/usuario.model';
@@ -13,11 +14,14 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
   public usuario: UsuarioModel;
   public user: UsuarioModel;
-  constructor(private loginService: LoginService, private router: Router) { }
+  constructor(private loginService: LoginService, private router: Router,private configService:ConfigService) { }
 
   ngOnInit() {
     this.usuario = new UsuarioModel();
-
+    this.configService.getJSON().subscribe(data=>{     
+      sessionStorage.setItem("host",data.host);  
+      sessionStorage.setItem("port",data.port);  
+    });
   }
 
   public loginUsuario(): void {
@@ -34,7 +38,7 @@ export class LoginComponent implements OnInit {
 
     this.loginService.getByLogin(this.usuario.nombre).subscribe(res => {
       this.user = res;
-      console.log(this.user);
+      //console.log(this.user);
       if (this.user == null) {
         alert("Usuario o contraseña incorrectos");        
         return;
@@ -43,7 +47,10 @@ export class LoginComponent implements OnInit {
         alert("Usuario o contraseña incorrectos");        
         return;
       }
+      
+      
       sessionStorage.setItem("userLogin",this.user.login);
+      sessionStorage.setItem("usuarioId",this.user.usuarioId);
       this.router.navigate(['/menu']);
     });
 

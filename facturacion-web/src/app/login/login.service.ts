@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient}  from '@angular/common/http';
 import { UsuarioModel } from '../model/usuario.model';
 import { Observable } from 'rxjs';
+import { MenuModel } from '../model/menu.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,10 @@ export class LoginService {
 
   public getByLogin(login:string):Observable<UsuarioModel>{
     return this.http.get<UsuarioModel>("http://localhost:8080/getUsuarioByLogin?login="+login);
+  }
+
+  getConfig(){
+    
   }
   
 }
