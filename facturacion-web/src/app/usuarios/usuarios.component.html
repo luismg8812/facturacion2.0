@@ -1,0 +1,132 @@
+<app-menu></app-menu>
+<div class="container">
+
+  <div class="form-row mt-3">
+    <h3>Usuarios del sistema</h3>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="nombreUsuarioBusqueda">Nombre</label>
+      <input class="form-control" id="nombreUsuarioBusqueda" [(ngModel)]="usuarioBuscar.nombre" placeholder="Nombre" name="nombreUsuarioBusqueda"
+        [ngModelOptions]="{standalone: true}">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="loginUsuarioBusqueda">Login</label>
+      <input class="form-control" id="loginUsuarioBusqueda" [(ngModel)]="usuarioBuscar.login" placeholder="Login">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">Rol</label>
+      <select class="form-control " [(ngModel)]="usuarioBuscar.rol">
+        <option>Lista de roles</option>
+      </select>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="identificacionUsuarioBusqueda">Identificación</label>
+      <input class="form-control" id="identificacionUsuarioBusqueda" [(ngModel)]="usuarioBuscar.identificacion" placeholder="Identificación">
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary mr-1" (click)="buscarUsuarios()">Buscar</button>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Crear
+  </button>
+  <div class="mt-2"></div>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Opciones</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Login</th>
+        <th scope="col">Rol</th>
+        <th scope="col">Identificación</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of usuarioList">
+        <th scope="row">editar</th>
+        <td>{{user.nombre}}</td>
+        <td>{{user.login}}</td>
+        <td>{{user.rolId}}</td>
+        <td>{{user.identificacion}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-end">
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Previous</a>
+          </li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+          </li>
+        </ul>
+      </nav> -->
+  <!-- Button trigger modal -->
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Crear Usuario</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="nombreUsuarioCreacion">*Nombre</label>
+              <input class="form-control" id="nombreUsuarioCreacion" [(ngModel)]="usuarioCrear.nombre" placeholder="Nombre" name="nombreUsuarioCreacion">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="loginUsuarioCreacion">*Login</label>
+              <input class="form-control" id="loginUsuarioCreacion" [(ngModel)]="usuarioCrear.login" placeholder="Login">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="rolUsuarioCrear">*Rol</label>
+              <select class="form-control " [(ngModel)]="usuarioCrear.rol" id="rolUsuarioCrear">
+                <option>Lista de roles</option>
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="identificacionUsuarioCrear">*Identificación</label>
+              <input class="form-control" type="number" id="identificacionUsuarioCrear" [(ngModel)]="usuarioCrear.identificacion" placeholder="Identificación">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="meilUsuarioCrear">Correo</label>
+              <input class="form-control" id="meilUsuarioCrear" [(ngModel)]="usuarioCrear.correo" placeholder="Correo">
+            </div>
+            <div class="form-check col-md-5">
+              <label for="meilUsuarioCrear">*Clave</label>
+              <input class="form-control" type="password" id="claveUsuarioCrear"
+               [(ngModel)]="usuarioCrear.clave" placeholder="Clave">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="estadoUsuarioCrear" [(ngModel)]="usuarioCrear.estado">
+              <label class="form-check-label" for="estadoUsuarioCrear">
+                *Estado
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary"  data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" (click)="crearUsuario()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

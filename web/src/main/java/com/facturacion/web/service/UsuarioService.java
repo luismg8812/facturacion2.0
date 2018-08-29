@@ -12,4 +12,6 @@ public interface UsuarioService {
 
 	List<Usuario> getByLogin(String login);
 
+	List<Usuario> getByFiltros(String nombre, String login, String rol, String idenficacion);
+
 }

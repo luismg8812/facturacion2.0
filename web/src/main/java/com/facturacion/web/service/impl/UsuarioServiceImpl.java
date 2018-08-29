@@ -35,4 +35,24 @@ public class UsuarioServiceImpl implements UsuarioService {
 		Example<Usuario> example = Example.of(usuario);
 		return  usuarioDao.findAll(example);
 	}
+
+	@Override
+	public List<Usuario> getByFiltros(String nombre, String login, String rol, String idenficacion) {
+		Usuario usuario= new Usuario(); 
+		if(login!=null && !login.isEmpty()) {
+			usuario.setLogin(login);
+		}
+		if(nombre!=null && !nombre.isEmpty()) {
+			usuario.setNombre(nombre);
+		}
+		if(rol!=null && !rol.isEmpty()) {
+			usuario.setRolId(Long.valueOf(rol));
+		}
+		if(idenficacion!=null && !idenficacion.isEmpty()) {
+			usuario.setNombre(idenficacion);
+		}
+		
+		Example<Usuario> example = Example.of(usuario);
+		return  usuarioDao.findAll(example);
+	}
 }

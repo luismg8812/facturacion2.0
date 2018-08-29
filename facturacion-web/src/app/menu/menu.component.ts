@@ -1,5 +1,6 @@
-import { element } from 'protractor';
-import { Component, OnInit,Renderer2,ElementRef ,ViewChild} from '@angular/core';
+import { SubMenuModel } from './../model/submenu.model';
+import { element, Key } from 'protractor';
+import { Component, OnInit, Renderer2, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuService } from './menu.service';
 import { MenuModel } from '../model/menu.model';
@@ -12,19 +13,20 @@ import { OpcionUsuarioModel } from '../model/opcionUsuario.model';
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent implements OnInit {
-  private show:string;
-  private menus:Array<MenuModel>;
-  private opUsuario:Array<OpcionUsuarioModel>;
+  private show: string;
+  private menus: Array<MenuModel>;
+  private opUsuario: Array<OpcionUsuarioModel>;
+  private subMenu: Array<SubMenuModel>;
   @ViewChild("informes") informes: ElementRef;
   @ViewChild("facturacion") facturacion: ElementRef;
-  constructor(private router: Router,private menuService: MenuService,private renderer: Renderer2) { }
+  constructor(private router: Router, private menuService: MenuService, private renderer: Renderer2) { }
 
   ngOnInit() {
     var userLogin = sessionStorage.getItem("userLogin");
-    if(userLogin==null){
+    if (userLogin == null) {
       this.router.navigate(['/login']);
-    }else{
-      
+    } else {
+
     }
     console.log(this.getByAllMenu());
   }
@@ -35,57 +37,67 @@ export class MenuComponent implements OnInit {
     });
   }
 
-   getOpcionUsuarioByMenu( menuId) {
+  getOpcionUsuarioByMenu(menuId) {
     var usuarioId = sessionStorage.getItem("usuarioId");
-    this.menuService.getOpcionUsuarioByMenu(menuId,usuarioId).subscribe(res => {
-      console.log("aqui");
-      this.opUsuario = res;
-      this.menuService.getSubMenuByOU(this.opUsuario).subscribe(res => {
 
-      });    
+    this.menuService.getOpcionUsuarioByMenu(menuId, usuarioId).subscribe(res => {
+
+      console.log("aqui:" + menuId);
+      this.opUsuario = res;
+      //let subMenuIdList: Array<string>;
+      var subMenuIdList = new Array("0"); 
+      console.log(this.opUsuario); // 1, "string", false
+      for (var _i = 0; _i < this.opUsuario.length; _i++) {
+        subMenuIdList.push(this.opUsuario[_i].opcionUsuarioId);
+        
+      }
+      this.menuService.getSubMenuByOU(subMenuIdList).subscribe(res => {
+        this.subMenu = res;
+        console.log(this.subMenu);
+      });
     });
   }
 
-  onKeyTeclasMenu(event, element ) { 
-    
+  onKeyTeclasMenu(event, element) {
+
     //console.log(element);
     //console.log(event.keyCode);
     var elec = element;
-    if( event.keyCode==39){ //cuando se presiona la tacla lado derecho 
-      if(elec=='facturacion'){			
+    if (event.keyCode == 39) { //cuando se presiona la tacla lado derecho 
+      if (elec == 'facturacion') {
         //this.show="informes";
         console.log(this.informes);
         //this.informes.nativeElement.click();
-        this.renderer.selectRootElement('#informes').click();  
+        this.renderer.selectRootElement('#informes').click();
         //console.log(this.show);
-				return ;
+        return;
       }
-      if(elec=='informes'){
+      if (elec == 'informes') {
         console.log("entra a informe");
-        this.show="clientes";
-      let siguiente:HTMLElement= document.getElementById('clientes') as HTMLElement ;
+        this.show = "clientes";
+        let siguiente: HTMLElement = document.getElementById('clientes') as HTMLElement;
         siguiente.click();
         console.log(this.show);
-				return ;
+        return;
       }
-      if(elec=='clientes'){
+      if (elec == 'clientes') {
         console.log("entra a clientes");
-        this.show="configuracion";
-        let siguiente:HTMLElement= document.getElementById('configuracion') as HTMLElement ;
+        this.show = "configuracion";
+        let siguiente: HTMLElement = document.getElementById('configuracion') as HTMLElement;
         siguiente.focus();
         siguiente.click();
         console.log(this.show);
-				return ;
+        return;
       }
-      if(elec=='configuracion'){
+      if (elec == 'configuracion') {
         console.log("entra a configuracion");
-        this.show="facturacion";
-        let siguiente:HTMLElement= document.getElementById('facturacion') as HTMLElement ;
+        this.show = "facturacion";
+        let siguiente: HTMLElement = document.getElementById('facturacion') as HTMLElement;
         siguiente.focus();
         siguiente.click();
         console.log(this.show);
-				return siguiente ;
-			}
+        return siguiente;
+      }
     }
   }
 

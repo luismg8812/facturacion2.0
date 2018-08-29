@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.facturacion.web.model.Menu;
 import com.facturacion.web.model.OpcionUsuario;
+import com.facturacion.web.model.SubMenu;
 import com.facturacion.web.service.MenuService;
 import com.facturacion.web.service.OpcionUsuarioService;
+import com.facturacion.web.service.SubMenuService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
@@ -23,6 +25,9 @@ public class MenuController {
 	
 	@Autowired
 	protected OpcionUsuarioService opcionUsuarioService;
+	
+	@Autowired
+	protected SubMenuService subMenuService;
 	
 	protected ObjectMapper objectMapper;
 	
@@ -39,5 +44,11 @@ public class MenuController {
 	@CrossOrigin
 	public List<OpcionUsuario> getOpcionUsuarioByMenu(@RequestParam("menuId") String menuId,@RequestParam("usuarioId") String usuarioId) {		
 		return opcionUsuarioService.getOpcionUsuarioByMenu(menuId,usuarioId);
+	}
+	
+	@RequestMapping(value="/geSubMenuByOU", method=RequestMethod.GET )
+	@CrossOrigin
+	public List<SubMenu> geSubMenuByOU(@RequestParam("ouId") List<String> opcionUsuarioIdList) {		
+		return subMenuService.geSubMenuByOU(opcionUsuarioIdList);
 	}
 }

@@ -2,13 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient}  from '@angular/common/http';
 import { UsuarioModel } from '../model/usuario.model';
 import { Observable } from 'rxjs';
-import { MenuModel } from '../model/menu.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-  private usuario:UsuarioModel;
   constructor(private http:HttpClient) { 
     console.log("servicio funcionando");
   }

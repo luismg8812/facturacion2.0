@@ -10,4 +10,18 @@ export class UsuarioModel {
     public estado: string;
     public login: string;
     public impresora: string;
+
+    constructor(){
+        this.usuarioId="";
+        this.rolId="";
+        this.nombre="";
+        this.apellido="";
+        this.correo="";
+        this.clave="";
+        this.fechaRegistro=new Date();
+        this.identificacion=""; 
+        this.estado="";
+        this.login="";
+        this.impresora="";
+    };
 }

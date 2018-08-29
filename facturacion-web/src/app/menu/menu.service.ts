@@ -30,10 +30,9 @@ export class MenuService {
     return this.http.get<OpcionUsuarioModel[]>("http://"+this.host+":"+this.port+"/getOpcionUsuarioByMenu?menuId="+menuId+"&usuarioId="+usuarioId);  
   }
 
-  public getSubMenuByOU(ou: OpcionUsuarioModel[]): Observable<SubMenuModel[]> {
+  public getSubMenuByOU(ou: Array<string>): Observable<SubMenuModel[]> {
     this.host = sessionStorage.getItem("host");
     this.port = sessionStorage.getItem("port");
-    console.log("llega al service"+ou);
     return this.http.get<SubMenuModel[]>("http://"+this.host+":"+this.port+"/geSubMenuByOU?ouId="+ou);  
   }
 }

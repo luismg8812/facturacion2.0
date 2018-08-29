@@ -26,6 +26,7 @@ public class UsuarioController {
 	protected ObjectMapper objectMapper;
 	
 	@RequestMapping(value="/saveOrUpdateUsuario", method=RequestMethod.POST )
+	@CrossOrigin
 	public RestResponse saveOrUpdate(@RequestBody String user) throws IOException {
 		objectMapper = new ObjectMapper();
 		Usuario usuario = this.objectMapper.readValue(user, Usuario.class);
@@ -33,7 +34,7 @@ public class UsuarioController {
 			return new RestResponse(HttpStatus.NOT_ACCEPTABLE.value(),"campos obligatorios no completos");
 		}
 		usuarioService.save(usuario);
-		return null;
+		return new RestResponse(200);
 	}
 	
 	private boolean validar(Usuario user){
@@ -53,5 +54,12 @@ public class UsuarioController {
 	public Usuario getUsuarioByLogin(@RequestParam("login") String login) {
 		List<Usuario> usuario= usuarioService.getByLogin(login);
 		return usuario.isEmpty()?null:usuario.get(0);
+	}
+	
+	@RequestMapping(value="/getByFiltros", method=RequestMethod.GET )
+	@CrossOrigin
+	public List<Usuario> getByFiltros(@RequestParam("nombre") String nombre,@RequestParam("login") String login,
+			@RequestParam("rol") String rol,@RequestParam("identificacion") String identificacion) {
+		return usuarioService.getByFiltros(nombre,login,rol,identificacion);
 	}
 }

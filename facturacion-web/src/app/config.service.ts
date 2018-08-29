@@ -8,11 +8,7 @@ import { Observable } from 'rxjs';
 export class ConfigService {
  private an:any;
   constructor(private http: HttpClient) {
-   //this.getJSON().subscribe(data => {
-    //  console.log(data)
-    //});
-    //console.log("an");
-    //console.log(this.an);
+  
   }
 
   public getJSON(): Observable<any> {

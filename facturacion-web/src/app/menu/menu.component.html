@@ -9,16 +9,13 @@
     </button>
     <div class="collapse navbar-collapse justify-content-end menu-style" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item"  >
-          <a class="nav-link " foc routerLink="/VentasDia" >punto venta dia <span class="sr-only">(current)</span></a>
-        </li>
         <li class="nav-item dropdown" *ngFor="let menu of menus"  
           (keyup)="onKeyTeclasMenu($event,menu.url)" (click)="getOpcionUsuarioByMenu(menu.menuId)" #{{menu.url}} id="{{menu.url}}">
           <a class="nav-link dropdown-toggle" href="#" id="menuId" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {{menu.nombre}}
           </a>
           <div class="dropdown-menu" aria-labelledby="menuId">
-            <a class="dropdown-item" *ngFor="let ou of opUsuario" href="#">{{ou.nombre}}</a>
+            <a class="dropdown-item" *ngFor="let ou of subMenu" routerLink="{{ou.url}}" >{{ou.nombre}}</a>
            
           </div>
         </li>
