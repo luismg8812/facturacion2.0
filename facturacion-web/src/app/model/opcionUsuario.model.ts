@@ -1,5 +1,4 @@
 export class OpcionUsuarioModel {
-    public menuId:string;
     public opcionUsuarioId:string;
 	public subMenuId:string;
 	public usuarioId:string;

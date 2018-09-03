@@ -17,6 +17,7 @@ export class MenuComponent implements OnInit {
   private menus: Array<MenuModel>;
   private opUsuario: Array<OpcionUsuarioModel>;
   private subMenu: Array<SubMenuModel>;
+  private subMenuAll:Array<SubMenuModel>;
   @ViewChild("informes") informes: ElementRef;
   @ViewChild("facturacion") facturacion: ElementRef;
   constructor(private router: Router, private menuService: MenuService, private renderer: Renderer2) { }
@@ -26,9 +27,11 @@ export class MenuComponent implements OnInit {
     if (userLogin == null) {
       this.router.navigate(['/login']);
     } else {
-
+      this.getByAllMenu();
+       this.getSubMenuAll();
+      this.getOpActivas();
     }
-    console.log(this.getByAllMenu());
+    
   }
 
   private getByAllMenu(): void {
@@ -37,25 +40,31 @@ export class MenuComponent implements OnInit {
     });
   }
 
-  getOpcionUsuarioByMenu(menuId) {
+  getSubMenuAll(){
+    this.menuService.getSubMenuAll().subscribe(res => { 
+      this.subMenuAll=res;
+    }); 
+  }
+
+  getOpActivas(){
     var usuarioId = sessionStorage.getItem("usuarioId");
-
-    this.menuService.getOpcionUsuarioByMenu(menuId, usuarioId).subscribe(res => {
-
-      console.log("aqui:" + menuId);
+    this.menuService.getOpcionUsuarioByMenu( usuarioId).subscribe(res => {  
       this.opUsuario = res;
-      //let subMenuIdList: Array<string>;
-      var subMenuIdList = new Array("0"); 
-      console.log(this.opUsuario); // 1, "string", false
-      for (var _i = 0; _i < this.opUsuario.length; _i++) {
-        subMenuIdList.push(this.opUsuario[_i].opcionUsuarioId);
-        
-      }
-      this.menuService.getSubMenuByOU(subMenuIdList).subscribe(res => {
-        this.subMenu = res;
-        console.log(this.subMenu);
-      });
     });
+  }
+
+  getOpcionUsuarioByMenu(menuId) {
+      this.subMenu=[];
+      console.log(menuId)
+      console.log(this.opUsuario); // 1, "string", false
+      for (var _i = 0; _i < this.subMenuAll.length; _i++) {
+        for (var e = 0; e < this.opUsuario.length; e++) {
+          if(this.subMenuAll[_i].subMenuId==this.opUsuario[e].subMenuId &&
+            this.subMenuAll[_i].menuId==menuId){
+            this.subMenu.push(this.subMenuAll[_i]);
+          }
+        }
+      }
   }
 
   onKeyTeclasMenu(event, element) {

@@ -17,10 +17,9 @@ public class OpcionUsuarioServiceImpl implements OpcionUsuarioService {
 	protected OpcionUsuarioDao opcionUsuarioDao;
 
 	@Override
-	public List<OpcionUsuario> getOpcionUsuarioByMenu(String menuId, String usuarioId) {
+	public List<OpcionUsuario> getOpcionUsuarioByMenu( String usuarioId) {
 		OpcionUsuario opcionUsuario= new OpcionUsuario(); 
 		opcionUsuario.setUsuarioId(Long.valueOf(usuarioId));
-		opcionUsuario.setMenuId(Long.valueOf(menuId));
 		Example<OpcionUsuario> example = Example.of(opcionUsuario);
 		return  opcionUsuarioDao.findAll(example);
 	}

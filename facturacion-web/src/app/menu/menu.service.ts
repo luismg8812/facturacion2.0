@@ -5,34 +5,49 @@ import { MenuModel } from '../model/menu.model';
 import { ConfigService } from '../config.service';
 import { OpcionUsuarioModel } from '../model/opcionUsuario.model';
 import { SubMenuModel } from '../model/submenu.model';
+import { UsuarioModel } from '../model/usuario.model';
+import { ResponseCodeModel } from '../MODEL/responseCode.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MenuService {
   
-  private host:string;
-  private port:string;
+  private host:string= sessionStorage.getItem("host");;
+  private port:string = sessionStorage.getItem("port");;
   private menu:MenuModel;
   constructor(private http:HttpClient,private configService:ConfigService) { 
     console.log("servicio menuService funcionando: ");
   }
 
-  public getByAll():Observable<MenuModel[]>{
-    this.host = sessionStorage.getItem("host");
-    this.port = sessionStorage.getItem("port");
+  public getByAll():Observable<MenuModel[]>{  
     return this.http.get<MenuModel[]>("http://"+this.host+":"+this.port+"/getMenuAll");  
   }
 
-  public getOpcionUsuarioByMenu(menuId:string,usuarioId:string):Observable<OpcionUsuarioModel[]>{
-    this.host = sessionStorage.getItem("host");
-    this.port = sessionStorage.getItem("port");
-    return this.http.get<OpcionUsuarioModel[]>("http://"+this.host+":"+this.port+"/getOpcionUsuarioByMenu?menuId="+menuId+"&usuarioId="+usuarioId);  
+  public getOpcionUsuarioByMenu(usuarioId:string):Observable<OpcionUsuarioModel[]>{ 
+    return this.http.get<OpcionUsuarioModel[]>("http://"+this.host+":"+this.port+"/getOpcionUsuarioByMenu?usuarioId="+usuarioId);  
   }
 
   public getSubMenuByOU(ou: Array<string>): Observable<SubMenuModel[]> {
-    this.host = sessionStorage.getItem("host");
-    this.port = sessionStorage.getItem("port");
     return this.http.get<SubMenuModel[]>("http://"+this.host+":"+this.port+"/geSubMenuByOU?ouId="+ou);  
   }
+
+  public getSubMenuAll(): Observable<SubMenuModel[]> {
+    return this.http.get<SubMenuModel[]>("http://" + this.host + ":" + this.port + "/getSubMenuAll");
+  }
+
+  public getSubMenuByUsuario(usuarioId:string):Observable<SubMenuModel[]>{ 
+    return this.http.get<SubMenuModel[]>("http://"+this.host+":"+this.port+"/getSubMenuByUsuario?usuarioId="+usuarioId);  
+  }
+
+  public guardarRutas(user:UsuarioModel,idSubmenu:Array<string>):Observable<ResponseCodeModel> {
+    return this.http.get<ResponseCodeModel>("http://" + this.host + ":" + this.port + "/guardarRutas?usuarioId="+user.usuarioId+"&idSubmenu="+idSubmenu);
+  }
+
+  public guardarActivaciones(user:UsuarioModel,idActivaciones:Array<string>):Observable<ResponseCodeModel> {
+    return this.http.get<ResponseCodeModel>("http://" + this.host + ":" + this.port + "/guardarActivaciones?usuarioId="+user.usuarioId+"&idActivaciones="+idActivaciones);
+  }
+  
+
+
 }

@@ -3,6 +3,7 @@ package com.facturacion.web.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -13,12 +14,15 @@ import com.facturacion.web.service.UsuarioService;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
+	
+	private static Logger log = Logger.getLogger(UsuarioServiceImpl.class);
 
 	@Autowired
 	protected UsuarioDao usuarioDao;
 
 	@Override
 	public Usuario save(Usuario usuario) {
+		log.info("usuario a guardar:"+usuario);
 		return usuarioDao.save(usuario);
 	}
 
@@ -55,4 +59,5 @@ public class UsuarioServiceImpl implements UsuarioService {
 		Example<Usuario> example = Example.of(usuario);
 		return  usuarioDao.findAll(example);
 	}
+	
 }

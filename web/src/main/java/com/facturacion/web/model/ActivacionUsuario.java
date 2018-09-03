@@ -14,19 +14,19 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="OPCION_USUARIO")
-public class OpcionUsuario {
+@Table(name="ACTIVACION_USUARIO")
+public class ActivacionUsuario {
 
 	@Id
-	@SequenceGenerator(name="S_OPCION_USUARIO", sequenceName="S_OPCION_USUARIO", allocationSize = 1)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="S_OPCION_USUARIO")
+	@SequenceGenerator(name="S_ACTIVACION_USUARIO", sequenceName="S_ACTIVACION_USUARIO", allocationSize = 1)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="S_ACTIVACION_USUARIO")
 	@NotNull
-	@Column(name="OPCION_USUARIO_ID")
-	private Long opcionUsuarioId;
+	@Column(name="ACTIVACION_USUARIO_ID")
+	private Long activacionUsuarioId;
 	
 	
-	@Column(name="SUB_MENU_ID")
-	private Long subMenuId;
+	@Column(name="ACTIVACION_ID")
+	private Long activacionId;
 	
 	
 	@Column(name="USUARIO_ID")
@@ -40,28 +40,21 @@ public class OpcionUsuario {
 	
 	@Column(name="FECHA_ACTUALIZA")
 	private Date fechaActualiza;
-	
-	@Column(name="RUTA")
-	private String ruta;
-	
-	@Column(name="LIBERAR_CUADRE")
-	private Long liberarCuadre;
 
-	public Long getOpcionUsuarioId() {
-		return opcionUsuarioId;
+	public Long getActivacionUsuarioId() {
+		return activacionUsuarioId;
 	}
 
-	public void setOpcionUsuarioId(Long opcionUsuarioId) {
-		this.opcionUsuarioId = opcionUsuarioId;
+	public void setActivacionUsuarioId(Long activacionUsuarioId) {
+		this.activacionUsuarioId = activacionUsuarioId;
 	}
 
-	
-	public Long getSubMenuId() {
-		return subMenuId;
+	public Long getActivacionId() {
+		return activacionId;
 	}
 
-	public void setSubMenuId(Long subMenuId) {
-		this.subMenuId = subMenuId;
+	public void setActivacionId(Long activacionId) {
+		this.activacionId = activacionId;
 	}
 
 	public Long getUsuarioId() {
@@ -95,24 +88,5 @@ public class OpcionUsuario {
 	public void setFechaActualiza(Date fechaActualiza) {
 		this.fechaActualiza = fechaActualiza;
 	}
-
-	public String getRuta() {
-		return ruta;
-	}
-
-	public void setRuta(String ruta) {
-		this.ruta = ruta;
-	}
-
-	public Long getLiberarCuadre() {
-		return liberarCuadre;
-	}
-
-	public void setLiberarCuadre(Long liberarCuadre) {
-		this.liberarCuadre = liberarCuadre;
-	}
-
-	
-	
 	
 }

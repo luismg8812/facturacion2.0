@@ -1,4 +1,69 @@
 <app-menu></app-menu>
-<p>
-  ventas-dia works!
-</p>
+<!-- js de control de teclas: puntoVentaDia -->
+<div class="container-fluid">
+  <div class="form-row mt-3">
+    <h4>Punto de venta Día</h4>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-2 col-sm-2">Documento: </div>
+    <div class="form-group col-md-2 col-sm-2">Fecha: </div>      
+    <div class="form-group col-md-2 col-sm-2">Cliente: </div>
+    <div class="form-group col-md-2 col-sm-2">Identificación: </div>      
+    <div class="form-group col-md-2 col-sm-2">Tipo Doc: </div>
+    <div class="form-group col-md-2 col-sm-2">Empleo: </div>      
+  </div>
+  <hr/>
+  <div class="form-row" >
+    <div class="form-group col-md-1 col-sm-4">      
+      <button type="button" class="btn btn-primary btn-sm" id="siguientePV" autofocus
+       #siguientePV (keyup)="controlTeclas($event,siguientePV)" (keyup.enter)="enterTecla(siguientePV)">Siguiente</button>
+    </div>
+    <div class="form-group col-md-1 col-sm-4">      
+      <button type="button" class="btn btn-primary btn-sm" id="anteriorPV"
+      #anteriorPV (keyup)="controlTeclas($event,anteriorPV)" (keyup.enter)="enterTecla(anteriorPV)" >Anterior</button>
+    </div>
+    <div class="form-group col-md-1 col-sm-4">      
+        <button type="button" class="btn btn-primary btn-sm" id="primeraPV"
+        #primeraPV (keyup)="controlTeclas($event,primeraPV)" (keyup.enter)="enterTecla(primeraPV)" >Primera</button>
+    </div>
+    <div class="form-group col-md-1 col-sm-4">      
+      <button type="button" class="btn btn-primary btn-sm" id="ultimaPV"
+        #ultimaPV (keyup)="controlTeclas($event,ultimaPV)" (keyup.enter)="enterTecla(ultimaPV)" >Ultima</button>
+    </div>
+    <div class="form-group col-md-1 col-sm-4">      
+        <button type="button" class="btn btn-primary btn-sm" id="buscarPV"
+        #buscarPV (keyup)="controlTeclas($event,buscarPV)" (keyup.enter)="enterTecla(buscarPV)" >Buscar</button>
+    </div>
+    <div class="form-group col-md-1 col-sm-4">      
+        <button type="button" class="btn btn-primary btn-sm" id="nuevaPV"
+        #nuevaPV (keyup)="controlTeclas($event,nuevaPV)" (keyup.enter)="enterTecla(nuevaPV)" >Nueva</button>
+    </div>
+    <div class="form-group col-md-1 col-sm-4">      
+        <button type="button" class="btn btn-primary btn-sm" id="imprimirPV"
+        #imprimirPV (keyup)="controlTeclas($event,imprimirPV)" (keyup.enter)="enterTecla(imprimirPV)" >Imprimir</button>
+    </div>
+    <div class="form-group col-md-1 col-sm-4">      
+        <button type="button" class="btn btn-primary btn-sm" id="opcionPV"
+        #opcionPV (keyup)="controlTeclas($event,opcionPV)" (keyup.enter)="enterTecla(opcionPV)" >Opciones</button>
+    </div>
+    <div class="form-group col-md-1 col-sm-4">     
+        <button type="button" class="btn btn-primary btn-sm" id="finPV"
+        #finPV (keyup)="controlTeclas($event,finPV)"  routerLink="/menu" (keyup.enter)="enterTecla(finPV)" >Fin</button> 
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-2 col-sm-2">Cod</div>
+    <div class="form-group col-md-4 col-sm-4">Artículo</div>     
+    <div class="form-group col-md-2 col-sm-2">Cant</div>             
+    <div class="form-group col-md-2 col-sm-2">Unitario</div> 
+    <div class="form-group col-md-2 col-sm-2">Parcial</div>                         
+  </div>
+  <div class="form-row"></div>
+  <div class="form-row">
+      <div class="form-group col-md-2 col-sm-2"><p>Peso Kg</p></div>
+      <div class="form-group col-md-2 col-sm-2"><p>Vr Excento:</p></div>
+      <div class="form-group col-md-2 col-sm-2"><p>Vr Gravado:</p></div>
+      <div class="form-group col-md-2 col-sm-2"><p>Vr Iva:</p></div>
+      <div class="form-group col-md-2 col-sm-2"><p>Total:</p></div>
+  </div>
+</div>

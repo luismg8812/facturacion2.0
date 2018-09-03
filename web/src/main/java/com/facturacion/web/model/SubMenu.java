@@ -38,7 +38,17 @@ public class SubMenu {
 	@Column(name="RUTA")
 	private String ruta;
 	
+	@Column(name="MENU_ID")
+	private Long menuId;
 	
+	
+	
+	public Long getMenuId() {
+		return menuId;
+	}
+	public void setMenuId(Long menuId) {
+		this.menuId = menuId;
+	}
 	public String getNombre() {
 		return nombre;
 	}

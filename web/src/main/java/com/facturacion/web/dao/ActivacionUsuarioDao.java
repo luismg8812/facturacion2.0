@@ -6,13 +6,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.facturacion.web.model.OpcionUsuario;
+import com.facturacion.web.model.ActivacionUsuario;
 
-public interface OpcionUsuarioDao extends JpaRepository<OpcionUsuario, Long>{
+public interface ActivacionUsuarioDao extends JpaRepository<ActivacionUsuario, Long>{
 	
 	    @Modifying
 	    @Transactional
-	    @Query("delete from OpcionUsuario ou where ou.usuarioId =:usuarioId ")
+	    @Query("delete from ActivacionUsuario ou where ou.usuarioId =:usuarioId ")
 	    void deleteByUsuarioId(@Param("usuarioId")Long usuarioId);
 	
 }

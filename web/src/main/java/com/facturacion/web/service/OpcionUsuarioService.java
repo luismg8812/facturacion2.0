@@ -6,5 +6,5 @@ import com.facturacion.web.model.OpcionUsuario;
 
 public interface OpcionUsuarioService {
 
-	List<OpcionUsuario> getOpcionUsuarioByMenu(String menuId, String usuarioId);
+	List<OpcionUsuario> getOpcionUsuarioByMenu( String usuarioId);
 }
