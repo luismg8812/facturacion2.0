@@ -1,7 +1,11 @@
 package com.facturacion.web.controller;
 
+import java.io.Serializable;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,18 +13,27 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.facturacion.web.Utils.RestResponse;
+import com.facturacion.web.model.Configuracion;
 import com.facturacion.web.model.Menu;
 import com.facturacion.web.model.OpcionUsuario;
 import com.facturacion.web.model.SubMenu;
 import com.facturacion.web.service.ActivacionService;
+import com.facturacion.web.service.ConfiguracionService;
 import com.facturacion.web.service.MenuService;
 import com.facturacion.web.service.OpcionUsuarioService;
 import com.facturacion.web.service.SubMenuService;
+import com.facturacion.web.utils.RestResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
-public class MenuController {
+public class MenuController implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2441820156467139694L;
+
+	private static Logger log = Logger.getLogger(MenuController.class);
 
 	@Autowired
 	protected MenuService menuService;
@@ -33,6 +46,9 @@ public class MenuController {
 	
 	@Autowired
 	protected ActivacionService activacionService;
+	
+	@Autowired
+	protected ConfiguracionService configuracionService;
 	
 	protected ObjectMapper objectMapper;
 	
@@ -56,6 +72,17 @@ public class MenuController {
 	public List<SubMenu> geSubMenuByOU(@RequestParam("ouId") List<String> opcionUsuarioIdList) {		
 		return subMenuService.geSubMenuByOU(opcionUsuarioIdList);
 	}
+	
+	@RequestMapping(value="/getRegistrarSession", method=RequestMethod.GET )
+	@CrossOrigin
+	public void getRegistrarSession(@RequestParam("usuarioId") List<String> usuarioId, HttpSession session) {	
+		Configuracion configuracion = configuracionService.getById(1l);		
+		session.setAttribute("usuarioId", usuarioId);
+		session.setAttribute("configuracion", configuracion);
+		
+	}
+	
+	
 	
 	@RequestMapping(value="/getSubMenuByUsuario", method=RequestMethod.GET )
 	@CrossOrigin

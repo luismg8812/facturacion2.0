@@ -41,8 +41,6 @@ public class SubMenu {
 	@Column(name="MENU_ID")
 	private Long menuId;
 	
-	
-	
 	public Long getMenuId() {
 		return menuId;
 	}

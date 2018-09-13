@@ -16,7 +16,7 @@ export class MenuService {
   private host:string= sessionStorage.getItem("host");;
   private port:string = sessionStorage.getItem("port");;
   private menu:MenuModel;
-  constructor(private http:HttpClient,private configService:ConfigService) { 
+  constructor(private http:HttpClient) { 
     console.log("servicio menuService funcionando: ");
   }
 
@@ -47,6 +47,12 @@ export class MenuService {
   public guardarActivaciones(user:UsuarioModel,idActivaciones:Array<string>):Observable<ResponseCodeModel> {
     return this.http.get<ResponseCodeModel>("http://" + this.host + ":" + this.port + "/guardarActivaciones?usuarioId="+user.usuarioId+"&idActivaciones="+idActivaciones);
   }
+
+  public getRegistrarSession(usuarioId:string):Observable<string>{ 
+    return this.http.get<string>("http://"+this.host+":"+this.port+"/getRegistrarSession?usuarioId="+usuarioId);  
+  }
+
+  
   
 
 

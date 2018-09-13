@@ -13,12 +13,14 @@ import { LoginComponent } from './login/login.component';
 import { MenuComponent } from './menu/menu.component';
 import { VentasDiaComponent } from './ventas-dia/ventas-dia.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
+import { ClientesComponent } from './clientes/clientes.component';
 
 const routes: Routes = [
   { path: 'menu', component: MenuComponent },
   { path: 'login', component: LoginComponent },
   { path: 'VentasDia', component: VentasDiaComponent },
   { path: 'usuarios', component: UsuariosComponent },
+  { path: 'clientes', component: ClientesComponent },
   { path: '', component: MenuComponent, pathMatch:'full' },
   { path: '**', redirectTo: '/', pathMatch: 'full' },
 ];
@@ -29,7 +31,8 @@ const routes: Routes = [
     LoginComponent,
     MenuComponent,
     VentasDiaComponent,
-    UsuariosComponent
+    UsuariosComponent,
+    ClientesComponent
   ],
   imports: [
     BrowserModule,

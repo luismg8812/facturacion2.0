@@ -3,6 +3,7 @@ import { LoginService } from '../login/login.service';
 import { Component, OnInit } from '@angular/core';
 import { UsuarioModel } from '../model/usuario.model';
 import { Router } from '@angular/router';
+import { MenuService } from '../menu/menu.service';
 
 
 
@@ -14,7 +15,8 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
   public usuario: UsuarioModel;
   public user: UsuarioModel;
-  constructor(private loginService: LoginService, private router: Router,private configService:ConfigService) { }
+  constructor(private loginService: LoginService, private router: Router,private configService:ConfigService,
+              private menuService:MenuService) { }
 
   ngOnInit() {
     this.usuario = new UsuarioModel();
@@ -51,6 +53,10 @@ export class LoginComponent implements OnInit {
       
       sessionStorage.setItem("userLogin",this.user.login);
       sessionStorage.setItem("usuarioId",this.user.usuarioId);
+      this.menuService.getRegistrarSession(this.user.usuarioId).subscribe(res => {
+        
+      });
+
       this.router.navigate(['/menu']);
     });
 

@@ -1,4 +1,4 @@
-package com.facturacion.web.Utils;
+package com.facturacion.web.utils;
 
 import java.util.List;
 

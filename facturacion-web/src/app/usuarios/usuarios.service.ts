@@ -13,9 +13,9 @@ import { SubMenuModel } from '../model/submenu.model';
 })
 export class UsuariosService {
 
-  private host: string = sessionStorage.getItem("host");;
+  private host: string = sessionStorage.getItem("host");
   private port: string = sessionStorage.getItem("port");
-  constructor(private http: HttpClient, private configService: ConfigService) { }
+  constructor(private http: HttpClient) { }
   public getByFiltros(usuario: UsuarioModel): Observable<UsuarioModel[]> {
     return this.http.get<UsuarioModel[]>("http://" + this.host + ":" + this.port + "/getByFiltros?nombre=" + usuario.nombre +
       "&login=" + usuario.login + "&rol=" + usuario.rolId + "&identificacion=" + usuario.identificacion);

@@ -1,69 +1,187 @@
 <app-menu></app-menu>
 <!-- js de control de teclas: puntoVentaDia -->
 <div class="container-fluid">
-  <div class="form-row mt-3">
-    <h4>Punto de venta Día</h4>
-  </div>
-  <div class="form-row">
-    <div class="form-group col-md-2 col-sm-2">Documento: </div>
-    <div class="form-group col-md-2 col-sm-2">Fecha: </div>      
-    <div class="form-group col-md-2 col-sm-2">Cliente: </div>
-    <div class="form-group col-md-2 col-sm-2">Identificación: </div>      
-    <div class="form-group col-md-2 col-sm-2">Tipo Doc: </div>
-    <div class="form-group col-md-2 col-sm-2">Empleo: </div>      
-  </div>
-  <hr/>
-  <div class="form-row" >
-    <div class="form-group col-md-1 col-sm-4">      
-      <button type="button" class="btn btn-primary btn-sm" id="siguientePV" autofocus
-       #siguientePV (keyup)="controlTeclas($event,siguientePV)" (keyup.enter)="enterTecla(siguientePV)">Siguiente</button>
+    <div class="form-row mt-3">
+        <h4>Punto de venta Día</h4>
     </div>
-    <div class="form-group col-md-1 col-sm-4">      
-      <button type="button" class="btn btn-primary btn-sm" id="anteriorPV"
-      #anteriorPV (keyup)="controlTeclas($event,anteriorPV)" (keyup.enter)="enterTecla(anteriorPV)" >Anterior</button>
+    <div class="form-row">
+        <div class="form-group col-md-2 col-sm-2">Documento: {{document.documentoId}}</div>
+        <div class="form-group col-md-2 col-sm-2">Fecha: </div>
+        <div class="form-group col-md-4 col-sm-2">
+            <input list="browsers" name="clientePV" #clientePV placeholder="Cliente" class="form-control" id="clientePV" (keyup.enter)="enterTecla(clientePV)"
+                (change)="enterTecla(clientePV)" (keydown.esc)="scapeTecla(clientePV)">
+            <datalist id="browsers">
+                <option *ngFor="let cliente of clientes" value="{{cliente.clienteId}}|{{cliente.nombre}}|{{cliente.documento}}">{{cliente.nombre}}
+                    {{cliente.documento}}
+                </option>
+            </datalist>
+        </div>
+
+        <div class="form-group col-md-2 col-sm-2">
+            <input name="tipoDocumentoPV" #tipoDocumentoPV placeholder="TIpo Documento" class="form-control" id="tipoDocumentoPV" (keyup.F)="enterTecla(tipoDocumentoPV)"
+                (keyup.C)="enterTecla(tipoDocumentoPV)" (keyup.R)="enterTecla(tipoDocumentoPV)" (keydown.enter)="enterTecla(tipoDocumentoPV)"
+                (keydown.esc)="scapeTecla(clientePV)">
+        </div>
+        <div class="form-group col-md-2 col-sm-2">
+            <input list="empleados" name="empleadoPV" #empleadoPV placeholder="Empleado" class="form-control" id="empleadoPV" (keydown.enter)="enterTecla(empleadoPV)"
+                (change)="enterTecla(empleadoPV)" (keydown.esc)="scapeTecla(clientePV)">
+            <datalist id="empleados">
+                <option value="prueba">prueba</option>
+                <option value="prueba2">prueba2</option>
+            </datalist>
+        </div>
     </div>
-    <div class="form-group col-md-1 col-sm-4">      
-        <button type="button" class="btn btn-primary btn-sm" id="primeraPV"
-        #primeraPV (keyup)="controlTeclas($event,primeraPV)" (keyup.enter)="enterTecla(primeraPV)" >Primera</button>
+    <hr/>
+
+    <div class="form-row">
+        <div class="form-group col-md-1 col-sm-4" id="divSiguiente" #divSiguiente>
+            <button type="button" class="btn btn-primary btn-sm" id="siguientePV" autofocus #siguientePV (keyup)="controlTeclas($event,siguientePV)"
+                (keyup.enter)="enterTecla(siguientePV)">Siguiente</button>
+        </div>
+        <div class="form-group col-md-1 col-sm-4" id="divAnterior" #divAnterior>
+            <button type="button" class="btn btn-primary btn-sm" id="anteriorPV" #anteriorPV (keyup)="controlTeclas($event,anteriorPV)"
+                (keyup.enter)="enterTecla(anteriorPV)">Anterior</button>
+        </div>
+        <div class="form-group col-md-1 col-sm-4" id="divPrimera" #divPrimera>
+            <button type="button" class="btn btn-primary btn-sm" id="primeraPV" #primeraPV (keyup)="controlTeclas($event,primeraPV)"
+                (keyup.enter)="enterTecla(primeraPV)">Primera</button>
+        </div>
+        <div class="form-group col-md-1 col-sm-4" id="divUltima" #divUltima>
+            <button type="button" class="btn btn-primary btn-sm" id="ultimaPV" #ultimaPV (keyup)="controlTeclas($event,ultimaPV)" (keyup.enter)="enterTecla(ultimaPV)">Ultima</button>
+        </div>
+        <div class="form-group col-md-1 col-sm-4" id="divBuscar" #divBuscar>
+            <button type="button" class="btn btn-primary btn-sm" id="buscarPV" #buscarPV (keyup)="controlTeclas($event,buscarPV)" (keyup.enter)="enterTecla(buscarPV)">Buscar</button>
+        </div>
+        <div class="form-group col-md-1 col-sm-4" id="divNueva" #divNueva>
+            <button type="button" class="btn btn-primary btn-sm" id="nuevaPV" (click)="nuevafactura()" #nuevaPV (keyup)="controlTeclas($event,nuevaPV)"
+                (keyup.enter)="enterTecla(nuevaPV)">Nueva</button>
+        </div>
+        <div class="form-group col-md-1 col-sm-4" id="divImprimir" #divImprimir>
+            <button type="button" class="btn btn-primary btn-sm" id="imprimirPV" #imprimirPV (keyup)="controlTeclas($event,imprimirPV)"
+                (keyup.enter)="enterTecla(imprimirPV)">Imprimir</button>
+        </div>
+        <div class="form-group col-md-1 col-sm-4" id="divOpciones" #divOpciones>
+            <button type="button" class="btn btn-primary btn-sm" id="opcionPV" #opcionPV (keyup)="controlTeclas($event,opcionPV)" (keyup.enter)="enterTecla(opcionPV)">Opciones</button>
+        </div>
+        <div class="form-group col-md-1 col-sm-4" id="divFin" #divFin>
+            <button type="button" class="btn btn-primary btn-sm" id="finPV" #finPV (keyup)="controlTeclas($event,finPV)" routerLink="/menu"
+                (keyup.enter)="enterTecla(finPV)">Fin</button>
+        </div>
     </div>
-    <div class="form-group col-md-1 col-sm-4">      
-      <button type="button" class="btn btn-primary btn-sm" id="ultimaPV"
-        #ultimaPV (keyup)="controlTeclas($event,ultimaPV)" (keyup.enter)="enterTecla(ultimaPV)" >Ultima</button>
+    <div class="form-row">
+        <div class="form-group col-md-6 col-sm-2">
+            <input name="CodigoBarrasPV" #CodigoBarrasPV placeholder="Codigo de Barras" class="form-control" id="CodigoBarrasPV" (keydown.enter)="enterTecla(CodigoBarrasPV)"
+                (blur)="ocultarCodigoBarras()" (keydown.esc)="scapeTecla(clientePV)">
+        </div>
     </div>
-    <div class="form-group col-md-1 col-sm-4">      
-        <button type="button" class="btn btn-primary btn-sm" id="buscarPV"
-        #buscarPV (keyup)="controlTeclas($event,buscarPV)" (keyup.enter)="enterTecla(buscarPV)" >Buscar</button>
+
+    <div class="form-row">
+
+        <div class="form-group col-sm-2 d-none" id="divCodigo" #divCodigo>
+            <input name="codigoPV" #codigoPV placeholder="Código" class="form-control" id="codigoPV" (keydown.enter)="enterTecla(codigoPV)"
+                (keydown.esc)="scapeTecla(clientePV)">
+        </div>
+        <div class="form-group col-sm-4 d-none" id="divArticulo" #divArticulo>
+
+            <input list="articulos" name="articuloPV" #articuloPV placeholder="Articulo" class="form-control" id="articuloPV" (keydown.enter)="enterTecla(articuloPV)"
+                (change)="articuloSelect(articuloPV)" (keydown.esc)="scapeTecla(clientePV)">
+            <datalist id="articulos">
+                <option *ngFor="let producto of productosAll">{{producto.nombre}}|{{producto.costoPublico}}|{{producto.cantidad}}|{{producto.productoId}}</option>
+            </datalist>
+        </div>
+        <div class="form-group col-sm-2 d-none" id="divCantidad" #divCantidad>
+            <input name="cantidadPV" #cantidadPV placeholder="Cantidad" class="form-control" id="cantidadPV" (keydown.enter)="enterTecla(cantidadPV)"
+                (keydown.esc)="scapeTecla(cantidadPV)">
+            <input name="precioPV" #precioPV placeholder="$ Precio" class="form-control d-none" id="precioPV" (keydown.enter)="enterTecla(precioPV)"
+                (keydown.esc)="scapeTecla(precioPV)" (blur)="ocultarPrecio()">
+        </div>
+        <div class="form-group col-sm-2 d-none" id="divUnitario" #divUnitario>
+            <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Unitario">
+        </div>
+        <div class="form-group col-sm-2 d-none" id="divParcial" #divParcial>
+            <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Parcial">
+        </div>
     </div>
-    <div class="form-group col-md-1 col-sm-4">      
-        <button type="button" class="btn btn-primary btn-sm" id="nuevaPV"
-        #nuevaPV (keyup)="controlTeclas($event,nuevaPV)" (keyup.enter)="enterTecla(nuevaPV)" >Nueva</button>
+    <div class="form-row mb-0 ">
+        <div class=" col-md-6 col-sm-6 border border-primary ">
+            <div class="form-row mb-0 ">
+                <div class="form-group col-md-2 col-sm-2">Cod</div>
+                <div class="form-group col-md-4 col-sm-4">Artículo</div>
+                <div class="form-group col-md-2 col-sm-2">Cantidad</div>
+                <div class="form-group col-md-2 col-sm-2">Unitario</div>
+                <div class="form-group col-md-2 col-sm-2">Parcial</div>
+            </div>
+            <div class="form-row">
+                <div class=" " id="divParcial" #divParcial>
+                    <ul class="list-group form-group ">
+                        <li class="list-group-item  " *ngFor="let producto of productos">
+                            <div class="form-row row">
+                                <div class="col-md-2 col-sm-2">
+                                    {{producto.productoId}}
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    {{producto.nombreProducto}}
+                                </div>
+                                <div class="col-md-2 col-sm-2">
+                                    {{producto.cantidad}}
+                                </div>
+                                <div class="col-md-2 col-sm-2">
+                                    {{producto.unitario}}
+                                </div>
+                                <div class="col-md-2 col-sm-2">
+                                    {{producto.parcial}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class=" col-md-6 col-sm-6 border border-primary">
+            <div class="form-row">
+                <div class="form-group col-md-2 col-sm-2">
+                    Peso kg:
+                    <h3>{{document.pesoTotal}}</h3>
+                </div>
+                <div class="form-group col-md-2 col-sm-2">
+                    Vr Excento:
+                    <h3>{{document.excento}}</h3>
+                </div>
+                <div class="form-group col-md-2 col-sm-2">
+                    Vr Gravado:
+                    <h3>{{document.gravado}}</h3>
+                </div>
+                <div class="form-group col-md-2 col-sm-2">
+                    Vr Iva:
+                    <h3>{{document.iva}}</h3>
+                </div>
+                <div class="form-group col-md-2 col-sm-2">
+                    Total:
+                    <h3 style="color:red">{{document.total}}</h3>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="form-group col-md-1 col-sm-4">      
-        <button type="button" class="btn btn-primary btn-sm" id="imprimirPV"
-        #imprimirPV (keyup)="controlTeclas($event,imprimirPV)" (keyup.enter)="enterTecla(imprimirPV)" >Imprimir</button>
+
+    <!-- Modal imprimir-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Imprimir</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="form-group col-md-1 col-sm-4">      
-        <button type="button" class="btn btn-primary btn-sm" id="opcionPV"
-        #opcionPV (keyup)="controlTeclas($event,opcionPV)" (keyup.enter)="enterTecla(opcionPV)" >Opciones</button>
-    </div>
-    <div class="form-group col-md-1 col-sm-4">     
-        <button type="button" class="btn btn-primary btn-sm" id="finPV"
-        #finPV (keyup)="controlTeclas($event,finPV)"  routerLink="/menu" (keyup.enter)="enterTecla(finPV)" >Fin</button> 
-    </div>
-  </div>
-  <div class="form-row">
-    <div class="form-group col-md-2 col-sm-2">Cod</div>
-    <div class="form-group col-md-4 col-sm-4">Artículo</div>     
-    <div class="form-group col-md-2 col-sm-2">Cant</div>             
-    <div class="form-group col-md-2 col-sm-2">Unitario</div> 
-    <div class="form-group col-md-2 col-sm-2">Parcial</div>                         
-  </div>
-  <div class="form-row"></div>
-  <div class="form-row">
-      <div class="form-group col-md-2 col-sm-2"><p>Peso Kg</p></div>
-      <div class="form-group col-md-2 col-sm-2"><p>Vr Excento:</p></div>
-      <div class="form-group col-md-2 col-sm-2"><p>Vr Gravado:</p></div>
-      <div class="form-group col-md-2 col-sm-2"><p>Vr Iva:</p></div>
-      <div class="form-group col-md-2 col-sm-2"><p>Total:</p></div>
-  </div>
+
 </div>

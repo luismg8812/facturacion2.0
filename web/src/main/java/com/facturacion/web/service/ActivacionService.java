@@ -2,8 +2,8 @@ package com.facturacion.web.service;
 
 import java.util.List;
 
-import com.facturacion.web.Utils.RestResponse;
 import com.facturacion.web.model.Activacion;
+import com.facturacion.web.utils.RestResponse;
 
 public interface ActivacionService {
 

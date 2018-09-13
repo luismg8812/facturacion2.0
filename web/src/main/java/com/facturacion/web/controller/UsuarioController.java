@@ -13,14 +13,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.facturacion.web.Utils.RestResponse;
 import com.facturacion.web.model.Activacion;
 import com.facturacion.web.model.Rol;
 import com.facturacion.web.model.Usuario;
 import com.facturacion.web.service.ActivacionService;
 import com.facturacion.web.service.RolService;
 import com.facturacion.web.service.UsuarioService;
-import com.facturacion.web.service.impl.UsuarioServiceImpl;
+import com.facturacion.web.utils.RestResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
