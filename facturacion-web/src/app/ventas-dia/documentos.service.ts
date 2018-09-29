@@ -1,3 +1,4 @@
+import { ResponseCodeModel } from './../model/responseCode.model';
 import { Observable } from 'rxjs';
 import { DocumentoModel } from './../model/documento.model';
 import { Injectable } from '@angular/core';
@@ -20,4 +21,11 @@ export class DocumentosService {
   public getDocumentoById(documentoId:string): Observable<DocumentoModel> {
     return this.http.get<DocumentoModel>("http://" + this.host + ":" + this.port + "/getDocumentoById?documentoId="+documentoId);
   }
+
+  public imprimirFactura(documentoId:DocumentoModel): Observable<ResponseCodeModel> {
+    let json = JSON.stringify(documentoId);
+    return this.http.post<ResponseCodeModel>("http://" + this.host + ":" + this.port + "/imprimirFactura",json);
+  }
+  
+  
 }

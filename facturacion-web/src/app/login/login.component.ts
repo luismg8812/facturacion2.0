@@ -20,10 +20,20 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.usuario = new UsuarioModel();
+    //se lee las configuración del programa
     this.configService.getJSON().subscribe(data=>{     
       sessionStorage.setItem("host",data.host);  
       sessionStorage.setItem("port",data.port);  
+        
     });
+    // se lee las configuraciones locales
+    this.configService.getIpAddress().subscribe(data => {
+      console.log(data);
+    });
+   // this.configService.getLocalJSON().subscribe(data=>{
+    //  sessionStorage.setItem("printer",data.printer);
+    //  console.log("impresora seleccionada:"+data.printer);
+   // });
   }
 
   public loginUsuario(): void {

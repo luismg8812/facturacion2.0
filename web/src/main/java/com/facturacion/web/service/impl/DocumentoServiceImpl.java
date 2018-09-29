@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.facturacion.web.dao.DocumentoDao;
 import com.facturacion.web.model.Documento;
-import com.facturacion.web.model.Usuario;
 import com.facturacion.web.service.DocumentoService;
 
 @Service
@@ -27,10 +26,6 @@ public class DocumentoServiceImpl implements DocumentoService {
 		documentoDao.save(documento);
 		
 	}
-
-
-	
-
 
 	
 }

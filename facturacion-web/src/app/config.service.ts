@@ -14,4 +14,14 @@ export class ConfigService {
   public getJSON(): Observable<any> {
     return this.http.get("./assets/config/config.json");
   }
+
+  public getLocalJSON(): Observable<any> {
+    console.log("entra a local");
+    return this.http.get("C://effectiveSoftware/facturacion/config/localConfig.json");
+  }
+
+  getIpAddress() {
+    return this.http
+          .get('http://freegeoip.net/json/?callback');
+}
 }

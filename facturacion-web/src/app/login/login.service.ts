@@ -16,7 +16,7 @@ export class LoginService {
   }
 
   public getByLogin(login:string):Observable<UsuarioModel>{
-    return this.http.get<UsuarioModel>("http://localhost:8080/getUsuarioByLogin?login="+login);
+    return this.http.get<UsuarioModel>("http://localhost:8080/client/getUsuarioByLogin?login="+login);
   }
 
   getConfig(){

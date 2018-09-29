@@ -441,14 +441,13 @@ public class Calculos {
 	 * Metodo que calcula dependiendo del tipo de docuemnto una suma parcial al informe diario
 	 * @param documento
 	 */
-	public static InfoDiario calcularInfoDiario(Documento documento,List<com.facturacion.web.model.InfoDiario> infoDiarioList,Empresa e) {
+	public static InfoDiario calcularInfoDiario(Documento documento,List<InfoDiario> infoDiarioList,Empresa e) {
 		InfoDiario info;
 		String tipoDocumento=documento.getTipoDocumentoId().toString();
 		if(infoDiarioList==null || infoDiarioList.isEmpty()){
 			 info = new InfoDiario();
 			 info.setFechaInforme(new Date());
-			 info.setFechaIngreso(new Date());
-			 
+			 info.setFechaIngreso(new Date());		 
 		}else{
 			info=infoDiarioList.get(0);
 		}
@@ -500,9 +499,9 @@ public class Calculos {
 			info.setDocumentoFin(e.getLetraConsecutivo()+documento.getConsecutivoDian()) ;
 		}else{
 			String documentoE=documento.getConsecutivoDian().replace(" ","");
-			documentoE=documentoE.replace(e.getLetraConsecutivo(),"");
+			documentoE=documentoE.replace(e.getLetraConsecutivo()==null?"":e.getLetraConsecutivo(),"");
 			String infoE=info.getDocumentoFin()==null?"1":info.getDocumentoFin().replace(" ","");
-			infoE=infoE.replace(e.getLetraConsecutivo(),"");
+			infoE=infoE.replace(e.getLetraConsecutivo()==null?"":e.getLetraConsecutivo(),"");
 			if(Long.valueOf(documentoE)>Long.valueOf(infoE)){
 				info.setDocumentoFin(documento.getConsecutivoDian()) ;
 			}		

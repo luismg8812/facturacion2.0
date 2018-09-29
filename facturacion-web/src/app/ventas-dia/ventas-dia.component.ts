@@ -11,6 +11,7 @@ import { UsuariosService } from '../usuarios/usuarios.service';
 import { ClientesService } from '../clientes/clientes.service';
 import { ProductoModel } from '../model/producto.model';
 import { DocumentoDetalleModel } from '../model/documentoDetalle.model';
+import { Alert } from 'selenium-webdriver';
 
 @Component({
   selector: 'app-ventas-dia',
@@ -39,6 +40,20 @@ export class VentasDiaComponent implements OnInit {
   @ViewChild("opcionPV") opcionPV: ElementRef;
   @ViewChild("finPV") finPV: ElementRef;
 
+  //botonos de imprimir
+  @ViewChild("descuentoPV") descuentoPV: ElementRef;
+  @ViewChild("descuentoLavel") descuentoLavel: ElementRef;
+  @ViewChild("carteraPV") carteraPV: ElementRef;
+  @ViewChild("tarjetaPV") tarjetaPV: ElementRef;
+  @ViewChild("vrTarjetaPV") vrTarjetaPV: ElementRef;
+  @ViewChild("efectovoPV") efectovoPV: ElementRef;
+  @ViewChild("continuaImpresionPV") continuaImpresionPV: ElementRef;
+  @ViewChild("cancalarImpresionPV") cancalarImpresionPV: ElementRef;
+  @ViewChild("impresionPV") impresionPV: ElementRef;
+
+
+
+
 
   @ViewChild("divCantidad") divCantidad: ElementRef; // div de donde se busca  la cantidad
   @ViewChild("divCodigo") divCodigo: ElementRef; // div de donde se busca el codigo del producto
@@ -56,6 +71,8 @@ export class VentasDiaComponent implements OnInit {
   @ViewChild("divImprimir") divImprimir: ElementRef;
   @ViewChild("divOpciones") divOpciones: ElementRef;
   @ViewChild("divFin") divFin: ElementRef;
+  @ViewChild("imprimirBtn") imprimirBtn: ElementRef;
+
 
   private activaciones: Array<ActivacionModel>;
   private clientes: Array<ClienteModel>;
@@ -73,6 +90,7 @@ export class VentasDiaComponent implements OnInit {
   private clienteObligatorioActivo: boolean = false;
   private empreadoActivo: boolean = false;
   private codigoBarrasActivo: boolean = false;
+  private descuentosActivo: boolean = false;
 
 
   constructor(private renderer: Renderer2, private usuarioService: UsuariosService, private documentosService: DocumentosService,
@@ -174,7 +192,7 @@ export class VentasDiaComponent implements OnInit {
       this.nuevafactura();
     }
     if (event.keyCode == 73) { //cuando se presiona la tacla i 		 
-      this.imprimirFactura();
+      this.imprimirModal();
     }
   }
 
@@ -194,7 +212,7 @@ export class VentasDiaComponent implements OnInit {
       this.nuevafactura();
     }
     if (element.id == "imprimirPV") {
-      this.imprimirFactura();
+      this.imprimirModal();
     }
     if (element.id == "clientePV") {
       this.clienteSelectFun(element);
@@ -221,6 +239,27 @@ export class VentasDiaComponent implements OnInit {
     if (element.id == "precioPV") {
       this.precioEnter(element);
     }
+    if (element.id == "descuentoPV") {
+      this.carteraPV.nativeElement.focus();
+    }
+    if (element.id == "carteraPV") {
+      this.enterCartera(element);
+    }
+    if (element.id == "tarjetaPV") {
+      this.enterTarjeta(element);
+    }
+    if (element.id == "vrTarjetaPV") {
+      this.efectovoPV.nativeElement.focus();
+    }
+    if (element.id == "efectovoPV") {
+      this.continuaImpresionPV.nativeElement.focus();
+    }
+    if (element.id == "continuaImpresionPV") {
+      this.enterContinuarImpresion(element);
+
+    }
+
+
   }
 
   limpiar() {
@@ -245,9 +284,153 @@ export class VentasDiaComponent implements OnInit {
     this.cantidadPV.nativeElement.value = "";
     this.precioPV.nativeElement.value = "";
     this.productos = [];
+    this.descuentoPV.nativeElement.value="";
+    //this.carteraPV.nativeElement.value="";
+    //this.tarjetaPV.nativeElement.value="";
+    //this.vrTarjetaPV.nativeElement.value="";
+    //this.efectovoPV.nativeElement.value="";
+    //this.continuaImpresionPV.nativeElement.value="";
   }
 
+   
 
+  imprimirFactura() {
+    if (this.document.documentoId == "") {
+      alert("El documento esta corructo, vuelva a crearlo");
+      return;
+    }
+    
+    //se asigna un tipo de pago
+    if(this.carteraPV.nativeElement.value=="S" ||this.carteraPV.nativeElement.value=="s"){
+      this.document.tipoPagoId="2";//tipo de pago a credito
+    }else{
+      if(this.tarjetaPV.nativeElement.value=="S" ||this.tarjetaPV.nativeElement.value=="s"){
+        this.document.tipoPagoId="5";//tipo de pago con tarjeta
+      }else{
+        this.document.tipoPagoId="1";//tipo de pago con en efectivo
+      }
+    }
+    // se verifica si hay descuento para aplicar
+    let des1 = this.descuentoPV.nativeElement.value==""?0.0:this.descuentoPV.nativeElement.value;
+    if(des1!=0.0){
+      let desTemp = 0.0;
+      this.getAplicarDescuento(des1);
+    }
+    //TODO hacer la parte que del docuemto asigna la mac desde type scrip
+    //this.document.mac=""
+    this.documentosService.imprimirFactura(this.document).subscribe(res => {
+        if(res.responseCode==200){
+          this.limpiar();
+          if(res.message!=""){
+            alert(res.message);
+          }
+        }else{
+          if(res.responseCode==500){
+            alert(res.message);
+          }
+        }
+        this.cancalarImpresionPV.nativeElement.click();
+        this.siguientePV.nativeElement.focus();
+    },(err) => {
+      alert("Error imprimiendo factura desde el server");
+    });
+  }
+
+  getAplicarDescuento(descuento){
+    let desTemp = 0.0;
+		// si el descuento es mayor o menor que 100 entonces se calcula el descuento en %		
+		if (descuento < -100.0 || descuento > 100.0) {
+			this.document.descuento = descuento;
+			desTemp = (descuento * 100) / +this.document.total;
+			console.log("% descuento:" + desTemp);
+		} else {
+			this.document.descuento=""+(+this.document.total * descuento / 100);
+			desTemp = descuento;
+			console.log("% descuento:" + desTemp);
+		}
+		//if (desTemp < -15 || desTemp > 15) {
+		//	return;
+		//}
+		let des = desTemp / 100;
+		let  temp:Array<DocumentoDetalleVoModel>=[];
+		for(var i=0; i<this.productos.length; i++){
+			let parcialDescuento = +this.productos[i].parcial + (+this.productos[i].parcial * des);
+			let unitarioDescuento = +this.productos[i].unitario + (+this.productos[i].unitario * des);
+			this.productos[i].parcial=""+parcialDescuento;
+			this.productos[i].unitario=""+unitarioDescuento;
+			temp.push(this.productos[i]);
+		}
+		let totalTemp = +this.document.total;
+		let ivaTemp = +this.document.iva + (+this.document.iva * des);
+		let excentoTemp = +this.document.excento + (+this.document.excento * des);
+		let gravadoTemp = +this.document.gravado + (+this.document.gravado * des);
+		this.document.total=""+totalTemp;
+		this.document.saldo=""+totalTemp;
+		this.document.iva=""+ivaTemp;
+		this.document.excento=""+excentoTemp;
+		this.document.gravado=""+gravadoTemp;
+		this.productos=temp;
+		// se valida si el descuento es mayor o menor a 1.5
+		//if (desTemp >= 1.5 || desTemp <= -1.5) {
+		//	Evento evento = new Evento();
+		//	TipoEvento tipoEvento = new TipoEvento();
+		//	tipoEvento.setTipoEventoId(2l); // se asigna tipo evento igual a
+											// descuento mayor al 1.5
+		//	evento.setFechaRegistro(new Date());
+		//	evento.setTipoEventoId(tipoEvento);
+		//	evento.setUsuarioId(usuario());
+		//	evento.setCampo("" + getDocumento().getDocumentoId());
+		//	evento.setValorActual("" + totalTemp);
+		//	evento.setValorAnterior("" + getDescuento());
+		//	eventoService.save(evento);
+		//}
+  }
+
+  enterContinuarImpresion(element) {
+    let contador = 0;
+    var myInterval = setInterval(() => {
+      if (element.value == 'n' || element.value == 'N') {
+        this.cancalarImpresionPV.nativeElement.click();
+      } else {
+        console.log("flujo si imprimir");
+        this.impresionPV.nativeElement.click();
+
+      }
+      contador = contador + 1;
+      if (contador >= 1) {
+        clearInterval(myInterval);
+      }
+    }, 150);
+  }
+
+  enterCartera(element) {
+    let contador = 0;
+    var myInterval = setInterval(() => {
+      this.carteraPV.nativeElement.focus();
+      this.carteraPV.nativeElement = element.value;
+      this.tarjetaPV.nativeElement.focus();
+      this.tarjetaPV.nativeElement.value = "";
+      contador = contador + 1;
+      if (contador >= 1) {
+        clearInterval(myInterval);
+      }
+    }, 200);
+  }
+
+  enterTarjeta(element) {
+    let contador = 0;
+    var myInterval = setInterval(() => {
+      if (element.value == 's' || element.value == 'S') {
+        this.vrTarjetaPV.nativeElement.focus();
+      } else {
+        this.efectovoPV.nativeElement.focus();
+      }
+      contador = contador + 1;
+      if (contador >= 1) {
+        clearInterval(myInterval);
+      }
+    }, 200);
+  }
 
   precioEnter(element) {
     if (this.codigoBarrasActivo) {
@@ -306,7 +489,7 @@ export class VentasDiaComponent implements OnInit {
       this.document.usuarioId = userLogin;
       this.documentosService.saveDocumento(this.document).subscribe(res => {
         this.document = res;
-         //c cambia se hace en el back-end
+        //c cambia se hace en el back-end
         docDetalle.cantidad = cantidad;
         docDetalle.productoId = this.productoSelect;
         docDetalle.documentoId = this.document.documentoId;
@@ -314,34 +497,31 @@ export class VentasDiaComponent implements OnInit {
         //TODO hacer en el back la logica del doble server
         this.documentoDetalleService.agregarDocumentoDetalle(docDetalle).subscribe(res => {
           this.productos.push(res);
-          this.productos=this.productos.reverse();
+          this.productos = this.productos.reverse();
           this.documentosService.getDocumentoById(this.document.documentoId).subscribe(res => {
-            this.document=res;
-            console.log(this.document);
+            this.document = res;
           });
         });
-        
+
       });
-      
+
     } else {
-      
+
       let docDetalle = new DocumentoDetalleModel();
-       //c cambia se hace en el back-end
-       
-       docDetalle.cantidad = cantidad;
-       docDetalle.productoId = this.productoSelect;
-       docDetalle.documentoId = this.document.documentoId;
-       docDetalle.estado = '1';
-        //TODO hacer en el back la logica del doble server
-        this.documentoDetalleService.agregarDocumentoDetalle(docDetalle).subscribe(res => {
-          this.productos.push(res);
-          console.log(this.productos);
-          this.documentosService.getDocumentoById(this.document.documentoId).subscribe(res => {
-            this.document=res;
-            console.log(this.document);
-          });
+      //c cambia se hace en el back-end
+
+      docDetalle.cantidad = cantidad;
+      docDetalle.productoId = this.productoSelect;
+      docDetalle.documentoId = this.document.documentoId;
+      docDetalle.estado = '1';
+      //TODO hacer en el back la logica del doble server
+      this.documentoDetalleService.agregarDocumentoDetalle(docDetalle).subscribe(res => {
+        this.productos.push(res);
+        this.documentosService.getDocumentoById(this.document.documentoId).subscribe(res => {
+          this.document = res;
         });
-        
+      });
+
     }
 
   }
@@ -376,7 +556,6 @@ export class VentasDiaComponent implements OnInit {
       this.precioPV.nativeElement.focus();
     } else {
       this.productosService.getProductoById(this.productoSelect).subscribe(res => {
-        console.log(res);
         if (res.balanza == '1') {
           console.log("//TODO hacer lo de balanza");
         } else {
@@ -521,6 +700,10 @@ export class VentasDiaComponent implements OnInit {
         console.log("codigo barras activado");
         this.codigoBarrasActivo = true;
       }
+      if (this.activaciones[e].codigo == "DESCUENTOS") {
+        console.log("descuentos activos ");
+        this.descuentosActivo = true;
+      }
     }
     if (this.clienteActivo) {
       this.clientePV.nativeElement.focus();
@@ -542,12 +725,37 @@ export class VentasDiaComponent implements OnInit {
     }
   }
 
-  imprimirFactura(){
-    if(this.document.documentoId==""){
+  imprimirModal() {
+    if (this.document.documentoId == "") {
       alert("debe crear primero una factura");
       return;
     }
-    alert("imprimir factura");  
+    let contador = 0;
+    this.imprimirBtn.nativeElement.click();
+    if (this.descuentosActivo) {
+      this.descuentoLavel.nativeElement.classList.remove("d-none");
+      this.descuentoLavel.nativeElement.classList.add("d-block");
+      this.descuentoPV.nativeElement.classList.remove("d-none");
+      this.descuentoPV.nativeElement.classList.add("d-block");
+      var myInterval = setInterval(() => {
+        console.log(contador);
+        this.descuentoPV.nativeElement.focus();
+        contador = contador + 1;
+        if (contador >= 1) {
+          clearInterval(myInterval);
+        }
+      }, 800);
+    } else {
+      var myInterval = setInterval(() => {
+        this.carteraPV.nativeElement.focus();
+        contador = contador + 1;
+        if (contador >= 1) {
+          clearInterval(myInterval);
+        }
+      }, 800);
+    }
+
+
   }
 
   estadoDivProducto(visible: string) {
