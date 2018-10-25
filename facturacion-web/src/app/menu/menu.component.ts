@@ -56,7 +56,7 @@ export class MenuComponent implements OnInit {
   getOpcionUsuarioByMenu(menuId) {
       this.subMenu=[];
       console.log(menuId)
-      console.log(this.opUsuario); // 1, "string", false
+      
       for (var _i = 0; _i < this.subMenuAll.length; _i++) {
         for (var e = 0; e < this.opUsuario.length; e++) {
           if(this.subMenuAll[_i].subMenuId==this.opUsuario[e].subMenuId &&
@@ -65,6 +65,7 @@ export class MenuComponent implements OnInit {
           }
         }
       }
+      console.log(this.subMenu); // 1, "string", false
   }
 
   onKeyTeclasMenu(event, element) {

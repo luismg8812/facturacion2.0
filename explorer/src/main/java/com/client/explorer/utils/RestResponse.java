@@ -1,7 +1,11 @@
 package com.client.explorer.utils;
 
-public class RestResponse {
+import java.io.Serializable;
 
+public class RestResponse implements Serializable{
+
+	
+	private static final long serialVersionUID = -2845341443742994655L;
 	private Integer responseCode;
 	private String message;
 	

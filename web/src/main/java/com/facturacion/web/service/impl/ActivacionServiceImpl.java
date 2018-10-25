@@ -13,7 +13,6 @@ import com.facturacion.web.dao.ActivacionDao;
 import com.facturacion.web.dao.ActivacionUsuarioDao;
 import com.facturacion.web.model.Activacion;
 import com.facturacion.web.model.ActivacionUsuario;
-import com.facturacion.web.model.OpcionUsuario;
 import com.facturacion.web.service.ActivacionService;
 import com.facturacion.web.utils.RestResponse;
 
@@ -51,7 +50,7 @@ public class ActivacionServiceImpl implements ActivacionService {
 
 	@Override
 	public RestResponse guardarActivaciones(String usuarioId, List<String> idActivaciones) {
-		RestResponse response = new RestResponse(200);
+		RestResponse response = new RestResponse(200,"");
 		activacionUsuarioDao.deleteByUsuarioId(Long.valueOf(usuarioId));
 		for(String id : idActivaciones) {
 			log.info("activacion:"+id);

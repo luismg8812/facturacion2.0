@@ -21,39 +21,38 @@ export class MenuService {
   }
 
   public getByAll():Observable<MenuModel[]>{  
-    return this.http.get<MenuModel[]>("http://"+this.host+":"+this.port+"/getMenuAll");  
+    return this.http.get<MenuModel[]>("http://"+this.host+":"+this.port+"/menu/getMenuAll");  
   }
 
   public getOpcionUsuarioByMenu(usuarioId:string):Observable<OpcionUsuarioModel[]>{ 
-    return this.http.get<OpcionUsuarioModel[]>("http://"+this.host+":"+this.port+"/getOpcionUsuarioByMenu?usuarioId="+usuarioId);  
+    return this.http.get<OpcionUsuarioModel[]>("http://"+this.host+":"+this.port+"/menu/getOpcionUsuarioByMenu?usuarioId="+usuarioId);  
   }
 
   public getSubMenuByOU(ou: Array<string>): Observable<SubMenuModel[]> {
-    return this.http.get<SubMenuModel[]>("http://"+this.host+":"+this.port+"/geSubMenuByOU?ouId="+ou);  
+    return this.http.get<SubMenuModel[]>("http://"+this.host+":"+this.port+"/menu/geSubMenuByOU?ouId="+ou);  
   }
 
   public getSubMenuAll(): Observable<SubMenuModel[]> {
-    return this.http.get<SubMenuModel[]>("http://" + this.host + ":" + this.port + "/getSubMenuAll");
+    return this.http.get<SubMenuModel[]>("http://" + this.host + ":" + this.port + "/menu/getSubMenuAll");
   }
 
   public getSubMenuByUsuario(usuarioId:string):Observable<SubMenuModel[]>{ 
-    return this.http.get<SubMenuModel[]>("http://"+this.host+":"+this.port+"/getSubMenuByUsuario?usuarioId="+usuarioId);  
+    return this.http.get<SubMenuModel[]>("http://"+this.host+":"+this.port+"/menu/getSubMenuByUsuario?usuarioId="+usuarioId);  
   }
 
   public guardarRutas(user:UsuarioModel,idSubmenu:Array<string>):Observable<ResponseCodeModel> {
-    return this.http.get<ResponseCodeModel>("http://" + this.host + ":" + this.port + "/guardarRutas?usuarioId="+user.usuarioId+"&idSubmenu="+idSubmenu);
+    let url:string="http://" + this.host + ":" + this.port + "/menu/guardarRutas?usuarioId="+user.usuarioId+"&idSubmenu="+idSubmenu;
+    console.log(url);
+    return this.http.get<ResponseCodeModel>(url);
   }
 
-  public guardarActivaciones(user:UsuarioModel,idActivaciones:Array<string>):Observable<ResponseCodeModel> {
-    return this.http.get<ResponseCodeModel>("http://" + this.host + ":" + this.port + "/guardarActivaciones?usuarioId="+user.usuarioId+"&idActivaciones="+idActivaciones);
+  public guardarActivaciones(user:UsuarioModel,idActivaciones:Array<string>):Observable<ResponseCodeModel> { 
+
+    return this.http.get<ResponseCodeModel>("http://" + this.host + ":" + this.port + "/menu/guardarActivaciones?usuarioId="+user.usuarioId+"&idActivaciones="+idActivaciones);
   }
 
   public getRegistrarSession(usuarioId:string):Observable<string>{ 
-    return this.http.get<string>("http://"+this.host+":"+this.port+"/getRegistrarSession?usuarioId="+usuarioId);  
+    return this.http.get<string>("http://"+this.host+":"+this.port+"/menu/getRegistrarSession?usuarioId="+usuarioId);  
   }
-
-  
-  
-
 
 }

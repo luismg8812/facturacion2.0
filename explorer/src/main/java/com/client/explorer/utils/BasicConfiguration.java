@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class BasicConfiguration {
 	
 	private String serverHost;
-	private String localhost;
+	private String serverPort;
 	
 	
 	public String getServerHost() {
@@ -17,12 +17,13 @@ public class BasicConfiguration {
 	public void setServerHost(String serverHost) {
 		this.serverHost = serverHost;
 	}
-	public String getLocalhost() {
-		return localhost;
+	public String getServerPort() {
+		return serverPort;
 	}
-	public void setLocalhost(String localhost) {
-		this.localhost = localhost;
+	public void setServerPort(String serverPort) {
+		this.serverPort = serverPort;
 	}
+	
 	
 	
 }

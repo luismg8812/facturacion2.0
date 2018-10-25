@@ -58,7 +58,7 @@ public class SubMenuServiceImpl implements SubMenuService {
 
 	@Override
 	public RestResponse guardarRutas(String usuarioId, List<String> idSubmenu) {
-		RestResponse response = new RestResponse(200);
+		RestResponse response = new RestResponse(200,"");
 		opcionUsuarioDao.deleteByUsuarioId(Long.valueOf(usuarioId));
 		for(String id : idSubmenu) {
 			log.info("submenuId:"+id);

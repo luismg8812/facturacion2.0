@@ -1,7 +1,13 @@
 package com.facturacion.web.utils;
 
-public class RestResponse {
+import java.io.Serializable;
 
+public class RestResponse  implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8337679683529131352L;
 	private Integer responseCode;
 	private String message;
 	

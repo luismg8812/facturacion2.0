@@ -20,6 +20,7 @@ import com.facturacion.web.model.Empresa;
 import com.facturacion.web.model.InfoDiario;
 import com.facturacion.web.model.Producto;
 import com.facturacion.web.model.Proveedor;
+import com.facturacion.web.utils.Conector;
 import com.facturacion.web.vo.DocumentoDetalleVo;
 
 

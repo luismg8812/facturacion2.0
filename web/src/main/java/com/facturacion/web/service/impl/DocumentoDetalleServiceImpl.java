@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.facturacion.web.dao.DocumentoDetalleDao;
 import com.facturacion.web.model.DocumentoDetalle;
-import com.facturacion.web.model.Usuario;
 import com.facturacion.web.service.DocumentoDetalleService;
 
 @Service

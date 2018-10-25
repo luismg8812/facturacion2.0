@@ -11,7 +11,7 @@ import { UsuariosService } from '../usuarios/usuarios.service';
 import { ClientesService } from '../clientes/clientes.service';
 import { ProductoModel } from '../model/producto.model';
 import { DocumentoDetalleModel } from '../model/documentoDetalle.model';
-import { Alert } from 'selenium-webdriver';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-ventas-dia',
@@ -28,6 +28,8 @@ export class VentasDiaComponent implements OnInit {
   @ViewChild("codigoPV") codigoPV: ElementRef;
   @ViewChild("cantidadPV") cantidadPV: ElementRef;
   @ViewChild("precioPV") precioPV: ElementRef;
+  @ViewChild("grameraPV") grameraPV: ElementRef;
+  
 
   //botones de acciones
   @ViewChild("siguientePV") siguientePV: ElementRef;
@@ -116,6 +118,12 @@ export class VentasDiaComponent implements OnInit {
     this.empleadoSelect = "";
     this.document = new DocumentoModel();
     this.productos = [];
+    $(document).ready(function(){
+        alert("aqui llega");
+          $("#exampleModal").on('hide.bs.modal', function () {
+              alert('The modal is about to be shown.');
+      });
+  });
   }
 
 
@@ -284,7 +292,7 @@ export class VentasDiaComponent implements OnInit {
     this.cantidadPV.nativeElement.value = "";
     this.precioPV.nativeElement.value = "";
     this.productos = [];
-    this.descuentoPV.nativeElement.value="";
+    this.descuentoPV.nativeElement.value = "";
     //this.carteraPV.nativeElement.value="";
     //this.tarjetaPV.nativeElement.value="";
     //this.vrTarjetaPV.nativeElement.value="";
@@ -292,98 +300,99 @@ export class VentasDiaComponent implements OnInit {
     //this.continuaImpresionPV.nativeElement.value="";
   }
 
-   
+
 
   imprimirFactura() {
     if (this.document.documentoId == "") {
-      alert("El documento esta corructo, vuelva a crearlo");
+      alert("El documento esta corructo, por favor vuelva a crearlo");
       return;
     }
-    
+
     //se asigna un tipo de pago
-    if(this.carteraPV.nativeElement.value=="S" ||this.carteraPV.nativeElement.value=="s"){
-      this.document.tipoPagoId="2";//tipo de pago a credito
-    }else{
-      if(this.tarjetaPV.nativeElement.value=="S" ||this.tarjetaPV.nativeElement.value=="s"){
-        this.document.tipoPagoId="5";//tipo de pago con tarjeta
-      }else{
-        this.document.tipoPagoId="1";//tipo de pago con en efectivo
+    if (this.carteraPV.nativeElement.value == "S" || this.carteraPV.nativeElement.value == "s") {
+      this.document.tipoPagoId = "2";//tipo de pago a credito
+    } else {
+      if (this.tarjetaPV.nativeElement.value == "S" || this.tarjetaPV.nativeElement.value == "s") {
+        this.document.tipoPagoId = "5";//tipo de pago con tarjeta
+      } else {
+        this.document.tipoPagoId = "1";//tipo de pago con en efectivo
       }
     }
     // se verifica si hay descuento para aplicar
-    let des1 = this.descuentoPV.nativeElement.value==""?0.0:this.descuentoPV.nativeElement.value;
-    if(des1!=0.0){
+    let des1 = this.descuentoPV.nativeElement.value == "" ? 0.0 : this.descuentoPV.nativeElement.value;
+    if (des1 != 0.0) {
       let desTemp = 0.0;
       this.getAplicarDescuento(des1);
     }
     //TODO hacer la parte que del docuemto asigna la mac desde type scrip
     //this.document.mac=""
     this.documentosService.imprimirFactura(this.document).subscribe(res => {
-        if(res.responseCode==200){
-          this.limpiar();
-          if(res.message!=""){
-            alert(res.message);
-          }
-        }else{
-          if(res.responseCode==500){
-            alert(res.message);
-          }
+      console.log(res);
+      if (res.responseCode == 200) {
+        this.limpiar();
+        if (res.message != "") {
+          alert(res.message);
         }
-        this.cancalarImpresionPV.nativeElement.click();
-        this.siguientePV.nativeElement.focus();
-    },(err) => {
+      } else {
+        if (res.responseCode == 500) {
+          alert(res.message);
+        }
+      }
+      this.cancalarImpresionPV.nativeElement.click();
+      this.siguientePV.nativeElement.focus();
+    }, (err) => {
       alert("Error imprimiendo factura desde el server");
     });
   }
 
-  getAplicarDescuento(descuento){
+  getAplicarDescuento(descuento) {
     let desTemp = 0.0;
-		// si el descuento es mayor o menor que 100 entonces se calcula el descuento en %		
-		if (descuento < -100.0 || descuento > 100.0) {
-			this.document.descuento = descuento;
-			desTemp = (descuento * 100) / +this.document.total;
-			console.log("% descuento:" + desTemp);
-		} else {
-			this.document.descuento=""+(+this.document.total * descuento / 100);
-			desTemp = descuento;
-			console.log("% descuento:" + desTemp);
-		}
-		//if (desTemp < -15 || desTemp > 15) {
-		//	return;
-		//}
-		let des = desTemp / 100;
-		let  temp:Array<DocumentoDetalleVoModel>=[];
-		for(var i=0; i<this.productos.length; i++){
-			let parcialDescuento = +this.productos[i].parcial + (+this.productos[i].parcial * des);
-			let unitarioDescuento = +this.productos[i].unitario + (+this.productos[i].unitario * des);
-			this.productos[i].parcial=""+parcialDescuento;
-			this.productos[i].unitario=""+unitarioDescuento;
-			temp.push(this.productos[i]);
-		}
-		let totalTemp = +this.document.total;
-		let ivaTemp = +this.document.iva + (+this.document.iva * des);
-		let excentoTemp = +this.document.excento + (+this.document.excento * des);
-		let gravadoTemp = +this.document.gravado + (+this.document.gravado * des);
-		this.document.total=""+totalTemp;
-		this.document.saldo=""+totalTemp;
-		this.document.iva=""+ivaTemp;
-		this.document.excento=""+excentoTemp;
-		this.document.gravado=""+gravadoTemp;
-		this.productos=temp;
-		// se valida si el descuento es mayor o menor a 1.5
-		//if (desTemp >= 1.5 || desTemp <= -1.5) {
-		//	Evento evento = new Evento();
-		//	TipoEvento tipoEvento = new TipoEvento();
-		//	tipoEvento.setTipoEventoId(2l); // se asigna tipo evento igual a
-											// descuento mayor al 1.5
-		//	evento.setFechaRegistro(new Date());
-		//	evento.setTipoEventoId(tipoEvento);
-		//	evento.setUsuarioId(usuario());
-		//	evento.setCampo("" + getDocumento().getDocumentoId());
-		//	evento.setValorActual("" + totalTemp);
-		//	evento.setValorAnterior("" + getDescuento());
-		//	eventoService.save(evento);
-		//}
+    // si el descuento es mayor o menor que 100 entonces se calcula el descuento en %		
+    if (descuento < -100.0 || descuento > 100.0) {
+      this.document.descuento = descuento;
+      desTemp = (descuento * 100) / +this.document.total;
+      console.log("% descuento:" + desTemp);
+    } else {
+      this.document.descuento = "" + (+this.document.total * descuento / 100);
+      desTemp = descuento;
+      console.log("% descuento:" + desTemp);
+    }
+    //if (desTemp < -15 || desTemp > 15) {
+    //	return;
+    //}
+    let des = desTemp / 100;
+    let temp: Array<DocumentoDetalleVoModel> = [];
+    for (var i = 0; i < this.productos.length; i++) {
+      let parcialDescuento = +this.productos[i].parcial + (+this.productos[i].parcial * des);
+      let unitarioDescuento = +this.productos[i].unitario + (+this.productos[i].unitario * des);
+      this.productos[i].parcial = "" + parcialDescuento;
+      this.productos[i].unitario = "" + unitarioDescuento;
+      temp.push(this.productos[i]);
+    }
+    let totalTemp = +this.document.total;
+    let ivaTemp = +this.document.iva + (+this.document.iva * des);
+    let excentoTemp = +this.document.excento + (+this.document.excento * des);
+    let gravadoTemp = +this.document.gravado + (+this.document.gravado * des);
+    this.document.total = "" + totalTemp;
+    this.document.saldo = "" + totalTemp;
+    this.document.iva = "" + ivaTemp;
+    this.document.excento = "" + excentoTemp;
+    this.document.gravado = "" + gravadoTemp;
+    this.productos = temp;
+    // se valida si el descuento es mayor o menor a 1.5
+    //if (desTemp >= 1.5 || desTemp <= -1.5) {
+    //	Evento evento = new Evento();
+    //	TipoEvento tipoEvento = new TipoEvento();
+    //	tipoEvento.setTipoEventoId(2l); // se asigna tipo evento igual a
+    // descuento mayor al 1.5
+    //	evento.setFechaRegistro(new Date());
+    //	evento.setTipoEventoId(tipoEvento);
+    //	evento.setUsuarioId(usuario());
+    //	evento.setCampo("" + getDocumento().getDocumentoId());
+    //	evento.setValorActual("" + totalTemp);
+    //	evento.setValorAnterior("" + getDescuento());
+    //	eventoService.save(evento);
+    //}
   }
 
   enterContinuarImpresion(element) {
@@ -414,7 +423,7 @@ export class VentasDiaComponent implements OnInit {
       if (contador >= 1) {
         clearInterval(myInterval);
       }
-    }, 200);
+    }, 100);
   }
 
   enterTarjeta(element) {
@@ -429,7 +438,7 @@ export class VentasDiaComponent implements OnInit {
       if (contador >= 1) {
         clearInterval(myInterval);
       }
-    }, 200);
+    }, 100);
   }
 
   precioEnter(element) {
@@ -451,7 +460,53 @@ export class VentasDiaComponent implements OnInit {
     if (precio == null || precio == '' || precio <= 0) {
       return;
     }
-    console.log("//TODO hacer lo que tiene que hacer cuando se le da enter en precio del x01");
+    let docDetalle = new DocumentoDetalleModel();
+    if (this.document.documentoId == "") {
+      this.document.clienteId = this.clienteSelect;
+      this.document.tipoDocumentoId = this.tipoDocumentSelect;
+      this.document.fechaRegistro = new Date();
+      var userLogin = sessionStorage.getItem("usuarioId");
+      this.document.usuarioId = userLogin;
+      this.documentosService.saveDocumento(this.document).subscribe(res => {
+        this.document = res;
+        //c cambia se hace en el back-end
+        docDetalle.cantidad = "1";//se asigna cantidad 1 en x01
+        docDetalle.parcial = precio;
+        docDetalle.unitario = precio;
+        docDetalle.productoId = this.productoSelect;
+        docDetalle.documentoId = this.document.documentoId;
+        docDetalle.estado = '1';
+        //TODO hacer en el back la logica del doble server
+        this.documentoDetalleService.agregarx01(docDetalle).subscribe(res => {
+          this.productos.push(res);
+          this.productos = this.productos.reverse();
+          this.documentosService.getDocumentoById(this.document.documentoId).subscribe(res => {
+            this.document = res;
+          });
+        });
+
+      });
+
+    } else {
+
+      let docDetalle = new DocumentoDetalleModel();
+      //c cambia se hace en el back-end
+
+      docDetalle.cantidad = "1";
+      docDetalle.productoId = this.productoSelect;
+      docDetalle.documentoId = this.document.documentoId;
+      docDetalle.estado = '1';
+      docDetalle.parcial = precio;
+      docDetalle.unitario = precio;
+      //TODO hacer en el back la logica del doble server
+      this.documentoDetalleService.agregarx01(docDetalle).subscribe(res => {
+        this.productos.push(res);
+        this.documentosService.getDocumentoById(this.document.documentoId).subscribe(res => {
+          this.document = res;
+        });
+      });
+
+    }
   }
 
   cantidadEnter(element) {
@@ -546,6 +601,10 @@ export class VentasDiaComponent implements OnInit {
     }
   }
 
+  getGramera() {
+
+  }
+
   articuloSelect(element) {
     console.log("articulo select:" + element.value);
     var splitted = element.value.split("|");
@@ -557,7 +616,11 @@ export class VentasDiaComponent implements OnInit {
     } else {
       this.productosService.getProductoById(this.productoSelect).subscribe(res => {
         if (res.balanza == '1') {
-          console.log("//TODO hacer lo de balanza");
+          this.getGramera();// este metodo
+          
+          this.grameraPV.nativeElement.classList.add("d-block");
+          this.grameraPV.nativeElement.classList.remove("d-none");
+          this.grameraPV.nativeElement.focus();
         } else {
           this.cantidadPV.nativeElement.focus();
         }
@@ -583,6 +646,11 @@ export class VentasDiaComponent implements OnInit {
   ocultarPrecio() {
     this.precioPV.nativeElement.classList.remove("d-block");
     this.precioPV.nativeElement.classList.add("d-none");
+  }
+
+  ocultarGramera(){
+    this.grameraPV.nativeElement.classList.remove("d-block");
+    this.grameraPV.nativeElement.classList.add("d-none");
   }
 
   empleadoSelectFunt(element) {
@@ -744,19 +812,23 @@ export class VentasDiaComponent implements OnInit {
         if (contador >= 1) {
           clearInterval(myInterval);
         }
-      }, 800);
+      }, 500);
     } else {
       var myInterval = setInterval(() => {
-        this.carteraPV.nativeElement.focus();
+        console.log(contador);
         contador = contador + 1;
         if (contador >= 1) {
+          
           clearInterval(myInterval);
+         
         }
-      }, 800);
+         this.carteraPV.nativeElement.focus();
+      }, 500);
     }
 
 
   }
+
 
   estadoDivProducto(visible: string) {
     if (visible == "d-block") {

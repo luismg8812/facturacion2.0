@@ -17,4 +17,9 @@ export class DocumentoDetalleService {
     let json = JSON.stringify(documentoDetalle);
     return this.http.post<DocumentoDetalleVoModel>("http://" + this.host + ":" + this.port + "/agregarDocumentoDetalle", json);
   }
+
+  public agregarx01(documentoDetalle: DocumentoDetalleModel): Observable<DocumentoDetalleVoModel> {
+    let json = JSON.stringify(documentoDetalle);
+    return this.http.post<DocumentoDetalleVoModel>("http://" + this.host + ":" + this.port + "/agregarx01", json);
+  }
 }

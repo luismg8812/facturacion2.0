@@ -20,8 +20,4 @@ export class ConfigService {
     return this.http.get("C://effectiveSoftware/facturacion/config/localConfig.json");
   }
 
-  getIpAddress() {
-    return this.http
-          .get('http://freegeoip.net/json/?callback');
-}
 }

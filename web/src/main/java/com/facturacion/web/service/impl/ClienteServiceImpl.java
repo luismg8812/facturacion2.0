@@ -5,15 +5,11 @@ import java.util.Optional;
 
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import com.facturacion.web.dao.ClienteDao;
-import com.facturacion.web.dao.UsuarioDao;
 import com.facturacion.web.model.Cliente;
-import com.facturacion.web.model.Usuario;
 import com.facturacion.web.service.ClienteService;
-import com.facturacion.web.service.UsuarioService;
 
 @Service
 public class ClienteServiceImpl implements ClienteService {

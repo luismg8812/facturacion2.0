@@ -86,7 +86,9 @@ public class MenuController implements Serializable{
 	
 	@RequestMapping(value="/getSubMenuByUsuario", method=RequestMethod.GET )
 	@CrossOrigin
-	public List<SubMenu> getSubMenuByUsuario(@RequestParam("usuarioId") String usuarioId) {		
+	public List<SubMenu> getSubMenuByUsuario(@RequestParam("usuarioId") String usuarioId) {	
+		
+		log.info("opciones por usuario: ");
 		return subMenuService.getSubMenuByUsuario(usuarioId);
 	}
 	

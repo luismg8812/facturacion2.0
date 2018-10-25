@@ -6,10 +6,10 @@
     </div>
     <div class="form-row">
         <div class="form-group col-md-2 col-sm-2">Documento: {{document.documentoId}}</div>
-        <div class="form-group col-md-2 col-sm-2">Fecha: </div>
+        <div class="form-group col-md-2 col-sm-2">Fecha: {{document.fechaRegistro | date: 'dd/MM/yyyy'}} </div>
         <div class="form-group col-md-4 col-sm-2">
-            <input list="browsers" name="clientePV" #clientePV placeholder="Cliente" class="form-control" id="clientePV" (keyup.enter)="enterTecla(clientePV)"
-                (change)="enterTecla(clientePV)" (keydown.esc)="scapeTecla(clientePV)">
+            <input list="browsers" name="clientePV" #clientePV placeholder="Cliente" class="form-control" id="clientePV"
+                (keyup.enter)="enterTecla(clientePV)" (change)="enterTecla(clientePV)" (keydown.esc)="scapeTecla(clientePV)">
             <datalist id="browsers">
                 <option *ngFor="let cliente of clientes" value="{{cliente.clienteId}}|{{cliente.nombre}}|{{cliente.documento}}">{{cliente.nombre}}
                     {{cliente.documento}}
@@ -18,20 +18,20 @@
         </div>
 
         <div class="form-group col-md-2 col-sm-2">
-            <input name="tipoDocumentoPV" #tipoDocumentoPV placeholder="TIpo Documento" class="form-control" id="tipoDocumentoPV" (keyup.F)="enterTecla(tipoDocumentoPV)"
-                (keyup.C)="enterTecla(tipoDocumentoPV)" (keyup.R)="enterTecla(tipoDocumentoPV)" (keydown.enter)="enterTecla(tipoDocumentoPV)"
-                (keydown.esc)="scapeTecla(clientePV)">
+            <input name="tipoDocumentoPV" #tipoDocumentoPV placeholder="TIpo Documento" class="form-control" id="tipoDocumentoPV"
+                (keyup.F)="enterTecla(tipoDocumentoPV)" (keyup.C)="enterTecla(tipoDocumentoPV)" (keyup.R)="enterTecla(tipoDocumentoPV)"
+                (keydown.enter)="enterTecla(tipoDocumentoPV)" (keydown.esc)="scapeTecla(clientePV)">
         </div>
         <div class="form-group col-md-2 col-sm-2">
-            <input list="empleados" name="empleadoPV" #empleadoPV placeholder="Empleado" class="form-control" id="empleadoPV" (keydown.enter)="enterTecla(empleadoPV)"
-                (change)="enterTecla(empleadoPV)" (keydown.esc)="scapeTecla(clientePV)">
+            <input list="empleados" name="empleadoPV" #empleadoPV placeholder="Empleado" class="form-control" id="empleadoPV"
+                (keydown.enter)="enterTecla(empleadoPV)" (change)="enterTecla(empleadoPV)" (keydown.esc)="scapeTecla(clientePV)">
             <datalist id="empleados">
                 <option value="prueba">prueba</option>
                 <option value="prueba2">prueba2</option>
             </datalist>
         </div>
     </div>
-    <hr/>
+    <hr />
 
     <div class="form-row">
         <div class="form-group col-md-1 col-sm-4" id="divSiguiente" #divSiguiente>
@@ -47,10 +47,12 @@
                 (keyup.enter)="enterTecla(primeraPV)">Primera</button>
         </div>
         <div class="form-group col-md-1 col-sm-4" id="divUltima" #divUltima>
-            <button type="button" class="btn btn-primary btn-sm" id="ultimaPV" #ultimaPV (keyup)="controlTeclas($event,ultimaPV)" (keyup.enter)="enterTecla(ultimaPV)">Ultima</button>
+            <button type="button" class="btn btn-primary btn-sm" id="ultimaPV" #ultimaPV (keyup)="controlTeclas($event,ultimaPV)"
+                (keyup.enter)="enterTecla(ultimaPV)">Ultima</button>
         </div>
         <div class="form-group col-md-1 col-sm-4" id="divBuscar" #divBuscar>
-            <button type="button" class="btn btn-primary btn-sm" id="buscarPV" #buscarPV (keyup)="controlTeclas($event,buscarPV)" (keyup.enter)="enterTecla(buscarPV)">Buscar</button>
+            <button type="button" class="btn btn-primary btn-sm" id="buscarPV" #buscarPV (keyup)="controlTeclas($event,buscarPV)"
+                (keyup.enter)="enterTecla(buscarPV)">Buscar</button>
         </div>
         <div class="form-group col-md-1 col-sm-4" id="divNueva" #divNueva>
             <button type="button" class="btn btn-primary btn-sm" id="nuevaPV" (click)="nuevafactura()" #nuevaPV (keyup)="controlTeclas($event,nuevaPV)"
@@ -61,17 +63,18 @@
                 (keyup.enter)="enterTecla(imprimirPV)">Imprimir</button>
         </div>
         <div class="form-group col-md-1 col-sm-4" id="divOpciones" #divOpciones>
-            <button type="button" class="btn btn-primary btn-sm" id="opcionPV" #opcionPV (keyup)="controlTeclas($event,opcionPV)" (keyup.enter)="enterTecla(opcionPV)">Opciones</button>
+            <button type="button" class="btn btn-primary btn-sm" id="opcionPV" #opcionPV (keyup)="controlTeclas($event,opcionPV)"
+                (keyup.enter)="enterTecla(opcionPV)">Opciones</button>
         </div>
         <div class="form-group col-md-1 col-sm-4" id="divFin" #divFin>
-            <button type="button" class="btn btn-primary btn-sm" id="finPV" #finPV (keyup)="controlTeclas($event,finPV)" routerLink="/menu"
-                (keyup.enter)="enterTecla(finPV)">Fin</button>
+            <button type="button" class="btn btn-primary btn-sm" id="finPV" #finPV (keyup)="controlTeclas($event,finPV)"
+                routerLink="/menu" (keyup.enter)="enterTecla(finPV)">Fin</button>
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-6 col-sm-2">
-            <input name="CodigoBarrasPV" #CodigoBarrasPV placeholder="Codigo de Barras" class="form-control" id="CodigoBarrasPV" (keydown.enter)="enterTecla(CodigoBarrasPV)"
-                (blur)="ocultarCodigoBarras()" (keydown.esc)="scapeTecla(clientePV)">
+            <input name="CodigoBarrasPV" #CodigoBarrasPV placeholder="Codigo de Barras" class="form-control" id="CodigoBarrasPV"
+                (keydown.enter)="enterTecla(CodigoBarrasPV)" (blur)="ocultarCodigoBarras()" (keydown.esc)="scapeTecla(clientePV)">
         </div>
     </div>
 
@@ -83,17 +86,19 @@
         </div>
         <div class="form-group col-sm-4 d-none" id="divArticulo" #divArticulo>
 
-            <input list="articulos" name="articuloPV" #articuloPV placeholder="Articulo" class="form-control" id="articuloPV" (keydown.enter)="enterTecla(articuloPV)"
-                (change)="articuloSelect(articuloPV)" (keydown.esc)="scapeTecla(clientePV)">
+            <input list="articulos" name="articuloPV" #articuloPV placeholder="Articulo" class="form-control" id="articuloPV"
+                (keydown.enter)="enterTecla(articuloPV)" (change)="articuloSelect(articuloPV)" (keydown.esc)="scapeTecla(clientePV)">
             <datalist id="articulos">
                 <option *ngFor="let producto of productosAll">{{producto.nombre}}|{{producto.costoPublico}}|{{producto.cantidad}}|{{producto.productoId}}</option>
             </datalist>
         </div>
         <div class="form-group col-sm-2 d-none" id="divCantidad" #divCantidad>
-            <input name="cantidadPV" #cantidadPV placeholder="Cantidad" class="form-control" id="cantidadPV" (keydown.enter)="enterTecla(cantidadPV)"
-                (keydown.esc)="scapeTecla(cantidadPV)">
-            <input name="precioPV" #precioPV placeholder="$ Precio" class="form-control d-none" id="precioPV" (keydown.enter)="enterTecla(precioPV)"
-                (keydown.esc)="scapeTecla(precioPV)" (blur)="ocultarPrecio()">
+            <input name="cantidadPV" #cantidadPV placeholder="Cantidad" class="form-control" id="cantidadPV"
+                (keydown.enter)="enterTecla(cantidadPV)" (keydown.esc)="scapeTecla(cantidadPV)">
+            <input name="precioPV" #precioPV placeholder="$ Precio" class="form-control d-none" id="precioPV"
+                (keydown.enter)="enterTecla(precioPV)" (keydown.esc)="scapeTecla(precioPV)" (blur)="ocultarPrecio()">
+            <input name="grameraPV" #grameraPV placeholder="$ Precio" class="form-control d-none" id="grameraPV"
+                (keydown.enter)="enterTecla(grameraPV)" (keydown.esc)="scapeTecla(grameraPV)" (blur)="ocultarGramera()">
         </div>
         <div class="form-group col-sm-2 d-none" id="divUnitario" #divUnitario>
             <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Unitario">
@@ -166,7 +171,8 @@
         pupup imrimir
     </button>
     <!-- Modal imprimir-->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -208,22 +214,23 @@
                             <h4 style="color:red">{{document.total}}</h4>
                         </div>
                     </div>
-                    <div class="row " >
-                        <div class="col col-ms-2 d-none"  #descuentoLavel name="descuentoLavel" id="descuentoLavel">
+                    <div class="row ">
+                        <div class="col col-ms-2 d-none" #descuentoLavel name="descuentoLavel" id="descuentoLavel">
                             <h5>Descuento: </h5>
                         </div>
                         <div class="col col-ms-2 ">
-                            <input name="descuentoPV" #descuentoPV placeholder="Descuento"  class="form-control d-none" id="descuentoPV" (keydown.enter)="enterTecla(descuentoPV)"
-                                (keydown.esc)="scapeTecla(descuentoPV)">
+                            <input name="descuentoPV" #descuentoPV placeholder="Descuento" class="form-control d-none"
+                                id="descuentoPV" (keydown.enter)="enterTecla(descuentoPV)" (keydown.esc)="scapeTecla(descuentoPV)">
                         </div>
                     </div>
-                   <div class="row">
+                    <div class="row">
                         <div class="col col-ms-2">
                             <h5>Cartera: </h5>
                         </div>
                         <div class="col col-ms-2">
-                            <input name="carteraPV" #carteraPV placeholder="S/N?"  class="form-control" id="carteraPV" (keydown.enter)="enterTecla(carteraPV)"
-                                (keydown.esc)="scapeTecla(carteraPV)" (keydown.S)="enterTecla(carteraPV)" (keydown.N)="enterTecla(carteraPV)">
+                            <input name="carteraPV" #carteraPV placeholder="S/N?" class="form-control" id="carteraPV"
+                                (keydown.enter)="enterTecla(carteraPV)" (keydown.esc)="scapeTecla(carteraPV)"
+                                (keydown.S)="enterTecla(carteraPV)" (keydown.N)="enterTecla(carteraPV)">
                         </div>
                     </div>
                     <div class="row">
@@ -231,8 +238,9 @@
                             <h5>Pago/tarjeta?: </h5>
                         </div>
                         <div class="col col-ms-2">
-                            <input name="tarjetaPV" #tarjetaPV placeholder="S/N?" class="form-control" id="tarjetaPV" (keydown.enter)="enterTecla(tarjetaPV)"
-                                (keydown.esc)="scapeTecla(tarjetaPV)" (keydown.S)="enterTecla(tarjetaPV)" (keydown.N)="enterTecla(tarjetaPV)">
+                            <input name="tarjetaPV" #tarjetaPV placeholder="S/N?" class="form-control" id="tarjetaPV"
+                                (keydown.enter)="enterTecla(tarjetaPV)" (keydown.esc)="scapeTecla(tarjetaPV)"
+                                (keydown.S)="enterTecla(tarjetaPV)" (keydown.N)="enterTecla(tarjetaPV)">
                         </div>
                     </div>
                     <div class="row">
@@ -240,8 +248,8 @@
                             <h5>Vr. Tarjeta: </h5>
                         </div>
                         <div class="col col-ms-2">
-                            <input name="vrTarjetaPV" #vrTarjetaPV placeholder="Valor tarjeta" class="form-control" id="vrTarjetaPV" (keydown.enter)="enterTecla(vrTarjetaPV)"
-                                (keydown.esc)="scapeTecla(vrTarjetaPV)">
+                            <input name="vrTarjetaPV" #vrTarjetaPV placeholder="Valor tarjeta" class="form-control" id="vrTarjetaPV"
+                                (keydown.enter)="enterTecla(vrTarjetaPV)" (keydown.esc)="scapeTecla(vrTarjetaPV)">
                         </div>
                     </div>
                     <div class="row">
@@ -249,8 +257,8 @@
                             <h5>Efectivo: </h5>
                         </div>
                         <div class="col col-ms-2">
-                            <input name="efectovoPV" #efectovoPV placeholder="Efectivo" class="form-control" id="efectovoPV" (keydown.enter)="enterTecla(efectovoPV)"
-                                (keydown.esc)="scapeTecla(efectovoPV)">
+                            <input name="efectovoPV" #efectovoPV placeholder="Efectivo" class="form-control" id="efectovoPV"
+                                (keydown.enter)="enterTecla(efectovoPV)" (keydown.esc)="scapeTecla(efectovoPV)">
                         </div>
                     </div>
                     <div class="row">
@@ -266,16 +274,18 @@
                             <h5>Continúa con la Impresión? </h5>
                         </div>
                         <div class="col col-ms-2">
-                            <input name="continuaImpresionPV" #continuaImpresionPV placeholder="S/N?" class="form-control" id="continuaImpresionPV" (keydown.enter)="enterTecla(continuaImpresionPV)"
-                                (keydown.esc)="scapeTecla(continuaImpresionPV)" (keydown.S)="enterTecla(continuaImpresionPV)" (keydown.N)="enterTecla(continuaImpresionPV)">
+                            <input name="continuaImpresionPV" #continuaImpresionPV placeholder="S/N?" class="form-control"
+                                id="continuaImpresionPV" (keydown.enter)="enterTecla(continuaImpresionPV)"
+                                (keydown.esc)="scapeTecla(continuaImpresionPV)" (keydown.S)="enterTecla(continuaImpresionPV)"
+                                (keydown.N)="enterTecla(continuaImpresionPV)">
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" name="cancalarImpresionPV" 
-                            #cancalarImpresionPV id="cancalarImpresionPV" >cancelar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" name="cancalarImpresionPV"
+                        #cancalarImpresionPV id="cancalarImpresionPV">cancelar</button>
                     <button type="button" #impresionPV class="btn btn-primary" name="impresionPV" (click)="imprimirFactura()"
-                     id="impresionPV">Imprimir</button>
+                        id="impresionPV">Imprimir</button>
                 </div>
             </div>
         </div>

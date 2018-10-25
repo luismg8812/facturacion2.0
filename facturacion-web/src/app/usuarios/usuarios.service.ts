@@ -17,26 +17,26 @@ export class UsuariosService {
   private port: string = sessionStorage.getItem("port");
   constructor(private http: HttpClient) { }
   public getByFiltros(usuario: UsuarioModel): Observable<UsuarioModel[]> {
-    return this.http.get<UsuarioModel[]>("http://" + this.host + ":" + this.port + "/getByFiltros?nombre=" + usuario.nombre +
+    return this.http.get<UsuarioModel[]>("http://" + this.host + ":" + this.port + "/client/getByFiltros?nombre=" + usuario.nombre +
       "&login=" + usuario.login + "&rol=" + usuario.rolId + "&identificacion=" + usuario.identificacion);
   }
 
   public saveUsuario(usuario: UsuarioModel): Observable<ResponseCodeModel> {
     let json = JSON.stringify(usuario);
     console.log(json);
-    return this.http.post<ResponseCodeModel>("http://" + this.host + ":" + this.port + "/saveOrUpdateUsuario", json);
+    return this.http.post<ResponseCodeModel>("http://" + this.host + ":" + this.port + "/client/saveOrUpdateUsuario", json);
   }
 
   public getRolAll(): Observable<RolModel[]> {
-    return this.http.get<RolModel[]>("http://" + this.host + ":" + this.port + "/getRollAll");
+    return this.http.get<RolModel[]>("http://" + this.host + ":" + this.port + "/client/getRolAll");
   }
 
   public getActivacionAll(): Observable<ActivacionModel[]> {
-    return this.http.get<ActivacionModel[]>("http://" + this.host + ":" + this.port + "/getActivacionAll");
+    return this.http.get<ActivacionModel[]>("http://" + this.host + ":" + this.port + "/client/getActivacionAll");
   }
 
   public getActivacionByUsuario(user:string): Observable<ActivacionModel[]> {
-    return this.http.get<ActivacionModel[]>("http://" + this.host + ":" + this.port + "/getActivacionByUsuario?usuarioId="+user);
+    return this.http.get<ActivacionModel[]>("http://" + this.host + ":" + this.port + "/client/getActivacionByUsuario?usuarioId="+user);
   }
 
 }

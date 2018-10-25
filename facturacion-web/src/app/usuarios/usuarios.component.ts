@@ -172,7 +172,6 @@ export class UsuariosComponent implements OnInit {
       }
     });
     this.menuService.guardarRutas(this.usuarioSelect,idSubmenu).subscribe(res => {
-      console.log(res);
       if (res.responseCode == 200) {
         $('#exampleModal2').modal('hide');
       } else {
@@ -188,6 +187,7 @@ export class UsuariosComponent implements OnInit {
     this.menuService.getSubMenuAll().subscribe(subMenuAll => {
       this.subMenuAll = subMenuAll;
       this.menuService.getSubMenuByUsuario(user.usuarioId).subscribe(res1 => {
+        console.log(res1);
         this.submenuSelect = res1;
         for (var e = 0; e < subMenuAll.length; e++) {
           var esta = false;
