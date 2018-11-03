@@ -1,27 +1,18 @@
 package com.invoice.electonic.controller;
 
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.security.KeyStore;
-import java.security.KeyStore.PrivateKeyEntry;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
 import java.security.UnrecoverableEntryException;
-import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.security.cert.CertificateException;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -36,7 +27,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.etsi.uri._01903.v1_3.AnyType;
 import org.etsi.uri._01903.v1_3.CertIDListType;
 import org.etsi.uri._01903.v1_3.CertIDType;
-import org.etsi.uri._01903.v1_3.ClaimedRole;
 import org.etsi.uri._01903.v1_3.ClaimedRolesListType;
 import org.etsi.uri._01903.v1_3.DigestAlgAndValueType;
 import org.etsi.uri._01903.v1_3.ObjectIdentifierType;
@@ -74,13 +64,18 @@ import com.invoice.electonic.utils.DefaultNamespacePrefixMapper;
 
 import co.gov.dian.contratos.facturaelectronica.v1.AddressType;
 import co.gov.dian.contratos.facturaelectronica.v1.CustomerPartyType;
+import co.gov.dian.contratos.facturaelectronica.v1.InvoiceLineType;
 import co.gov.dian.contratos.facturaelectronica.v1.InvoiceType;
+import co.gov.dian.contratos.facturaelectronica.v1.ItemType;
 import co.gov.dian.contratos.facturaelectronica.v1.LocationType;
+import co.gov.dian.contratos.facturaelectronica.v1.MonetaryTotalType;
 import co.gov.dian.contratos.facturaelectronica.v1.PartyLegalEntityType;
 import co.gov.dian.contratos.facturaelectronica.v1.PartyTaxSchemeType;
 import co.gov.dian.contratos.facturaelectronica.v1.PartyType;
 import co.gov.dian.contratos.facturaelectronica.v1.PersonType;
 import co.gov.dian.contratos.facturaelectronica.v1.SupplierPartyType;
+import co.gov.dian.contratos.facturaelectronica.v1.TaxSubtotalType;
+import co.gov.dian.contratos.facturaelectronica.v1.TaxTotalType;
 import co.gov.dian.contratos.facturaelectronica.v1.structures.AuthrorizedInvoices;
 import co.gov.dian.contratos.facturaelectronica.v1.structures.DianExtensionsType;
 import co.gov.dian.contratos.facturaelectronica.v1.structures.InvoiceControl;
@@ -90,8 +85,11 @@ import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.Cont
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CountryType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PartyIdentificationType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PeriodType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PricingReferenceType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxCategoryType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxSchemeType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AdditionalAccountIDType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AllowanceTotalAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CityNameType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CitySubdivisionNameType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CompanyIDType;
@@ -103,24 +101,37 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.Electron
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.EndDateType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.FamilyNameType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.FirstNameType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.FreeOfChargeIndicatorType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IdentificationCodeType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InvoiceTypeCodeType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InvoicedQuantityType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IssueDateType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IssueTimeType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LineExtensionAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LineType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NameType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PayableAmountType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PercentType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PostalZoneType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ProfileIDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RegistrationNameType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.StartDateType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxAmountType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxEvidenceIndicatorType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxExclusiveAmountType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxInclusiveAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxLevelCodeType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxTypeCodeType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxableAmountType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TelephoneType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TextType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.UBLVersionIDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.UUIDType;
 import oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.ExtensionContentType;
 import oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.UBLExtensionType;
 import oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.UBLExtensionsType;
+import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
 import un.unece.uncefact.data.specification.unqualifieddatatypesschemamodule._2.IdentifierType;
 
 @Controller
@@ -145,7 +156,9 @@ public class InvoiceController {
 			InvoiceType invoice = createInvoice(documento,marshaller);
 			invoice.getUBLExtensions().getUBLExtension().get(0).getExtensionContent().setAny(dianExtension());
 			invoice.getUBLExtensions().getUBLExtension().get(1).getExtensionContent().setAny(signature());
+			log.info("inicio factura completa");
 			marshaller.marshal(invoice, System.out);
+			log.info("fin factura completa");
 		} catch (PropertyException|ParserConfigurationException|CertificateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -171,9 +184,113 @@ public class InvoiceController {
 		invoice.setDocumentCurrencyCode(documentCurrencyCodeType());
 		invoice.setAccountingSupplierParty(accountingSupplierParty(documento));
 		invoice.setAccountingCustomerParty(customerPartyType());
+		invoice.getTaxTotal().add(taxTotalTypes(documento));
+		invoice.setLegalMonetaryTotal(monetaryTotalType(documento));
+		invoice.getInvoiceLine().add(invoiceLineType(documento));
+		
 		//se arman de ultimo los extencion
 		invoice.setUBLExtensions(ublExtensions(documento,marshaller));
 		return invoice;
+	}
+	
+	private InvoiceLineType invoiceLineType(Documento documento) {
+		InvoiceLineType invoiceLineType = new InvoiceLineType();
+		IDType idType = new IDType();
+		InvoicedQuantityType invoicedQuantityType = new InvoicedQuantityType(); 
+		LineExtensionAmountType lineExtensionAmountType = new LineExtensionAmountType();
+		FreeOfChargeIndicatorType freeOfChargeIndicatorType = new FreeOfChargeIndicatorType(); 
+		freeOfChargeIndicatorType.setValue(false);
+		invoicedQuantityType.setUnitCode("S8");
+		invoicedQuantityType.setValue(new BigDecimal("234"));
+		lineExtensionAmountType.setCurrencyID(CurrencyCodeContentType.COP);
+		lineExtensionAmountType.setValue(new BigDecimal("100000.000"));
+		idType.setValue("1");
+		invoiceLineType.setID(idType);
+		invoiceLineType.setInvoicedQuantity(invoicedQuantityType);
+		invoiceLineType.setLineExtensionAmount(lineExtensionAmountType);
+		invoiceLineType.setFreeOfChargeIndicator(freeOfChargeIndicatorType);
+		invoiceLineType.setPricingReference(new PricingReferenceType());
+		invoiceLineType.getTaxTotal().add(taxTotalType(documento));
+		invoiceLineType.setItem(new ItemType());
+		return invoiceLineType;
+	}
+	
+	private oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxTotalType taxTotalType(Documento documento){
+		oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxTotalType taxTotalType = new oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxTotalType();
+		TaxAmountType amountType = new TaxAmountType();
+		TaxEvidenceIndicatorType evidenceIndicatorType = new TaxEvidenceIndicatorType();
+		evidenceIndicatorType.setValue(false);
+		amountType.setCurrencyID(CurrencyCodeContentType.COP); //tipo de moneda -ok
+		amountType.setValue(new BigDecimal("19000.000"));
+		taxTotalType.setTaxAmount(amountType);		
+		taxTotalType.setTaxEvidenceIndicator(evidenceIndicatorType);		
+		return taxTotalType;
+	}
+	
+	private MonetaryTotalType monetaryTotalType(Documento documento ) {
+		MonetaryTotalType monetaryTotalType = new MonetaryTotalType();
+		LineExtensionAmountType lineExtensionAmountType = new LineExtensionAmountType();
+		TaxExclusiveAmountType exclusiveAmountType = new TaxExclusiveAmountType();
+		TaxInclusiveAmountType inclusiveAmountType = new TaxInclusiveAmountType();
+		AllowanceTotalAmountType allowanceTotalAmountType = new AllowanceTotalAmountType();
+		PayableAmountType payableAmountType = new PayableAmountType();
+		payableAmountType.setCurrencyID(CurrencyCodeContentType.COP);
+		payableAmountType.setValue(new BigDecimal("113000.000"));
+		allowanceTotalAmountType.setCurrencyID(CurrencyCodeContentType.COP);
+		allowanceTotalAmountType.setValue(new BigDecimal("0.000"));
+		inclusiveAmountType.setCurrencyID(CurrencyCodeContentType.COP);
+		inclusiveAmountType.setValue(new BigDecimal("100000.000"));
+		exclusiveAmountType.setCurrencyID(CurrencyCodeContentType.COP);
+		exclusiveAmountType.setValue(new BigDecimal("119000.000"));
+		lineExtensionAmountType.setCurrencyID(CurrencyCodeContentType.COP);
+		lineExtensionAmountType.setValue(new BigDecimal("100000.000"));
+		monetaryTotalType.setLineExtensionAmount(lineExtensionAmountType);
+		monetaryTotalType.setTaxExclusiveAmount(exclusiveAmountType);
+		monetaryTotalType.setTaxInclusiveAmount(inclusiveAmountType);
+		monetaryTotalType.setAllowanceTotalAmount(allowanceTotalAmountType);
+		monetaryTotalType.setPayableAmount(payableAmountType);
+		return monetaryTotalType;
+	}
+	
+	private TaxTotalType taxTotalTypes(Documento documento){		
+		TaxTotalType taxTotalTypes = new TaxTotalType();
+		TaxAmountType amountType = new TaxAmountType();
+		TaxEvidenceIndicatorType evidenceIndicatorType = new TaxEvidenceIndicatorType();
+		evidenceIndicatorType.setValue(false);
+		amountType.setCurrencyID(CurrencyCodeContentType.COP); //tipo de moneda -ok
+		amountType.setValue(new BigDecimal("19000.000"));
+		taxTotalTypes.setTaxAmount(amountType);		
+		taxTotalTypes.setTaxEvidenceIndicator(evidenceIndicatorType);
+		taxTotalTypes.getTaxSubtotal().add(taxSubtotalType());
+		return taxTotalTypes;
+	}
+	
+	private TaxSubtotalType taxSubtotalType() {
+		TaxSubtotalType taxSubtotalType = new TaxSubtotalType();
+		TaxableAmountType taxableAmountType = new TaxableAmountType();
+		TaxAmountType amountType = new TaxAmountType();
+		PercentType percentType = new PercentType();
+		TaxCategoryType categoryType = new TaxCategoryType();
+		TaxSchemeType taxSchemeType = new TaxSchemeType();
+		IDType idType = new IDType();
+		TaxTypeCodeType taxTypeCodeType = new TaxTypeCodeType();
+		taxTypeCodeType.setValue("01"); //valor quedamo creo que siempre es 01 por el iva 
+		idType.setSchemeDataURI("http://www.dian.gov.co"); // valor quemado -ok
+		idType.setSchemeName("VALOR TOTAL DE IVA"); // valor quedamo -ok
+		idType.setValue("01");  //valor quedado para iva -ok
+		taxSchemeType.setID(idType);
+		taxSchemeType.setTaxTypeCode(taxTypeCodeType);
+		categoryType.setTaxScheme(taxSchemeType);
+		percentType.setValue(new BigDecimal("19")); // porcentaje de impuesto cobrado
+		amountType.setCurrencyID(CurrencyCodeContentType.COP); //tipo de moneda -ok
+		amountType.setValue(new BigDecimal("19000.000"));
+		taxableAmountType.setCurrencyID(CurrencyCodeContentType.COP); // tipo de moneda -ok
+		taxableAmountType.setValue(new BigDecimal("100000.000")); // base del impuesto esto esta en el documento
+		taxSubtotalType.setTaxableAmount(taxableAmountType);
+		taxSubtotalType.setTaxAmount(amountType);
+		taxSubtotalType.setPercent(percentType);
+		taxSubtotalType.setTaxCategory(categoryType);
+		return taxSubtotalType;
 	}
 	
 	private Element dianExtension() throws JAXBException, ParserConfigurationException {		
@@ -189,7 +306,7 @@ public class InvoiceController {
 		marshaller.marshal( dianExtensionsType, doc );
 		Node invoce= doc.getFirstChild();
 		//marshaller.marshal(dianExtensionsType, System.out);
-		log.info(invoce.getNodeName());
+		//log.info(invoce.getNodeName());
 		return (Element)invoce;
 	}
 	
@@ -205,7 +322,7 @@ public class InvoiceController {
 		SignatureType signatureType = signatureType();
 		marshaller.marshal( signatureType, doc );
 		Node invoce= doc.getFirstChild();
-		marshaller.marshal(signatureType, System.out);
+		//marshaller.marshal(signatureType, System.out);
 		log.info(invoce.getNodeName());
 		return (Element)invoce;
 	}
@@ -485,11 +602,130 @@ public class InvoiceController {
 	private CustomerPartyType customerPartyType() {
 		CustomerPartyType customerPartyType = new CustomerPartyType();
 		customerPartyType.setAdditionalAccountID(additionalAccountIDType());
+		customerPartyType.setParty(partyType());
 		return customerPartyType;
+	}
+	
+	private PartyType partyType() {
+		PartyType partyType = new PartyType();
+		partyType.getPartyIdentification().add(partyIdentificationType());
+		partyType.setPhysicalLocation(locationTypeCustomer());
+		partyType.getPartyTaxScheme().add(partyTaxSchemeType2());
+		partyType.getPartyLegalEntity().add(partyLegalEntityType2());
+		partyType.setContact(contactType2());
+		return partyType;
+	}
+	
+	private ContactType contactType2() {
+		ContactType contactType = new ContactType();
+		NameType nameType = new NameType();
+		TelephoneType  telephoneType = new TelephoneType(); 
+		ElectronicMailType electronicMailType = new ElectronicMailType();
+		electronicMailType.setValue("effectivesoftware1@gmail.com");
+		telephoneType.setValue("1234534");
+		nameType.setValue("Empresa DEMO");
+		contactType.setName(nameType);
+		contactType.setTelephone(telephoneType);
+		contactType.setElectronicMail(electronicMailType);
+		return contactType;
+	}
+	
+	private PartyLegalEntityType partyLegalEntityType2() {
+		 PartyLegalEntityType partyLegalEntityType = new PartyLegalEntityType();
+		 RegistrationNameType registrationNameType = new RegistrationNameType();
+		 CompanyIDType companyIDType = new CompanyIDType();
+		 companyIDType.setSchemeDataURI("http://www.rues.org.co/RUES_Web/");
+		 companyIDType.setSchemeName("matrícula mercantil: persona natural o jurídica");
+		 registrationNameType.setValue("Empresa DEMO");
+		 partyLegalEntityType.setRegistrationName(registrationNameType);
+		 partyLegalEntityType.setCompanyID(companyIDType);
+		 partyLegalEntityType.setRegistrationAddress(addressType3());
+		 return partyLegalEntityType;
+	}
+	
+	private oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AddressType addressType3() {
+		oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AddressType addressType = new oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AddressType();
+		CitySubdivisionNameType citySubdivisionNameType = new CitySubdivisionNameType();
+		CityNameType cityNameType = new CityNameType();
+		PostalZoneType postalZoneType = new PostalZoneType();
+		CountrySubentityType countrySubentityType = new CountrySubentityType();
+		AddressLineType addressLineType = new AddressLineType();
+		LineType lineType = new LineType();
+		CountryType countryType = new CountryType();
+		IdentificationCodeType identificationCodeType = new IdentificationCodeType();
+		identificationCodeType.setListID("ISO 3166-1");
+		identificationCodeType.setListName("");
+		NameType nameType = new NameType();
+		countryType.setName(nameType);
+		countryType.setIdentificationCode(identificationCodeType);
+		addressLineType.setLine(lineType);
+		addressType.setCitySubdivisionName(citySubdivisionNameType);
+		addressType.setCityName(cityNameType);
+		addressType.setPostalZone(postalZoneType);
+		addressType.setCountrySubentity(countrySubentityType);
+		addressType.getAddressLine().add(addressLineType);
+		addressType.setCountry(countryType);
+		return addressType;
+	}
+	
+	private PartyTaxSchemeType partyTaxSchemeType2() {
+		PartyTaxSchemeType partyTaxSchemeType =new PartyTaxSchemeType();
+		TaxLevelCodeType taxLevelCodeType = new TaxLevelCodeType();
+		taxLevelCodeType.setListName("TIPOS OBLIGACIONES-RESPONSABILIDADES:2016");
+		taxLevelCodeType.setListSchemeURI("http://www.dian.gov.co/");
+		taxLevelCodeType.setName("Otro tipo de obligado");
+		taxLevelCodeType.setValue("0-99");
+		partyTaxSchemeType.setTaxLevelCode(taxLevelCodeType);
+		return partyTaxSchemeType;
+	}
+	
+	private LocationType locationTypeCustomer() {
+		LocationType locationType = new LocationType();
+		DescriptionType descriptionType = new DescriptionType();
+		
+		descriptionType.setValue("Av Dorado No 90 10");
+		locationType.setDescription(descriptionType);
+		locationType().setAddress(addressType2());
+		return locationType;
+	}
+	
+	private AddressType addressType2() {
+		AddressType addressType = new AddressType();
+		CityNameType cityNameType = new CityNameType();
+		AddressLineType addressLineType = new AddressLineType();
+		LineType lineType = new LineType();
+		CountryType countryType = new CountryType();
+		IdentificationCodeType identificationCodeType = new IdentificationCodeType();
+		identificationCodeType.setListName("COLOMBIA");
+		identificationCodeType.setListURI("http://www.dian.gov.co");
+		identificationCodeType.setValue("CO");
+		countryType.setIdentificationCode(identificationCodeType);
+		addressLineType.setLine(lineType);
+		cityNameType.setValue("Bogota");
+		addressType.setCityName(cityNameType);
+		addressType.getAddressLine().add(addressLineType);
+		addressType.setCountry(countryType);
+		return addressType;
+		
+	}
+	
+	
+	private PartyIdentificationType partyIdentificationType() {
+		 PartyIdentificationType partyIdentificationType = new PartyIdentificationType();
+		 IDType idType = new IDType();
+		 idType.setSchemeAgencyID("195");
+		 idType.setSchemeAgencyName("CO, DIAN (Direccion de Impuestos y Aduanas Nacionales)");
+		 idType.setSchemeID("31");
+		 idType.setValue("20505779292");
+		 partyIdentificationType.setID(idType);
+		 return partyIdentificationType;
 	}
 	
 	private AdditionalAccountIDType additionalAccountIDType() {
 		AdditionalAccountIDType additionalAccountIDType = new AdditionalAccountIDType();
+		additionalAccountIDType.setSchemeDataURI("http://www.dian.gov.co");
+		additionalAccountIDType.setSchemeName("tipos de organización jurídica; adquiriente: una persona jurídica. Solo use el valor '1'");
+		additionalAccountIDType.setValue("1");
 		return additionalAccountIDType;
 	}
 	
