@@ -114,6 +114,7 @@ public class Invoice2Controller {
 		
 		FacturaElectronicaPortNameProxy nameProxy = new FacturaElectronicaPortNameProxy();
 		EnvioFacturaElectronica envioFacturaElectronica = new EnvioFacturaElectronica();
+		envioFacturaElectronica.setNIT("8081972684");
 		try {
 			AcuseRecibo acuseRecibo=nameProxy.envioFacturaElectronica(envioFacturaElectronica);
 			log.info(acuseRecibo.getResponse());
