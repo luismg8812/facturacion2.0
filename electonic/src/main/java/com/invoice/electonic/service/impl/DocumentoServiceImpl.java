@@ -1,5 +1,6 @@
 package com.invoice.electonic.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,5 +27,9 @@ public class DocumentoServiceImpl implements DocumentoService {
 		documentoDao.save(documento);		
 	}
 
-	
+	@Override
+	public List<Documento> getByEstado(Long estado) {
+		return documentoDao.getByEstado(estado);
+		
+	}
 }

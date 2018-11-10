@@ -534,7 +534,7 @@ public class InvoiceController {
 	
 	private IDType idType(Documento documento) {
 		IDType idType = new IDType();
-		idType.setValue(documento.getConsecutivoDian());
+		idType.setValue(documento.getNumeroDocumento());
 		return idType ;
 	}
 	

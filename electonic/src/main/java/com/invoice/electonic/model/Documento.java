@@ -2,8 +2,6 @@ package com.invoice.electonic.model;
 
 
 
-
-
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -11,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -29,20 +29,13 @@ public class Documento {
 	@Column(name="TIPO_DOCUMENTO_ID")
 	private Long tipoDocumentoId;
 	
-	@Column(name="PROVEEDOR_ID")
-	private Long proveedorId;
+	@Column(name="ESTADO_DOCUMENTO_ID")
+	private Long estadoDocumentoId;
 	
-	@Column(name="USUARIO_ID")
-	private Long usuarioId;
+	@ManyToOne
+	@JoinColumn(name="RECEPTOR_ID")
+	private Receptor receptorId;
 	
-	@Column(name="CLIENTE_ID")
-	private Long clienteId;
-	
-	@Column(name="EMPLEADO_ID")
-	private Long empleadoId;
-	
-	@Column(name="TIPO_PAGO_ID")
-	private Long tipoPagoId;
 	
 	@Column(name="FECHA_REGISTRO")
 	private Date fechaRegistro;
@@ -50,11 +43,9 @@ public class Documento {
 	@Column(name="FECHA_ACTUALIZA")
 	private Date fechaActualiza;
 	
-	@Column(name="CONSECUTIVO_DIAN")
-	private String consecutivoDian;
+	@Column(name="NUMERO_DOCUMENTO")
+	private String numeroDocumento;
 	
-	@Column(name="IMPRESO")
-	private Long impreso;
 	
 	@Column(name="TOTAL")
 	private Double total;
@@ -68,42 +59,6 @@ public class Documento {
 	@Column(name="IVA")
 	private Double iva;
 	
-	@Column(name="CIERRE_DIARIO")
-	private Long cierreDiario;
-	
-	@Column(name="DETALLE_ENTRADA")
-	private String detalleEntrada;
-	
-	@Column(name="SALDO")
-	private Double saldo;
-	
-	@Column(name="REDUCCION")
-	private Long reduccion;
-	
-	@Column(name="PESO_TOTAL")
-	private Double pesoTotal;
-	
-	@Column(name="DESCUENTO")
-	private Double descuento;
-	
-	@Column(name="VALOR_TARJETA")
-	private Double valorTarjeta;
-	
-	@Column(name="EFECTIVO")
-	private Double efectivo;
-	
-	@Column(name="CAMBIO")
-	private Double cambio;
-	
-	@Column(name="ENTREGADO")
-	private Long entregado;
-	
-	@Column(name="RETENIDO")
-	private Long retenido;
-	
-	@Column(name="MAC")
-	private String mac;
-	
 	@Column(name="IVA_19")
 	private Double iva19;
 	
@@ -116,21 +71,12 @@ public class Documento {
 	@Column(name="BASE_5")
 	private Double base5;
 	
-	@Column(name="RETEFUENTE")
-	private Double retefuente;
+		
+	@Column(name="PREFIJO")
+	private String prefijo;
 	
-	@Column(name="INTERES")
-	private Double interes;
-	
-	@Column(name="TOTAL_COSTO")
-	private Double totalCosto;
-
 	public Long getDocumentoId() {
 		return documentoId;
-	}
-
-	public void setDocumentoId(Long documentoId) {
-		this.documentoId = documentoId;
 	}
 
 	public Long getTipoDocumentoId() {
@@ -141,44 +87,14 @@ public class Documento {
 		this.tipoDocumentoId = tipoDocumentoId;
 	}
 
-	public Long getProveedorId() {
-		return proveedorId;
+
+
+	public Receptor getReceptorId() {
+		return receptorId;
 	}
 
-	public void setProveedorId(Long proveedorId) {
-		this.proveedorId = proveedorId;
-	}
-
-	public Long getUsuarioId() {
-		return usuarioId;
-	}
-
-	public void setUsuarioId(Long usuarioId) {
-		this.usuarioId = usuarioId;
-	}
-
-	public Long getClienteId() {
-		return clienteId;
-	}
-
-	public void setClienteId(Long clienteId) {
-		this.clienteId = clienteId;
-	}
-
-	public Long getEmpleadoId() {
-		return empleadoId;
-	}
-
-	public void setEmpleadoId(Long empleadoId) {
-		this.empleadoId = empleadoId;
-	}
-
-	public Long getTipoPagoId() {
-		return tipoPagoId;
-	}
-
-	public void setTipoPagoId(Long tipoPagoId) {
-		this.tipoPagoId = tipoPagoId;
+	public void setReceptorId(Receptor receptorId) {
+		this.receptorId = receptorId;
 	}
 
 	public Date getFechaRegistro() {
@@ -197,20 +113,12 @@ public class Documento {
 		this.fechaActualiza = fechaActualiza;
 	}
 
-	public String getConsecutivoDian() {
-		return consecutivoDian;
+	public String getNumeroDocumento() {
+		return numeroDocumento;
 	}
 
-	public void setConsecutivoDian(String consecutivoDian) {
-		this.consecutivoDian = consecutivoDian;
-	}
-
-	public Long getImpreso() {
-		return impreso;
-	}
-
-	public void setImpreso(Long impreso) {
-		this.impreso = impreso;
+	public void setNumeroDocumento(String numeroDocumento) {
+		this.numeroDocumento = numeroDocumento;
 	}
 
 	public Double getTotal() {
@@ -245,102 +153,6 @@ public class Documento {
 		this.iva = iva;
 	}
 
-	public Long getCierreDiario() {
-		return cierreDiario;
-	}
-
-	public void setCierreDiario(Long cierreDiario) {
-		this.cierreDiario = cierreDiario;
-	}
-
-	public String getDetalleEntrada() {
-		return detalleEntrada;
-	}
-
-	public void setDetalleEntrada(String detalleEntrada) {
-		this.detalleEntrada = detalleEntrada;
-	}
-
-	public Double getSaldo() {
-		return saldo;
-	}
-
-	public void setSaldo(Double saldo) {
-		this.saldo = saldo;
-	}
-
-	public Long getReduccion() {
-		return reduccion;
-	}
-
-	public void setReduccion(Long reduccion) {
-		this.reduccion = reduccion;
-	}
-
-	public Double getPesoTotal() {
-		return pesoTotal;
-	}
-
-	public void setPesoTotal(Double pesoTotal) {
-		this.pesoTotal = pesoTotal;
-	}
-
-	public Double getDescuento() {
-		return descuento;
-	}
-
-	public void setDescuento(Double descuento) {
-		this.descuento = descuento;
-	}
-
-	public Double getValorTarjeta() {
-		return valorTarjeta;
-	}
-
-	public void setValorTarjeta(Double valorTarjeta) {
-		this.valorTarjeta = valorTarjeta;
-	}
-
-	public Double getEfectivo() {
-		return efectivo;
-	}
-
-	public void setEfectivo(Double efectivo) {
-		this.efectivo = efectivo;
-	}
-
-	public Double getCambio() {
-		return cambio;
-	}
-
-	public void setCambio(Double cambio) {
-		this.cambio = cambio;
-	}
-
-	public Long getEntregado() {
-		return entregado;
-	}
-
-	public void setEntregado(Long entregado) {
-		this.entregado = entregado;
-	}
-
-	public Long getRetenido() {
-		return retenido;
-	}
-
-	public void setRetenido(Long retenido) {
-		this.retenido = retenido;
-	}
-
-	public String getMac() {
-		return mac;
-	}
-
-	public void setMac(String mac) {
-		this.mac = mac;
-	}
-
 	public Double getIva19() {
 		return iva19;
 	}
@@ -373,30 +185,16 @@ public class Documento {
 		this.base5 = base5;
 	}
 
-	public Double getRetefuente() {
-		return retefuente;
+	public String getPrefijo() {
+		return prefijo;
 	}
 
-	public void setRetefuente(Double retefuente) {
-		this.retefuente = retefuente;
+	public void setPrefijo(String prefijo) {
+		this.prefijo = prefijo;
 	}
 
-	public Double getInteres() {
-		return interes;
+	public void setDocumentoId(Long documentoId) {
+		this.documentoId = documentoId;
 	}
-
-	public void setInteres(Double interes) {
-		this.interes = interes;
-	}
-
-	public Double getTotalCosto() {
-		return totalCosto;
-	}
-
-	public void setTotalCosto(Double totalCosto) {
-		this.totalCosto = totalCosto;
-	}
-		
-
 	
 }

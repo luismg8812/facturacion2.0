@@ -30,9 +30,6 @@ public class Documento {
 	private Long tipoDocumentoId;
 	
 	
-	
-	
-	
 	@ManyToOne
 	@JoinColumn(name="RECEPTOR_ID")
 	private Receptor receptorId;
