@@ -12,4 +12,8 @@ public interface DocumentoInvoiceService {
 
 	void saveOrUpdate(Documento documento);
 
+	List<Documento> getByNumber(String numeroDocumento);
+
+	void delete(Documento documento);
+
 }

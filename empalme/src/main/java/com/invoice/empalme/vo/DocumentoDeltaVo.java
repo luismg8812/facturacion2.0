@@ -3,7 +3,8 @@ package com.invoice.empalme.vo;
 import java.util.List;
 
 import com.invoice.empalme.model.invoice.Documento;
-import com.invoice.empalme.model.nicesoftware.DocumentoDetalle;
+import com.invoice.empalme.model.invoice.DocumentoDetalle;
+
 
 public class DocumentoDeltaVo {
 	

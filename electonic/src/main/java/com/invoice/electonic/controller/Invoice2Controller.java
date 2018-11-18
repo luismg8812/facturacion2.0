@@ -1,9 +1,13 @@
 package com.invoice.electonic.controller;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.rmi.RemoteException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -22,9 +26,7 @@ import com.invoice.electonic.utils.Calculos;
 import com.invoice.electonic.utils.DefaultNamespacePrefixMapper;
 
 import co.gov.dian.contratos.facturaelectronica.v1.InvoiceType;
-import co.gov.dian.www.servicios.facturaelectronica.ReportarFactura.AcuseRecibo;
-import co.gov.dian.www.servicios.facturaelectronica.ReportarFactura.EnvioFacturaElectronica;
-import co.gov.dian.www.servicios.facturaelectronica.ReportarFactura.FacturaElectronicaPortNameProxy;
+
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.UBLVersionIDType;
 
 @Controller
@@ -63,7 +65,7 @@ public class Invoice2Controller {
 				folder.mkdirs();
 				OutputStream os = new FileOutputStream(RUTA_FACTURAS_XML+nombreFactura);
 				marshaller.marshal( invoice, os );
-				envioSWDIAN(RUTA_FACTURAS_XML+nombreFactura);
+				envioSWDIAN(RUTA_FACTURAS_XML+nombreFactura,d);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -110,18 +112,8 @@ public class Invoice2Controller {
 	
 	
 	//kevin
-	private String envioSWDIAN(String ruta) {
+	private String envioSWDIAN(String ruta, Documento documento) {
 		
-		FacturaElectronicaPortNameProxy nameProxy = new FacturaElectronicaPortNameProxy();
-		EnvioFacturaElectronica envioFacturaElectronica = new EnvioFacturaElectronica();
-		envioFacturaElectronica.setNIT("8081972684");
-		try {
-			AcuseRecibo acuseRecibo=nameProxy.envioFacturaElectronica(envioFacturaElectronica);
-			log.info(acuseRecibo.getResponse());
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return "";
 	}
 

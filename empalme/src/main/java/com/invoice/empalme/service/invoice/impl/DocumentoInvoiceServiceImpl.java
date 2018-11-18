@@ -32,5 +32,17 @@ public class DocumentoInvoiceServiceImpl implements DocumentoInvoiceService {
 		documentoDao.save(documento);		
 	}
 
+	@Override
+	public List<Documento> getByNumber(String numeroDocumento) {
+		List<Documento> list = documentoDao.getByNumber(numeroDocumento);
+		return list;
+	}
+
+	@Override
+	public void delete(Documento documento) {
+		documentoDao.delete(documento);
+		
+	}
+
 	
 }
