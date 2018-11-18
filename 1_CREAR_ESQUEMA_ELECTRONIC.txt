@@ -1,0 +1,14 @@
+CREATE DATABASE INVOICE
+    WITH 
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    CONNECTION LIMIT = -1;
+
+COMMENT ON DATABASE INVOICE
+    IS 'base de datos de facturacion electronica';
+	
+
+CREATE USER facturacion PASSWORD 'nuevof';
+GRANT ALL PRIVILEGES ON DATABASE INVOICE to facturacion;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO facturacion;	
+GRANT ALL PRIVILEGES ON ALL sequences IN SCHEMA public TO facturacion;
