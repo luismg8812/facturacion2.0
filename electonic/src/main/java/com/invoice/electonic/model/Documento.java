@@ -29,7 +29,7 @@ public class Documento {
 	@Column(name="TIPO_DOCUMENTO_ID")
 	private Long tipoDocumentoId;
 	
-	@Column(name="ESTADO_DOCUMENTO_ID")
+	@Column(name="ESTADO")
 	private Long estadoDocumentoId;
 	
 	@ManyToOne
@@ -87,7 +87,13 @@ public class Documento {
 		this.tipoDocumentoId = tipoDocumentoId;
 	}
 
+	public Long getEstadoDocumentoId() {
+		return estadoDocumentoId;
+	}
 
+	public void setEstadoDocumentoId(Long estadoDocumentoId) {
+		this.estadoDocumentoId = estadoDocumentoId;
+	}
 
 	public Receptor getReceptorId() {
 		return receptorId;

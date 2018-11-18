@@ -1,0 +1,9 @@
+create sequence S_RECEPTOR
+START WITH 101 
+increment by 1
+;
+
+create sequence S_DOCUMENTO
+START WITH 101 
+increment by 1
+;

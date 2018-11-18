@@ -3,7 +3,6 @@ package com.invoice.electonic.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.rmi.RemoteException;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -22,9 +21,6 @@ import com.invoice.electonic.utils.Calculos;
 import com.invoice.electonic.utils.DefaultNamespacePrefixMapper;
 
 import co.gov.dian.contratos.facturaelectronica.v1.InvoiceType;
-import co.gov.dian.www.servicios.facturaelectronica.ReportarFactura.AcuseRecibo;
-import co.gov.dian.www.servicios.facturaelectronica.ReportarFactura.EnvioFacturaElectronica;
-import co.gov.dian.www.servicios.facturaelectronica.ReportarFactura.FacturaElectronicaPortNameProxy;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.UBLVersionIDType;
 
 @Controller
@@ -43,10 +39,10 @@ public class Invoice2Controller {
 
 	@RequestMapping("/createInvoice2")
 	public String getIndexPage() {
-		log.info("construllendo xml");
+		log.info("construyendo xml");
 		try {
 			// se traen las facturas sin procesar
-			List<Documento> documentos = documentoService.getByEstado(1l);
+			List<Documento> documentos = documentoService.getByEstado(0l);
 			log.info("se encuentran : " + documentos.size() + " para procesar");
 			JAXBContext contexto = JAXBContext.newInstance("co.gov.dian.contratos.facturaelectronica.v1");
 			Marshaller marshaller = contexto.createMarshaller();
@@ -112,21 +108,22 @@ public class Invoice2Controller {
 	//kevin
 	private String envioSWDIAN(String ruta) {
 		
-		FacturaElectronicaPortNameProxy nameProxy = new FacturaElectronicaPortNameProxy();
-		EnvioFacturaElectronica envioFacturaElectronica = new EnvioFacturaElectronica();
-		try {
-			AcuseRecibo acuseRecibo=nameProxy.envioFacturaElectronica(envioFacturaElectronica);
-			log.info(acuseRecibo.getResponse());
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		//FacturaElectronicaPortNameProxy nameProxy = new FacturaElectronicaPortNameProxy();
+//		EnvioFacturaElectronica EnvioFacturaElectronica = new EnvioFacturaElectronica();
+//		try {
+//			AcuseRecibo acuseRecibo=nameProxy.envioFacturaElectronica(EnvioFacturaElectronica);
+//			log.info(acuseRecibo.getResponse());
+//			
+//		} catch (RemoteException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		return "";
 	}
 
 	public Empresa getEmpresa() {
 		if (empresa == null) {
-			empresa = empresaService.getById(1l);
+			empresa = empresaService.getById(0l);
 		}
 		return empresa;
 	}
