@@ -15,7 +15,7 @@ import javax.xml.ws.Service;
  *
  */
 @WebServiceClient(name = "facturaElectronicaPortNameService",
-                  wsdlLocation = "file:/C:/Users/kevin/Documents/effectivesoftware/invoice/electonic/src/main/resources/wsdl/facturaElectronica.wsdl",
+                  wsdlLocation = "file:/D:/workspaceFacturacion2.0/ws2/facturaElectronica.wsdl",
                   targetNamespace = "http://www.dian.gov.co/servicios/facturaelectronica/ReportarFactura")
 public class FacturaElectronicaPortNameService extends Service {
 
@@ -26,11 +26,11 @@ public class FacturaElectronicaPortNameService extends Service {
     static {
         URL url = null;
         try {
-            url = new URL("file:/C:/Users/kevin/Documents/effectivesoftware/invoice/electonic/src/main/resources/wsdl/facturaElectronica.wsdl");
+            url = new URL("file:/D:/workspaceFacturacion2.0/ws2/facturaElectronica.wsdl");
         } catch (MalformedURLException e) {
             java.util.logging.Logger.getLogger(FacturaElectronicaPortNameService.class.getName())
                 .log(java.util.logging.Level.INFO,
-                     "Can not initialize the default wsdl from {0}", "file:/C:/Users/kevin/Documents/effectivesoftware/invoice/electonic/src/main/resources/wsdl/facturaElectronica.wsdl");
+                     "Can not initialize the default wsdl from {0}", "file:/D:/workspaceFacturacion2.0/ws2/facturaElectronica.wsdl");
         }
         WSDL_LOCATION = url;
     }

@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
                       serviceName = "facturaElectronicaPortNameService",
                       portName = "facturaElectronicaPortNameSoap11",
                       targetNamespace = "http://www.dian.gov.co/servicios/facturaelectronica/ReportarFactura",
-                      wsdlLocation = "file:/C:/Users/kevin/Documents/effectivesoftware/invoice/electonic/src/main/resources/wsdl/facturaElectronica.wsdl",
+                      wsdlLocation = "file:/D:/workspaceFacturacion2.0/ws2/facturaElectronica.wsdl",
                       endpointInterface = "co.gov.dian.servicios.facturaelectronica.reportarfactura.FacturaElectronicaPortName")
 
 public class FacturaElectronicaPortNameSoap11Impl implements FacturaElectronicaPortName {
