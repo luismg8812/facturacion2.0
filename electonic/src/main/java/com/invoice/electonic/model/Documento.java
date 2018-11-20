@@ -29,7 +29,7 @@ public class Documento {
 	@Column(name="TIPO_DOCUMENTO_ID")
 	private Long tipoDocumentoId;
 	
-	@Column(name="ESTADO")
+	@Column(name="ESTADO_DOCUMENTO_ID")
 	private Long estadoDocumentoId;
 	
 	@ManyToOne
