@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.rmi.RemoteException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +22,7 @@ import javax.xml.datatype.DatatypeFactory;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.endpoint.Endpoint;
 import org.apache.cxf.frontend.ClientProxy;
+import org.apache.cxf.message.Message;
 import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
 import org.apache.wss4j.dom.WSConstants;
 import org.apache.wss4j.dom.handler.WSHandlerConstants;
@@ -134,8 +136,21 @@ public class Invoice2Controller {
 	        FacturaElectronicaPortName port = ss.getFacturaElectronicaPortNameSoap11();
 	        
 	        Client client = ClientProxy.getClient(port);
+	        
+	        Map<String, List<String>> headers = new HashMap<String, List<String>>();	       
+	        headers.put("Content-Length", Arrays.asList("3342"));
+	         headers.put("Content-Type", Arrays.asList("text/xml;charset=UTF-8"));  
+	         headers.put("SOAPAction", Arrays.asList(""));
+	         headers.put("soapAction", Arrays.asList(""));
+	         headers.put("Host", Arrays.asList("192.168.250.65:9080"));
+	         headers.put("Accept-Encoding", Arrays.asList("gzip,deflate"));
+	         
+	        client.getRequestContext().put(Message.PROTOCOL_HEADERS, headers);
+	        
+	        
 	        Endpoint cxfEndpoint = client.getEndpoint();
 	        
+	               
 	        Map<String, Object> outProps = new HashMap<String, Object>();
 	        outProps.put(WSHandlerConstants.ACTION,WSHandlerConstants.USERNAME_TOKEN);
 	        // Specify our username
@@ -146,10 +161,13 @@ public class Invoice2Controller {
 	        outProps.put(WSHandlerConstants.ADD_USERNAMETOKEN_NONCE, "true");
 	        outProps.put(WSHandlerConstants.ADD_USERNAMETOKEN_CREATED, "true");
 	        outProps.put(WSHandlerConstants.PW_CALLBACK_CLASS,ClientePasswordCallback.class.getName());
-	                
+	             
+	     // 
+	        
+	        
 	        WSS4JOutInterceptor wsOut = new WSS4JOutInterceptor(outProps);
 	        cxfEndpoint.getOutInterceptors().add(wsOut);
-	        
+	        	
 	        
    
 	        System.out.println("Invoking envioFacturaElectronica...");
