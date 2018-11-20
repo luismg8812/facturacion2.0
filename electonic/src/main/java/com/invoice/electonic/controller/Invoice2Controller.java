@@ -1,9 +1,14 @@
 package com.invoice.electonic.controller;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.rmi.RemoteException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -33,10 +38,12 @@ import com.invoice.electonic.utils.Calculos;
 import com.invoice.electonic.utils.DefaultNamespacePrefixMapper;
 
 import co.gov.dian.contratos.facturaelectronica.v1.InvoiceType;
+
 import co.gov.dian.servicios.facturaelectronica.reportarfactura.AcuseRecibo;
 import co.gov.dian.servicios.facturaelectronica.reportarfactura.EnvioFacturaElectronica;
 import co.gov.dian.servicios.facturaelectronica.reportarfactura.FacturaElectronicaPortName;
 import co.gov.dian.servicios.facturaelectronica.reportarfactura.FacturaElectronicaPortNameService;
+
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.UBLVersionIDType;
 
 @Controller
@@ -55,7 +62,7 @@ public class Invoice2Controller {
 
 	@RequestMapping("/createInvoice2")
 	public String getIndexPage() {
-		log.info("construyendo xml");
+		log.info("construllendo xml");
 		try {
 			// se traen las facturas sin procesar
 			List<Documento> documentos = documentoService.getByEstado(1l);
@@ -159,13 +166,14 @@ public class Invoice2Controller {
 	        envioFacturaElectronica.setDocument(dataHandler);
 	        AcuseRecibo acuseRecibo = port.envioFacturaElectronica(envioFacturaElectronica);
 	        System.out.println("envioFacturaElectronica.result=" + acuseRecibo);
+
 		
 		return "";
 	}
 
 	public Empresa getEmpresa() {
 		if (empresa == null) {
-			empresa = empresaService.getById(0l);
+			empresa = empresaService.getById(1l);
 		}
 		return empresa;
 	}

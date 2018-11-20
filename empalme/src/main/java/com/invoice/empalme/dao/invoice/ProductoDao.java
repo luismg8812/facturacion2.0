@@ -8,17 +8,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.invoice.empalme.model.invoice.Documento;
-import com.invoice.empalme.model.invoice.Receptor;
+import com.invoice.empalme.model.invoice.Producto;
 
 
+public interface ProductoDao extends JpaRepository<Producto, Long>{
 
-
-public interface DocumentoInvoiceDao extends JpaRepository<Documento, Long>{
-	
 	@Modifying
     @Transactional
-    @Query("select d from Documento d where d.numeroDocumento = :numeroDocumento")
-	List<Documento> getByNumber(@Param("numeroDocumento")String numeroDocumento);
-
+    @Query("select p from Producto p where p.codigoInterno = :codigoInterno")
+	List<Producto> getByCodigoInterno(@Param("codigoInterno")String codigoInterno);
 }
