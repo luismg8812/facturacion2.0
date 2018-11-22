@@ -14,10 +14,7 @@ import java.util.Map;
 
 import javax.xml.namespace.QName;
 
-import org.apache.cxf.endpoint.Client;
-import org.apache.cxf.endpoint.Endpoint;
-import org.apache.cxf.frontend.ClientProxy;
-import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
+
 import org.apache.wss4j.dom.WSConstants;
 import org.apache.wss4j.dom.handler.WSHandlerConstants;
 
@@ -61,10 +58,10 @@ public final class FacturaElectronicaPortName_FacturaElectronicaPortNameSoap11_C
 
         FacturaElectronicaPortNameService ss = new FacturaElectronicaPortNameService(wsdlURL, SERVICE_NAME);
         FacturaElectronicaPortName port = ss.getFacturaElectronicaPortNameSoap11();
-        
-        Client client = ClientProxy.getClient(port);
-         Endpoint cxfEndpoint = client.getEndpoint();
-        
+//        
+//        Client client = ClientProxy.getClient(port);
+//         Endpoint cxfEndpoint = client.getEndpoint();
+//        
         
           
           
@@ -82,9 +79,9 @@ public final class FacturaElectronicaPortName_FacturaElectronicaPortNameSoap11_C
         
         
         
-        WSS4JOutInterceptor wsOut = new WSS4JOutInterceptor(outProps);
-        cxfEndpoint.getOutInterceptors().add(wsOut);
-        
+//        WSS4JOutInterceptor wsOut = new WSS4JOutInterceptor(outProps);
+//        cxfEndpoint.getOutInterceptors().add(wsOut);
+//        
         
 
         
