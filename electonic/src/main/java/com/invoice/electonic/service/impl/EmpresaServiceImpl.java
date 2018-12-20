@@ -9,8 +9,6 @@ import com.invoice.electonic.dao.EmpresaDao;
 import com.invoice.electonic.model.Empresa;
 import com.invoice.electonic.service.EmpresaService;
 
-
-
 @Service
 public class EmpresaServiceImpl implements EmpresaService {
 
@@ -22,10 +20,4 @@ public class EmpresaServiceImpl implements EmpresaService {
 		Optional<Empresa> list = empresaDao.findById(empresaiId);
 		return list.get();
 	}
-
-
-	
-
-
-	
 }

@@ -21,12 +21,92 @@ public class Receptor {
 	@Column(name="RECEPTOR_ID")
 	private Long receptorId;
 	
+	@Column(name="TIPO_ORGANIZACION_JURIDICA_ID")
+	private Long tipoOrganizacionJuridicaId;
+	
+	@Column(name="TIPO_IDENTIFICACION_ID")
+	private Long tipoIdentificacionId;
+	
 	@Column(name="NOMBRE")
 	private String nombre;
-		
+	
+	@Column(name="RAZON_SOCIAL")
+	private String RazonSocial;
+	
+	@Column(name="APELLIDOS")
+	private String Apellidos;
+	
 	@Column(name="IDENTIFICACION")
 	private String identificacion;
 
+	@Column(name="DIRECCION")
+	private String Direccion;
+	
+	@Column(name="REGIMEN")
+	private Long Regimen;
+	
+	@Column(name="EMAIL")
+	private String Email;
+	
+	@Column(name="TELEFONO")
+	private String Telefono;
+
+	public Long getTipoOrganizacionJuridicaId() {
+		return tipoOrganizacionJuridicaId;
+	}
+
+	public void setTipoOrganizacionJuridicaId(Long tipoOrganizacionJuridicaId) {
+		this.tipoOrganizacionJuridicaId = tipoOrganizacionJuridicaId;
+	}
+
+	public Long getTipoIdentificacionId() {
+		return tipoIdentificacionId;
+	}
+
+	public void setTipoIdentificacionId(Long tipoIdentificacionId) {
+		this.tipoIdentificacionId = tipoIdentificacionId;
+	}
+
+	public String getRazonSocial() {
+		return RazonSocial;
+	}
+
+	public void setRazonSocial(String razonSocial) {
+		RazonSocial = razonSocial;
+	}
+
+	public String getApellidos() {
+		return Apellidos;
+	}
+
+	public void setApellidos(String apellidos) {
+		Apellidos = apellidos;
+	}
+
+	public String getDireccion() {
+		return Direccion;
+	}
+
+	public void setDireccion(String direccion) {
+		Direccion = direccion;
+	}
+
+	public Long getRegimen() {
+		return Regimen;
+	}
+
+	public void setRegimen(Long regimen) {
+		Regimen = regimen;
+	}
+
+	public String getEmail() {
+		return Email;
+	}
+
+	public void setEmail(String email) {
+		Email = email;
+	}
+	
 	public Long getReceptorId() {
 		return receptorId;
 	}
@@ -49,5 +129,13 @@ public class Receptor {
 
 	public void setIdentificacion(String identificacion) {
 		this.identificacion = identificacion;
+	}
+
+	public String getTelefono() {
+		return Telefono;
+	}
+
+	public void setTelefono(String telefono) {
+		Telefono = telefono;
 	}
 }

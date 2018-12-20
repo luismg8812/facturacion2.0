@@ -22,7 +22,6 @@ public class Empresa {
 	@Column(name="EMPRESA_ID")
 	private Long empresaId;
 	
-	
 	@Column(name="NOMBRE")
 	private String nombre;
 	
@@ -52,23 +51,37 @@ public class Empresa {
 	
 	@Column(name="CEL")
 	private String cel;
-	
-	
-	
+
 	@Column(name="PREFIJO")
 	private String prefijo;
 	
-	
 	@Column(name="FECHA_RESOLUCION")
 	private String fechaResolucion;
-	
 	
 	@Column(name="AUTORIZACION_DESDE")
 	private String autorizacionDesde;
 	
 	@Column(name="AUTORIZACION_HASTA")
 	private String autorizacionHasta;
+	
+	@Column(name="EMAIL")
+	private String email;
 
+	@Column(name="SOFTWAREID")
+	private String SoftwareID;
+
+	@Column(name="SOFTWAREPIN")
+	private String SoftwarePIN;
+
+	@Column(name="SOFTWARE_SECURITY_CODE")
+	private String SoftwareSecurityCode;
+
+	@Column(name="CLAVE_TECNICA_CUFE")
+	private String ClaveTecnicaCufe;
+	
+	@Column(name="CERTIFICADO")
+	private byte[] Certificado;
+	
 	public Long getEmpresaId() {
 		return empresaId;
 	}
@@ -188,6 +201,52 @@ public class Empresa {
 	public void setAutorizacionHasta(String autorizacionHasta) {
 		this.autorizacionHasta = autorizacionHasta;
 	}
-	
-	
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getSoftwareID() {
+		return SoftwareID;
+	}
+
+	public void setSoftwareID(String softwareID) {
+		SoftwareID = softwareID;
+	}
+
+	public String getSoftwarePIN() {
+		return SoftwarePIN;
+	}
+
+	public void setSoftwarePIN(String softwarePIN) {
+		SoftwarePIN = softwarePIN;
+	}
+
+	public String getSoftwareSecurityCode() {
+		return SoftwareSecurityCode;
+	}
+
+	public void setSoftwareSecurityCode(String softwareSecurityCode) {
+		SoftwareSecurityCode = softwareSecurityCode;
+	}
+
+	public String getClaveTecnicaCufe() {
+		return ClaveTecnicaCufe;
+	}
+
+	public void setClaveTecnicaCufe(String claveTecnicaCufe) {
+		ClaveTecnicaCufe = claveTecnicaCufe;
+	}
+
+	public byte[] getCertificado() {
+		return Certificado;
+	}
+
+	public void setCertificado(byte[] certificado) {
+		Certificado = certificado;
+	}
 }

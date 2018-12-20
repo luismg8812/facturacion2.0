@@ -92,51 +92,84 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			
-			
-<!--       <plugin> -->
-<!--         <groupId>org.codehaus.mojo</groupId> -->
-<!--         <artifactId>jaxws-maven-plugin</artifactId> -->
-<!--         <version>2.5</version> -->
-<!--         <executions> -->
-<!--           <execution> -->
-<!--             <goals> -->
-<!--               <goal>wsimport</goal> -->
-<!--             </goals> -->
-<!--             Following configuration will pass all XML files from ${project.basedir}/src/bindings to wsimport. -->
-<!--             <configuration> -->
-<!--               <bindingDirectory>${project.basedir}/src/main/java</bindingDirectory> -->
-            
-<!--               <wsdlUrls> -->
-<!--                 <wsdlUrl>https://facturaelectronica.dian.gov.co/habilitacion/B2BIntegrationEngine/FacturaElectronica/facturaElectronica.wsdl</wsdlUrl> -->
-<!--               </wsdlUrls> -->
-<!--             </configuration> -->
-<!--           </execution> -->
-<!--         </executions> -->
-<!--       </plugin> -->
-			
 <!-- 			<plugin> -->
-<!-- 			<groupId>org.jvnet.jaxb2.maven2</groupId> -->
-<!-- 			<artifactId>maven-jaxb2-plugin</artifactId> -->
-<!-- 			<version>0.14.0</version> -->
-<!-- 			<executions> -->
-<!-- 			<execution> -->
-<!-- 			<goals> -->
-<!-- 			<goal>generate</goal> -->
-<!-- 			</goals> -->
-<!-- 			</execution> -->
-<!-- 			</executions> -->
-<!-- 			<configuration> -->
-<!-- 			<schemaLanguage>WSDL</schemaLanguage> -->
-<!-- 			<generatePackage>com.invoice.electonic.ws.dian</generatePackage> -->
-<!-- 			<generateDirectory>${project.basedir}/src/main/java</generateDirectory> -->
-<!-- 			<schemas> -->
-<!-- 			<schema> -->
-<!-- 			<url>https://facturaelectronica.dian.gov.co/habilitacion/B2BIntegrationEngine/FacturaElectronica/facturaElectronica.wsdl</url> -->
-<!-- 			</schema> -->
-<!-- 			</schemas> -->
-<!-- 			</configuration> -->
-<!-- 			</plugin> -->
+<!--                 <groupId>org.eclipse.m2e</groupId> -->
+<!--                 <artifactId>lifecycle-mapping</artifactId> -->
+<!--                 <version>1.0.0</version> -->
+<!--                 <configuration> -->
+<!--                     <lifecycleMappingMetadata> -->
+<!--                         <pluginExecutions> -->
+<!--                             <pluginExecution> -->
+<!--                                 <pluginExecutionFilter> -->
+<!--                                     <groupId>org.codehaus.mojo</groupId> -->
+<!--                                     <artifactId>aspectj-maven-plugin</artifactId> -->
+<!--                                     <versionRange>[1.0,)</versionRange> -->
+<!--                                     <goals> -->
+<!--                                         <goal>test-compile</goal> -->
+<!--                                         <goal>compile</goal> -->
+<!--                                     </goals> -->
+<!--                                 </pluginExecutionFilter> -->
+<!--                                 <action> -->
+<!--                                     <execute /> -->
+<!--                                 </action> -->
+<!--                             </pluginExecution> -->
+<!--                         </pluginExecutions> -->
+<!--                     </lifecycleMappingMetadata> -->
+<!--                 </configuration> -->
+<!--             </plugin> -->
+	      	<plugin>
+	        	<groupId>org.jvnet.jax-ws-commons</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                        <configuration>
+<!--                             <wsdlFiles> -->
+<!--                                 <wsdlFile>facturaelectronica.dian.gov.co/habilitacion/B2BIntegrationEngine/FacturaElectronica/facturaElectronica.wsdl</wsdlFile> -->
+<!--                             </wsdlFiles> -->
+<!--                             <packageName></packageName> -->
+<!--                             <vmArgs> -->
+<!--                                 <vmArg>-Djavax.xml.accessExternalSchema=all</vmArg> -->
+<!--                             </vmArgs> -->
+                            <wsdlLocation>https://facturaelectronica.dian.gov.co/habilitacion/B2BIntegrationEngine/FacturaElectronica/facturaElectronica.wsdl</wsdlLocation>
+                            <staleFile>${project.build.directory}/jaxws/stale/facturaElectronica.stale</staleFile>
+                            <bindingDirectory>${basedir}/src/main/java</bindingDirectory>
+                            <bindingFiles>
+                                <bindingFile>facturaElectronica_handler.xml</bindingFile>
+                            </bindingFiles>
+                        </configuration>
+                        <id>wsimport-generate-facturaElectronica</id>
+                        <phase>generate-sources</phase>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>javax.xml</groupId>
+                        <artifactId>webservices-api</artifactId>
+                        <version>2.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.cxf</groupId>
+                        <artifactId>cxf-rt-frontend-jaxws</artifactId>
+                        <version>2.2.3</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.cxf</groupId>
+                        <artifactId>cxf-rt-transports-http</artifactId>
+                        <version>2.2.3</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <sourceDestDir>${project.build.directory}/generated-sources/jaxws-wsimport</sourceDestDir>
+                    <xnocompile>true</xnocompile>
+                    <verbose>true</verbose>
+                    <extension>true</extension>
+                    <catalog>${basedir}/src/jax-ws-catalog.xml</catalog>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 
@@ -177,7 +210,4 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
-
-
-
 </project>

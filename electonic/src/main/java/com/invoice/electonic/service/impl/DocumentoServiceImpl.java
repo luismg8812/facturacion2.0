@@ -30,6 +30,5 @@ public class DocumentoServiceImpl implements DocumentoService {
 	@Override
 	public List<Documento> getByEstado(Long estado) {
 		return documentoDao.getByEstado(estado);
-		
 	}
 }

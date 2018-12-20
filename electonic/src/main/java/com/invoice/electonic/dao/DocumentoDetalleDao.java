@@ -8,12 +8,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.invoice.electonic.model.Documento;
+import com.invoice.electonic.model.DocumentoDetalle;
 
-public interface DocumentoDao extends JpaRepository<Documento, Long>{
-	
+public interface DocumentoDetalleDao extends JpaRepository<DocumentoDetalle, Long>{
+
 	@Modifying
     @Transactional
-    @Query("select d from Documento d where  d.estadoDocumentoId= :estado")
-	List<Documento> getByEstado(@Param("estado")Long estado);
+    @Query("select d from DocumentoDetalle d where d.documentoId = :valor")
+	List<DocumentoDetalle> getByDocumentId(@Param("valor")Long documentId);
 }

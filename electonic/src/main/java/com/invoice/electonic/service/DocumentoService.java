@@ -11,6 +11,4 @@ public interface DocumentoService {
 	List<Documento> getByEstado(Long estado);
 
 	void saveOrUpdate(Documento documento);
-
-	
 }

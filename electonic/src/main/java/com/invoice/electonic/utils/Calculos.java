@@ -4,10 +4,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Calculos {
 	
-		
 	public static String completarDescripcion(String cantidad, int maxTamanoUnit) {
 		String unit = "";
 		int tamanoUnit = 0;
@@ -46,8 +47,20 @@ public class Calculos {
 		baos.close();
 		fileInputStream.close();
 		return data;
-		
-		
-		
+	}
+	
+	public static String byteArrayToHexString(byte[] b) {
+	  String result = "";
+	  for (int i=0; i < b.length; i++) {
+	    result +=
+	          Integer.toString( ( b[i] & 0xff ) + 0x100, 16).substring( 1 );
+	  }
+	  return result;
+	}
+	
+	public static Calendar toCalendar(Date date){ 
+	  Calendar cal = Calendar.getInstance();
+	  cal.setTime(date);
+	  return cal;
 	}
 }

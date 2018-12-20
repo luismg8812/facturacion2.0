@@ -1,0 +1,183 @@
+CREATE TABLE public.tipo_documento
+(
+    tipo_documento_id smallint NOT NULL,
+    nombre character varying(50) COLLATE pg_catalog."default",
+    CONSTRAINT pk_tipo_documento PRIMARY KEY (tipo_documento_id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+CREATE TABLE public.tipo_organizacion_juridica
+(
+    tipo_organizacion_juridica_id smallint NOT NULL,
+    nombre character varying(50) COLLATE pg_catalog."default",
+    CONSTRAINT pk_tipo_organizacion_juridica PRIMARY KEY (tipo_organizacion_juridica_id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+CREATE TABLE public.tipo_identificacion
+(
+    tipo_identificacion_id smallint NOT NULL,
+    nombre character varying(50) COLLATE pg_catalog."default",
+    CONSTRAINT pk_tipo_identificacion PRIMARY KEY (tipo_identificacion_id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+CREATE TABLE public.receptor
+(
+    receptor_id bigint NOT NULL,
+    tipo_organizacion_juridica_id smallint,
+    tipo_identificacion_id smallint,
+    nombre character varying(100) COLLATE pg_catalog."default",
+    razon_social character varying(100) COLLATE pg_catalog."default",
+    apellidos character varying(100) COLLATE pg_catalog."default",
+    identificacion character varying(50) COLLATE pg_catalog."default",
+    direccion character varying(100) COLLATE pg_catalog."default",
+    regimen smallint,
+    email character varying(100) COLLATE pg_catalog."default",
+    telefono character varying COLLATE pg_catalog."default",
+    CONSTRAINT pk_receptor PRIMARY KEY (receptor_id),
+    CONSTRAINT fk_tiident_reference_receptor FOREIGN KEY (tipo_identificacion_id)
+        REFERENCES public.tipo_identificacion (tipo_identificacion_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_tiorju_reference_receptor FOREIGN KEY (tipo_organizacion_juridica_id)
+        REFERENCES public.tipo_organizacion_juridica (tipo_organizacion_juridica_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+CREATE TABLE public.producto
+(
+    producto_id integer NOT NULL,
+    fecha_registro timestamp without time zone,
+    costo numeric,
+    costo_publico numeric,
+    iva numeric,
+    nombre character varying(200) COLLATE pg_catalog."default",
+    codigo_interno character varying(20) COLLATE pg_catalog."default",
+    CONSTRAINT pk_producto PRIMARY KEY (producto_id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+
+CREATE TABLE public.empresa
+(
+    empresa_id smallint NOT NULL,
+    nombre character varying(50) COLLATE pg_catalog."default",
+    represente character varying(100) COLLATE pg_catalog."default",
+    nit character varying(50) COLLATE pg_catalog."default",
+    regimen character varying(20) COLLATE pg_catalog."default",
+    direccion character varying(50) COLLATE pg_catalog."default",
+    barrio character varying(50) COLLATE pg_catalog."default",
+    ciudad character varying(50) COLLATE pg_catalog."default",
+    departamento character varying(50) COLLATE pg_catalog."default",
+    telefono_fijo character varying(50) COLLATE pg_catalog."default",
+    cel integer,
+    prefijo character varying(10) COLLATE pg_catalog."default",
+    fecha_resolucion timestamp without time zone,
+    autorizacion_desde bigint,
+    autorizacion_hasta bigint,
+    email character varying COLLATE pg_catalog."default",
+    softwareid character varying(50) COLLATE pg_catalog."default",
+    softwarepin character varying(50) COLLATE pg_catalog."default",
+    software_security_code character varying(100) COLLATE pg_catalog."default",
+    clave_tecnica_cufe character varying(50) COLLATE pg_catalog."default",
+    certificado bytea,
+    CONSTRAINT pk_empresa PRIMARY KEY (empresa_id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+CREATE TABLE public.estado_documento
+(
+    estado_documento_id smallint NOT NULL,
+    nombre character varying(50) COLLATE pg_catalog."default",
+    CONSTRAINT pk_estado_documento PRIMARY KEY (estado_documento_id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+CREATE TABLE public.documento
+(
+    documento_id bigint NOT NULL,
+    tipo_documento_id smallint,
+    estado_documento_id smallint,
+    receptor_id integer,
+    fecha_registro timestamp without time zone,
+    fecha_actualiza timestamp without time zone,
+    numero_documento character varying(20) COLLATE pg_catalog."default",
+    total numeric,
+    excento numeric,
+    gravado numeric,
+    iva numeric,
+    iva_5 numeric,
+    iva_19 numeric,
+    base_5 numeric,
+    base_19 numeric,
+    retefuente numeric,
+    prefijo character varying(10) COLLATE pg_catalog."default",
+    CONSTRAINT pk_documento PRIMARY KEY (documento_id),
+    CONSTRAINT fk_docu_reference_estado FOREIGN KEY (estado_documento_id)
+        REFERENCES public.estado_documento (estado_documento_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_docu_reference_receptor FOREIGN KEY (receptor_id)
+        REFERENCES public.receptor (receptor_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_docu_reference_tipo FOREIGN KEY (tipo_documento_id)
+        REFERENCES public.tipo_documento (tipo_documento_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+CREATE TABLE public.documento_detalle
+(
+    documento_detalle_id bigint NOT NULL,
+    documento_id bigint,
+    producto_id integer,
+    fecha_registro timestamp without time zone,
+    fecha_actualiza timestamp without time zone,
+    cantidad numeric,
+    codigo_impuesto smallint,
+    parcial numeric,
+    CONSTRAINT pk_documento_detalle PRIMARY KEY (documento_detalle_id),
+    CONSTRAINT fk_detalle_reference_docu FOREIGN KEY (documento_id)
+        REFERENCES public.documento (documento_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_detalle_reference_producto FOREIGN KEY (producto_id)
+        REFERENCES public.producto (producto_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;	
+
+commit; 

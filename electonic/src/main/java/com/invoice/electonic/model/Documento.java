@@ -1,7 +1,5 @@
 package com.invoice.electonic.model;
 
-
-
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -9,8 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -32,10 +28,8 @@ public class Documento {
 	@Column(name="ESTADO_DOCUMENTO_ID")
 	private Long estadoDocumentoId;
 	
-	@ManyToOne
-	@JoinColumn(name="RECEPTOR_ID")
-	private Receptor receptorId;
-	
+	@Column(name="RECEPTOR_ID")
+	private Long receptorId;
 	
 	@Column(name="FECHA_REGISTRO")
 	private Date fechaRegistro;
@@ -45,7 +39,6 @@ public class Documento {
 	
 	@Column(name="NUMERO_DOCUMENTO")
 	private String numeroDocumento;
-	
 	
 	@Column(name="TOTAL")
 	private Double total;
@@ -71,7 +64,6 @@ public class Documento {
 	@Column(name="BASE_5")
 	private Double base5;
 	
-		
 	@Column(name="PREFIJO")
 	private String prefijo;
 	
@@ -95,11 +87,11 @@ public class Documento {
 		this.estadoDocumentoId = estadoDocumentoId;
 	}
 
-	public Receptor getReceptorId() {
+	public Long getReceptorId() {
 		return receptorId;
 	}
 
-	public void setReceptorId(Receptor receptorId) {
+	public void setReceptorId(Long receptorId) {
 		this.receptorId = receptorId;
 	}
 
