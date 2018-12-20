@@ -18,14 +18,12 @@
 		<version>2.1.0.BUILD-SNAPSHOT</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<cxf.version>3.2.7</cxf.version>
 	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -57,8 +55,6 @@
 			<groupId>org.springframework.ws</groupId>
 			<artifactId>spring-ws-security</artifactId>
 		</dependency>
-
-
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -89,39 +85,58 @@
 			<artifactId>jaxb-core</artifactId>
 			<version>2.3.0.1</version>
 		</dependency>
-
-
-
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<!-- <plugin> -->
-			<!-- <groupId>org.jvnet.jaxb2.maven2</groupId> -->
-			<!-- <artifactId>maven-jaxb2-plugin</artifactId> -->
-			<!-- <version>0.13.2</version> -->
-			<!-- <executions> -->
-			<!-- <execution> -->
-			<!-- <goals> -->
-			<!-- <goal>generate</goal> -->
-			<!-- </goals> -->
-			<!-- </execution> -->
-			<!-- </executions> -->
-			<!-- <configuration> -->
-			<!-- <schemaLanguage>WSDL</schemaLanguage> -->
-			<!-- <generatePackage>com.invoice.electonic.ws.dian</generatePackage> -->
-			<!-- <generateDirectory>${project.basedir}/src/main/java</generateDirectory> -->
-			<!-- <schemas> -->
-			<!-- <schema> -->
-			<!-- <url>https://facturaelectronica.dian.gov.co/habilitacion/B2BIntegrationEngine/FacturaElectronica/facturaElectronica.wsdl</url> -->
-			<!-- </schema> -->
-			<!-- </schemas> -->
-			<!-- </configuration> -->
-			<!-- </plugin> -->
+			
+			
+<!--       <plugin> -->
+<!--         <groupId>org.codehaus.mojo</groupId> -->
+<!--         <artifactId>jaxws-maven-plugin</artifactId> -->
+<!--         <version>2.5</version> -->
+<!--         <executions> -->
+<!--           <execution> -->
+<!--             <goals> -->
+<!--               <goal>wsimport</goal> -->
+<!--             </goals> -->
+<!--             Following configuration will pass all XML files from ${project.basedir}/src/bindings to wsimport. -->
+<!--             <configuration> -->
+<!--               <bindingDirectory>${project.basedir}/src/main/java</bindingDirectory> -->
+            
+<!--               <wsdlUrls> -->
+<!--                 <wsdlUrl>https://facturaelectronica.dian.gov.co/habilitacion/B2BIntegrationEngine/FacturaElectronica/facturaElectronica.wsdl</wsdlUrl> -->
+<!--               </wsdlUrls> -->
+<!--             </configuration> -->
+<!--           </execution> -->
+<!--         </executions> -->
+<!--       </plugin> -->
+			
+<!-- 			<plugin> -->
+<!-- 			<groupId>org.jvnet.jaxb2.maven2</groupId> -->
+<!-- 			<artifactId>maven-jaxb2-plugin</artifactId> -->
+<!-- 			<version>0.14.0</version> -->
+<!-- 			<executions> -->
+<!-- 			<execution> -->
+<!-- 			<goals> -->
+<!-- 			<goal>generate</goal> -->
+<!-- 			</goals> -->
+<!-- 			</execution> -->
+<!-- 			</executions> -->
+<!-- 			<configuration> -->
+<!-- 			<schemaLanguage>WSDL</schemaLanguage> -->
+<!-- 			<generatePackage>com.invoice.electonic.ws.dian</generatePackage> -->
+<!-- 			<generateDirectory>${project.basedir}/src/main/java</generateDirectory> -->
+<!-- 			<schemas> -->
+<!-- 			<schema> -->
+<!-- 			<url>https://facturaelectronica.dian.gov.co/habilitacion/B2BIntegrationEngine/FacturaElectronica/facturaElectronica.wsdl</url> -->
+<!-- 			</schema> -->
+<!-- 			</schemas> -->
+<!-- 			</configuration> -->
+<!-- 			</plugin> -->
 		</plugins>
 	</build>
 

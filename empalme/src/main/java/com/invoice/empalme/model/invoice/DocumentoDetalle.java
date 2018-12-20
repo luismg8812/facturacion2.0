@@ -42,6 +42,10 @@ public class DocumentoDetalle {
 	
 	@Column(name="CANTIDAD")
 	private Double cantidad;
+	
+	@Column(name="CODIGO_IMPUESTO")
+	private Double codigoImpuesto;
+	
 
 	public Long getDocumentoDetalleId() {
 		return documentoDetalleId;
@@ -89,6 +93,15 @@ public class DocumentoDetalle {
 
 	public void setCantidad(Double cantidad) {
 		this.cantidad = cantidad;
+	}
+
+	public Double getCodigoImpuesto() {
+		return codigoImpuesto;
+	}
+
+	public void setCodigoImpuesto(Double codigoImpuesto) {
+		this.codigoImpuesto = codigoImpuesto;
 	}	
+	
 	
 }

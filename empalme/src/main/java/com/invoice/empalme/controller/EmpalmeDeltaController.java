@@ -69,16 +69,48 @@ public class EmpalmeDeltaController {
 				
 			}
 			String receptorId= documentovo.getDocumentoId().getReceptorId().getIdentificacion();
+			Long regimen = documentovo.getDocumentoId().getReceptorId().getRegimen();
+			Long tipoIdentificacion = documentovo.getDocumentoId().getReceptorId().getTipoIdenificacionId();
+			String email = documentovo.getDocumentoId().getReceptorId().getEmail();
 			if(receptorId==null) {
 				restResponse.setMessage("el receptor es obligatorio");
 				restResponse.setResponseCode(500);
 				return new ResponseEntity<RestResponse>(restResponse, HttpStatus.BAD_REQUEST);
 			}			
+			if(regimen==null) {
+				restResponse.setMessage("el regimen es obligatorio");
+				restResponse.setResponseCode(500);
+				return new ResponseEntity<RestResponse>(restResponse, HttpStatus.BAD_REQUEST);
+			}
+			if(tipoIdentificacion==null) {
+				restResponse.setMessage("el tipoIdentificacion es obligatorio");
+				restResponse.setResponseCode(500);
+				return new ResponseEntity<RestResponse>(restResponse, HttpStatus.BAD_REQUEST);
+			}
+			if(email==null) {
+				restResponse.setMessage("el email es obligatorio");
+				restResponse.setResponseCode(500);
+				return new ResponseEntity<RestResponse>(restResponse, HttpStatus.BAD_REQUEST);
+			}
+			
 			Receptor receptor = receptorService.getByIdentificacion(""+receptorId);
 			if(receptor==null ) {
 				Receptor receptor2 = new Receptor();
 				receptor2.setNombre(documentovo.getDocumentoId().getReceptorId().getNombre());
 				receptor2.setIdentificacion(""+receptorId);
+				receptor2.setTipoIdenificacionId(documentovo.getDocumentoId().getReceptorId().getTipoIdenificacionId());
+				receptor2.setDireccion(documentovo.getDocumentoId().getReceptorId().getDireccion());
+				receptor2.setEmail(documentovo.getDocumentoId().getReceptorId().getEmail());
+				receptor2.setRegimen(documentovo.getDocumentoId().getReceptorId().getRegimen());
+				receptor2.setTipoOrganizacionJuridicaId(documentovo.getDocumentoId().getReceptorId().getTipoOrganizacionJuridicaId());
+				if(regimen==2) {
+					receptor2.setRazonSocial(documentovo.getDocumentoId().getReceptorId().getRazonSocial());
+					
+				}else {
+					receptor2.setNombre(documentovo.getDocumentoId().getReceptorId().getNombre());
+					receptor2.setApellidos(documentovo.getDocumentoId().getReceptorId().getApellidos());	
+					
+				}
 				receptorService.save(receptor2);
 				receptor=receptor2;
 			}
@@ -100,6 +132,9 @@ public class EmpalmeDeltaController {
 					Producto producto2 = new Producto();
 					producto2.setNombre(dd.getProductoId().getNombre());
 					producto2.setCodigoInterno(productoId);
+					producto2.setCosto(dd.getProductoId().getCosto());
+					producto2.setCostoPublico(dd.getProductoId().getCostoPublico());
+					producto2.setIva(dd.getProductoId().getIva());
 					productoService.update(producto2);
 					producto=producto2;
 				}

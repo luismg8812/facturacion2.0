@@ -55,7 +55,7 @@ public class EmpalmeNiceSoftwareController {
 				invoice.setReceptorId(receptor);
 				invoice.setBase19(documento.getBase19());
 				invoice.setBase5(documento.getBase5());
-				invoice.setExcento(documento.getExcento());
+				invoice.setExento(documento.getExcento());
 				invoice.setFechaRegistro(documento.getFechaRegistro());
 				invoice.setFechaActualiza(new Date());
 				invoice.setGravado(documento.getGravado());

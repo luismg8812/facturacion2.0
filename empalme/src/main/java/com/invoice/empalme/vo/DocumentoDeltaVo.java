@@ -10,6 +10,7 @@ public class DocumentoDeltaVo {
 	
 	private Documento documentoId;
 	private List<DocumentoDetalle> documentoDetalleId;
+	private String tipoFactura;
 	
 	public Documento getDocumentoId() {
 		return documentoId;

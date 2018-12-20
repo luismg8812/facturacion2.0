@@ -50,7 +50,7 @@ public class Documento {
 	private Double total;
 	
 	@Column(name="EXCENTO")
-	private Double excento;
+	private Double exento;
 	
 	@Column(name="GRAVADO")
 	private Double gravado;
@@ -128,12 +128,12 @@ public class Documento {
 		this.total = total;
 	}
 
-	public Double getExcento() {
-		return excento;
+	public Double getExento() {
+		return exento;
 	}
 
-	public void setExcento(Double excento) {
-		this.excento = excento;
+	public void setExento(Double exento) {
+		this.exento = exento;
 	}
 
 	public Double getGravado() {
