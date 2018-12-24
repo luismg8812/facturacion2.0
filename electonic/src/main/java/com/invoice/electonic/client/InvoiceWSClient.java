@@ -11,7 +11,6 @@ import javax.activation.FileDataSource;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.rpc.ServiceException;
 import javax.xml.ws.Binding;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceClient;
@@ -26,7 +25,7 @@ import co.gov.dian.www.servicios.facturaelectronica.ReportarFactura.FacturaElect
 
 @WebServiceClient(name = "EnvioFacturaService", targetNamespace = "http://www.dian.gov.co/servicios/facturaelectronica/ReportarFactura", wsdlLocation = "https://facturaelectronica.dian.gov.co/habilitacion/B2BIntegrationEngine/FacturaElectronica/facturaElectronica.wsdl")
 public class InvoiceWSClient{
-	public static String envioSWDIAN2(String ruta, String clienteNit, String InvoiceNumber) throws DatatypeConfigurationException, ServiceException, IOException{
+	public static String envioSWDIAN2(String ruta, String clienteNit, String InvoiceNumber) throws DatatypeConfigurationException, IOException{
 		EnvioFacturaElectronica FacturaPeticion = new EnvioFacturaElectronica();
         
         //asignacion Body
@@ -50,7 +49,7 @@ public class InvoiceWSClient{
 		return "";
 	}
 	
-	private static AcuseRecibo envioFacturaElectronica(EnvioFacturaElectronica envioFacturaElectronicaPeticion) throws ServiceException, RemoteException {
+	private static AcuseRecibo envioFacturaElectronica(EnvioFacturaElectronica envioFacturaElectronicaPeticion) throws RemoteException {
 		FacturaElectronicaPortNameService service = new FacturaElectronicaPortNameService();
         FacturaElectronicaPortName port = service.getFacturaElectronicaPortNameSoap11();
                 

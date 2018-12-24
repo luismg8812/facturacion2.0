@@ -1,3 +1,4 @@
+
 package com.invoice.electonic.controller;
 
 import java.io.File;
@@ -32,6 +33,7 @@ import com.invoice.electonic.service.EmpresaService;
 import com.invoice.electonic.service.ReceptorService;
 import com.invoice.electonic.utils.DefaultNamespacePrefixMapper;
 import com.invoice.electonic.utils.InvoiceGeneratorUtils;
+import com.invoice.electonic.utils.ZipManager;
 
 import co.gov.dian.contratos.facturaelectronica.v1.InvoiceType;
 
@@ -73,12 +75,21 @@ public class Invoice2Controller {
 				log.info("se crea documento: " + nombreFactura);				
 				InvoiceType invoice = createInvoice(documento, empresa, marshaller);
 				marshaller.marshal(invoice, System.out);
+				
+				//creacion del archivo fisico xml
 				File folder = new File(RUTA_FACTURAS_XML);
 				folder.mkdirs();
-				OutputStream os = new FileOutputStream(RUTA_FACTURAS_XML+nombreFactura);
-				marshaller.marshal(invoice, os);
+				OutputStream facturaFisica = new FileOutputStream(RUTA_FACTURAS_XML + nombreFactura);
 				
-				InvoiceWSClient.envioSWDIAN2(RUTA_FACTURAS_XML+nombreFactura, empresa.getNit(), invoice.getID().getValue());	//envio factura DIAN
+				//se escribe el XML DIAN
+				marshaller.marshal(invoice, facturaFisica);
+				
+				//creacion del ZIP para enviar a la DIAN
+				new ZipManager(RUTA_FACTURAS_XML + nombreFactura);
+				nombreFactura = nombreFactura.replaceAll(".xml", ".zip");
+				
+				
+				InvoiceWSClient.envioSWDIAN2(RUTA_FACTURAS_XML + nombreFactura, empresa.getNit(), invoice.getID().getValue());	//envio factura DIAN
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
