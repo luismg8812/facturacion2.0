@@ -85,10 +85,10 @@ public class Invoice2Controller {
 				marshaller.marshal(invoice, facturaFisica);
 				
 				//creacion del ZIP para enviar a la DIAN
-				new ZipManager(RUTA_FACTURAS_XML + nombreFactura);
+				//new ZipManager(RUTA_FACTURAS_XML + nombreFactura);
+				ZipManager.ZipFile(RUTA_FACTURAS_XML, nombreFactura);
 				nombreFactura = nombreFactura.replaceAll(".xml", ".zip");
-				
-				
+
 				InvoiceWSClient.envioSWDIAN2(RUTA_FACTURAS_XML + nombreFactura, empresa.getNit(), invoice.getID().getValue());	//envio factura DIAN
 			}
 		} catch (Exception e) {
