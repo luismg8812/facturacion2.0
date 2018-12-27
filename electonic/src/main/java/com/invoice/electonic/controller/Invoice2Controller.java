@@ -12,6 +12,7 @@ import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
 import java.util.List;
 
+import javax.activation.DataHandler;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -85,8 +86,8 @@ public class Invoice2Controller {
 				marshaller.marshal(invoice, facturaFisica);
 				
 				//creacion del ZIP para enviar a la DIAN
-				//new ZipManager(RUTA_FACTURAS_XML + nombreFactura);
-				ZipManager.ZipFile(RUTA_FACTURAS_XML, nombreFactura);
+				//ZipManager.ZipFileTradicional(RUTA_FACTURAS_XML, nombreFactura);
+				ZipManager.ZipFileZip4j(RUTA_FACTURAS_XML + nombreFactura);
 				nombreFactura = nombreFactura.replaceAll(".xml", ".zip");
 
 				InvoiceWSClient.envioSWDIAN2(RUTA_FACTURAS_XML + nombreFactura, empresa.getNit(), invoice.getID().getValue());	//envio factura DIAN

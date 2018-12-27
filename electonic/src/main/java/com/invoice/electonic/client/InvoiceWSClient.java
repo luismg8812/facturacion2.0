@@ -1,5 +1,6 @@
 package com.invoice.electonic.client;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Date;
@@ -8,6 +9,7 @@ import java.util.List;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
+import javax.mail.util.ByteArrayDataSource;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -15,6 +17,8 @@ import javax.xml.ws.Binding;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceClient;
 import javax.xml.ws.handler.Handler;
+
+import org.apache.commons.io.IOUtils;
 
 import com.invoice.electonic.handler.LogMessageHandler;
 
@@ -45,7 +49,6 @@ public class InvoiceWSClient{
         FacturaPeticion.setDocument(document);
         
         AcuseRecibo acuseRecibo = envioFacturaElectronica(FacturaPeticion);
-        System.out.print(acuseRecibo);
 		return "";
 	}
 	

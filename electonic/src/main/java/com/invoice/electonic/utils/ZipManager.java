@@ -1,15 +1,22 @@
 package com.invoice.electonic.utils;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.model.ZipParameters;
+import net.lingala.zip4j.util.Zip4jConstants;
+
 public class ZipManager {
-	public static void ZipFile (String ruta, String nombreArchivo) throws Exception{
+	public static void ZipFileTradicional (String ruta, String nombreArchivo) throws Exception{
 		String rutaCompleta = ruta + nombreArchivo;
 		File archivo = new File(rutaCompleta);
         
@@ -27,33 +34,20 @@ public class ZipManager {
         zipFacturaFisica.flush();
         zipFacturaFisica.close();
 	}
-}
-
-/*
-package com.invoice.electonic.utils;
-
-import java.io.File;
-import java.util.ArrayList;
-
-import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.model.ZipParameters;
-import net.lingala.zip4j.util.Zip4jConstants;
-
-public class ZipManager {
-	public ZipManager (String ruta) throws Exception{
+	
+	public static void ZipFileZip4j (String ruta) throws Exception{
 		System.out.println("Zipping file");
 		ZipFile ZipFactura = new ZipFile(ruta.replaceAll(".xml", ".zip"));
-		ArrayList<File> listaFatura = new ArrayList<File>();
-		listaFatura.add(new File(ruta));
+		
+		//codigo por si se quiere anidar varios archivos al zip
+		//ArrayList<File> listaFatura = new ArrayList<File>();
+		//listaFatura.add(new File(ruta));
 		
 		ZipParameters parametros = new ZipParameters();
 		parametros.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
 		parametros.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
 		
-		//parametros.setAesKeyStrength(0);
-		//parametros.setEncryptFiles(false);
-		
-		ZipFactura.addFiles(listaFatura, parametros);
+		ZipFactura.addFile(new File(ruta), parametros);
 	}
-}*/
+}
 
