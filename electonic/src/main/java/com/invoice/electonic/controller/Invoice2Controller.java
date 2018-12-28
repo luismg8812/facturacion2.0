@@ -122,7 +122,7 @@ public class Invoice2Controller {
 		invoice = InvoiceGeneratorUtils.OrderingTaxesAndLegalMonetaryTotal(documento, invoice, ListaDocumentoDetalle);
 		
 		//Elemento InvoiceLine, el ultimito que se crea
-		invoice.getInvoiceLine().add(InvoiceGeneratorUtils.invoiceLineType(invoice.getTaxTotal(), invoice.getLegalMonetaryTotal().getLineExtensionAmount().getValue()));
+		invoice = InvoiceGeneratorUtils.OrderingInvoiceLines(ListaDocumentoDetalle, invoice);
 
 		invoice.setUUID(InvoiceGeneratorUtils.cufe(documento, invoice));
 		

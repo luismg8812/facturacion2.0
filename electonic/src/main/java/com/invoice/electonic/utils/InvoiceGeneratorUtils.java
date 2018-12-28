@@ -7,6 +7,7 @@ import java.math.BigInteger;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableEntryException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -75,6 +76,7 @@ import co.gov.dian.contratos.facturaelectronica.v1.PartyLegalEntityType;
 import co.gov.dian.contratos.facturaelectronica.v1.PartyTaxSchemeType;
 import co.gov.dian.contratos.facturaelectronica.v1.PartyType;
 import co.gov.dian.contratos.facturaelectronica.v1.PersonType;
+import co.gov.dian.contratos.facturaelectronica.v1.PriceType;
 import co.gov.dian.contratos.facturaelectronica.v1.SupplierPartyType;
 import co.gov.dian.contratos.facturaelectronica.v1.TaxSubtotalType;
 import co.gov.dian.contratos.facturaelectronica.v1.TaxTotalType;
@@ -117,6 +119,7 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NameType
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PayableAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PercentType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PostalZoneType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PriceAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ProfileIDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RegistrationNameType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.StartDateType;
@@ -147,34 +150,51 @@ public class InvoiceGeneratorUtils {
 		return ublVersionIDType;
 	}
 	
-	public static InvoiceLineType invoiceLineType(List<TaxTotalType> ListTaxTotalType, BigDecimal lineValue) {
-		//instancias
-		InvoiceLineType invoiceLineType = new InvoiceLineType();	//principal
+	public static InvoiceType OrderingInvoiceLines(List<DocumentoDetalle> ListaDocumentoDetalle, InvoiceType invoice) {
+		int ContadorProducto = 1;
 		
-		IDType idType = new IDType();
-		InvoicedQuantityType invoicedQuantityType = new InvoicedQuantityType(); 
-		LineExtensionAmountType lineExtensionAmountType = new LineExtensionAmountType();
-		FreeOfChargeIndicatorType freeOfChargeIndicatorType = new FreeOfChargeIndicatorType(); 
-		
-		//seteos
-		freeOfChargeIndicatorType.setValue(false);
-		invoicedQuantityType.setUnitCode("S8");
-		invoicedQuantityType.setValue(new BigDecimal("234"));
-		lineExtensionAmountType.setCurrencyID(CurrencyCodeContentType.COP);
-		lineExtensionAmountType.setValue(lineValue);
-		idType.setValue("1");
-		
-		invoiceLineType.setID(idType);
-		invoiceLineType.setInvoicedQuantity(invoicedQuantityType);
-		invoiceLineType.setLineExtensionAmount(lineExtensionAmountType);
-		invoiceLineType.setFreeOfChargeIndicator(freeOfChargeIndicatorType);
-		invoiceLineType.setPricingReference(new PricingReferenceType());
-		for(TaxTotalType tax : ListTaxTotalType) {
-			invoiceLineType.getTaxTotal().add(taxTotalType(tax));
+		for(DocumentoDetalle documentoDetalle : ListaDocumentoDetalle) {
+			//instancias
+			InvoiceLineType invoiceLineType = new InvoiceLineType();	//principal
+			
+			IDType idType = new IDType();
+			InvoicedQuantityType invoicedQuantityType = new InvoicedQuantityType(); 
+			LineExtensionAmountType lineExtensionAmountType = new LineExtensionAmountType();
+			FreeOfChargeIndicatorType freeOfChargeIndicatorType = new FreeOfChargeIndicatorType(); 
+			
+			PriceType priceType = new PriceType();
+			PriceAmountType priceAmountType = new PriceAmountType();
+			
+			//seteos
+			freeOfChargeIndicatorType.setValue(false);
+			invoicedQuantityType.setUnitCode("S8");
+			invoicedQuantityType.setValue(new BigDecimal(documentoDetalle.getCantidad()));	//cantidad
+			lineExtensionAmountType.setCurrencyID(CurrencyCodeContentType.COP);
+			lineExtensionAmountType.setValue(new BigDecimal(documentoDetalle.getParcial()));	//valor
+			
+			idType.setValue(Integer.toString(ContadorProducto));	//numero producto en factura
+			
+			invoiceLineType.setID(idType);
+			invoiceLineType.setInvoicedQuantity(invoicedQuantityType);
+			invoiceLineType.setLineExtensionAmount(lineExtensionAmountType);
+			invoiceLineType.setFreeOfChargeIndicator(freeOfChargeIndicatorType);
+			invoiceLineType.setPricingReference(new PricingReferenceType());
+			
+			invoiceLineType.setItem(new ItemType());
+			
+			priceAmountType.setCurrencyID(CurrencyCodeContentType.COP);
+			priceAmountType.setValue(new BigDecimal(documentoDetalle.getParcial()));
+			
+			priceType.setPriceAmount(priceAmountType);
+			
+			invoiceLineType.setPrice(priceType);
+
+			invoice.getInvoiceLine().add(invoiceLineType);
+			
+			ContadorProducto ++;
 		}
-		invoiceLineType.setItem(new ItemType());
 		
-		return invoiceLineType;
+		return invoice;
 	}
 	
 	//funcion para ordenar los detalles del documento y sacar los impuestos 
@@ -330,28 +350,28 @@ public class InvoiceGeneratorUtils {
 	
 	public static IssueDateType issueDateType(Documento documento) {
 		IssueDateType issueDateType = new IssueDateType();
-		GregorianCalendar c = new GregorianCalendar();
-		c.setTime(new Date());
+
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		
 		XMLGregorianCalendar date2 = null;
 		try {
-			date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
-		} catch (DatatypeConfigurationException e) {
-			e.printStackTrace();
-		}
+			date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(formatter.format(new Date()));
+		} catch (DatatypeConfigurationException e) {}
+		
 		issueDateType.setValue(date2);
 		return issueDateType;
 	}
 
 	public static IssueTimeType issueTimeType(Documento documento) {
 		IssueTimeType issueTimeType = new IssueTimeType();
-		GregorianCalendar c = new GregorianCalendar();
-		c.setTime(new Date());
+
+		SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss");
+		
 		XMLGregorianCalendar date2 = null;
 		try {
-			date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
-		} catch (DatatypeConfigurationException e) {
-			e.printStackTrace();
-		}
+			date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(formatter.format(new Date()));
+		} catch (DatatypeConfigurationException e) {}
+		
 		issueTimeType.setValue(date2);
 		return issueTimeType;
 	}
@@ -474,7 +494,7 @@ public class InvoiceGeneratorUtils {
 		PartyType partyType = new PartyType();
 		partyType.getPartyIdentification().add(partyIdentificationTypeCustomerParty(receptor));
 		partyType.setPhysicalLocation(locationTypeCustomerParty(receptor));
-		partyType.getPartyTaxScheme().add(partyTaxSchemeTypeCustomerParty());
+		partyType.getPartyTaxScheme().add(partyTaxSchemeTypeParty());
 		partyType.getPartyLegalEntity().add(partyLegalEntityTypeCustomerParty(receptor));
 		partyType.setContact(contactTypeCustomerParty(receptor));
 		return partyType;
@@ -484,7 +504,7 @@ public class InvoiceGeneratorUtils {
 		PartyType partyType = new PartyType();
 		partyType.getPartyIdentification().add(partyIdentificationTypeASParty(documento, empresa));
 		partyType.setPhysicalLocation(locationTypeASParty(empresa));
-		partyType.getPartyTaxScheme().add(partyTaxSchemeTypeASParty());		//esta funcion que?
+		partyType.getPartyTaxScheme().add(partyTaxSchemeTypeParty());		//esta funcion que?
 		partyType.getPartyLegalEntity().add(partyLegalEntityTypeASParty(empresa));	//esta funcion que?
 		partyType.getPerson().add(personType(empresa));		//esta funcion que?
 		return partyType;
@@ -580,25 +600,17 @@ public class InvoiceGeneratorUtils {
 		return taxSubtotalType;
 	}
 	
-	private static PartyTaxSchemeType partyTaxSchemeTypeCustomerParty() {
-		PartyTaxSchemeType partyTaxSchemeType =new PartyTaxSchemeType();
-		TaxLevelCodeType taxLevelCodeType = new TaxLevelCodeType();
-		taxLevelCodeType.setListName("TIPOS OBLIGACIONES-RESPONSABILIDADES:2016");
-		taxLevelCodeType.setListSchemeURI("http://www.dian.gov.co/");
-		taxLevelCodeType.setName("Otro tipo de obligado");
-		taxLevelCodeType.setValue("0-99");
-		partyTaxSchemeType.setTaxLevelCode(taxLevelCodeType);
-		return partyTaxSchemeType;
-	}
-	
-	private static PartyTaxSchemeType partyTaxSchemeTypeASParty() {
+	private static PartyTaxSchemeType partyTaxSchemeTypeParty() {
+		//instancias
 		PartyTaxSchemeType partyTaxSchemeType = new PartyTaxSchemeType();
 		TaxLevelCodeType taxLevelCodeType = new TaxLevelCodeType();
 		TaxSchemeType taxSchemeType = new TaxSchemeType();
+		
 		taxLevelCodeType.setListName("TIPOS OBLIGACIONES-RESPONSABILIDADES:2016");
 		taxLevelCodeType.setListSchemeURI("http://www.dian.gov.co/");
 		taxLevelCodeType.setName("Otro tipo de obligado");
 		taxLevelCodeType.setValue("0-99");
+		
 		partyTaxSchemeType.setTaxLevelCode(taxLevelCodeType);
 		partyTaxSchemeType.setTaxScheme(taxSchemeType);
 		return partyTaxSchemeType;
