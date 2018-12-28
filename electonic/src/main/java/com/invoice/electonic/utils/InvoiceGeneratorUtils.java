@@ -1120,14 +1120,18 @@ public class InvoiceGeneratorUtils {
 	
 	private static InvoiceControl invoiceControl(Documento documento, Empresa empresa) {
 		//Fecha registro
-		GregorianCalendar c = new GregorianCalendar();
-		c.setTime(documento.getFechaRegistro());
-		XMLGregorianCalendar date2 = null;
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		
+		XMLGregorianCalendar dateInicioAutorizacion = null;
+		XMLGregorianCalendar dateFinAutorizacion = null;
 		try {
-			date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
-		} catch (DatatypeConfigurationException e) {
-			e.printStackTrace();
-		}
+			Date FechaInicio = formatter.parse(empresa.getFechaResolucion());
+			Date FechaFin = formatter.parse(empresa.getFechaFinResolucion());
+			
+			dateInicioAutorizacion = DatatypeFactory.newInstance().newXMLGregorianCalendar(formatter.format(FechaInicio));
+			dateFinAutorizacion = DatatypeFactory.newInstance().newXMLGregorianCalendar(formatter.format(FechaFin));
+		} catch (Exception e) {}
+		
 		
 		//instancias
 		PeriodType periodType = new PeriodType();
@@ -1138,8 +1142,8 @@ public class InvoiceGeneratorUtils {
 		TextType textType = new TextType(); 
 		
 		//seteos
-		startDateType.setValue(date2);
-		endDateType.setValue(date2);		
+		startDateType.setValue(dateInicioAutorizacion);
+		endDateType.setValue(dateFinAutorizacion);		
 		periodType.setStartDate(startDateType);
 		periodType.setEndDate(endDateType);
 		textType.setValue(documento.getPrefijo());
