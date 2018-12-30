@@ -58,6 +58,9 @@ public class Empresa {
 	@Column(name="FECHA_RESOLUCION")
 	private String fechaResolucion;
 	
+	@Column(name="FECHA_FIN_RESOLUCION")
+	private String fechaFinResolucion;
+	
 	@Column(name="AUTORIZACION_DESDE")
 	private String autorizacionDesde;
 	
@@ -184,6 +187,14 @@ public class Empresa {
 
 	public void setFechaResolucion(String fechaResolucion) {
 		this.fechaResolucion = fechaResolucion;
+	}
+
+	public String getFechaFinResolucion() {
+		return fechaFinResolucion;
+	}
+
+	public void setFechaFinResolucion(String fechaFinResolucion) {
+		this.fechaFinResolucion = fechaFinResolucion;
 	}
 
 	public String getAutorizacionDesde() {

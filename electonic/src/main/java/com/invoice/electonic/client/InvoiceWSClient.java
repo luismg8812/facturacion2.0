@@ -1,5 +1,6 @@
 package com.invoice.electonic.client;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Date;
@@ -8,14 +9,16 @@ import java.util.List;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
+import javax.mail.util.ByteArrayDataSource;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.rpc.ServiceException;
 import javax.xml.ws.Binding;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceClient;
 import javax.xml.ws.handler.Handler;
+
+import org.apache.commons.io.IOUtils;
 
 import com.invoice.electonic.handler.LogMessageHandler;
 
@@ -26,7 +29,7 @@ import co.gov.dian.www.servicios.facturaelectronica.ReportarFactura.FacturaElect
 
 @WebServiceClient(name = "EnvioFacturaService", targetNamespace = "http://www.dian.gov.co/servicios/facturaelectronica/ReportarFactura", wsdlLocation = "https://facturaelectronica.dian.gov.co/habilitacion/B2BIntegrationEngine/FacturaElectronica/facturaElectronica.wsdl")
 public class InvoiceWSClient{
-	public static String envioSWDIAN2(String ruta, String clienteNit, String InvoiceNumber) throws DatatypeConfigurationException, ServiceException, IOException{
+	public static String envioSWDIAN2(String ruta, String clienteNit, String InvoiceNumber) throws DatatypeConfigurationException, IOException{
 		EnvioFacturaElectronica FacturaPeticion = new EnvioFacturaElectronica();
         
         //asignacion Body
@@ -46,11 +49,10 @@ public class InvoiceWSClient{
         FacturaPeticion.setDocument(document);
         
         AcuseRecibo acuseRecibo = envioFacturaElectronica(FacturaPeticion);
-        System.out.print(acuseRecibo);
 		return "";
 	}
 	
-	private static AcuseRecibo envioFacturaElectronica(EnvioFacturaElectronica envioFacturaElectronicaPeticion) throws ServiceException, RemoteException {
+	private static AcuseRecibo envioFacturaElectronica(EnvioFacturaElectronica envioFacturaElectronicaPeticion) throws RemoteException {
 		FacturaElectronicaPortNameService service = new FacturaElectronicaPortNameService();
         FacturaElectronicaPortName port = service.getFacturaElectronicaPortNameSoap11();
                 
