@@ -355,7 +355,7 @@ public class InvoiceGeneratorUtils {
 		
 		XMLGregorianCalendar date2 = null;
 		try {
-			date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(formatter.format(new Date()));
+			date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(formatter.format(documento.getFechaRegistro()));
 		} catch (DatatypeConfigurationException e) {}
 		
 		issueDateType.setValue(date2);
@@ -365,11 +365,11 @@ public class InvoiceGeneratorUtils {
 	public static IssueTimeType issueTimeType(Documento documento) {
 		IssueTimeType issueTimeType = new IssueTimeType();
 
-		SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss");
+		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
 		
 		XMLGregorianCalendar date2 = null;
 		try {
-			date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(formatter.format(new Date()));
+			date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(formatter.format(documento.getFechaRegistro()));
 		} catch (DatatypeConfigurationException e) {}
 		
 		issueTimeType.setValue(date2);
@@ -642,25 +642,6 @@ public class InvoiceGeneratorUtils {
 		return partyLegalEntityType;
 	}
 	
-	private static AddressType addressTypeCustomerParty() {
-		AddressType addressType = new AddressType();
-		CityNameType cityNameType = new CityNameType();
-		AddressLineType addressLineType = new AddressLineType();
-		LineType lineType = new LineType();
-		CountryType countryType = new CountryType();
-		IdentificationCodeType identificationCodeType = new IdentificationCodeType();
-		identificationCodeType.setListName("COLOMBIA");
-		identificationCodeType.setListURI("http://www.dian.gov.co");
-		identificationCodeType.setValue("CO");
-		countryType.setIdentificationCode(identificationCodeType);
-		addressLineType.setLine(lineType);
-		cityNameType.setValue("Bogota");
-		addressType.setCityName(cityNameType);
-		addressType.getAddressLine().add(addressLineType);
-		addressType.setCountry(countryType);
-		return addressType;
-	}
-	
 	private static oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AddressType addressTypeCustomerParty2(Receptor receptor) {
 		//instancias
 		oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AddressType addressType = new oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AddressType();	//principal
@@ -846,7 +827,7 @@ public class InvoiceGeneratorUtils {
 	// UBLExtensions
 	
 	public static UBLExtensionsType ublExtensions(Documento documento, Empresa empresa, Marshaller marshaller) 
-			throws JAXBException, ParserConfigurationException, KeyStoreException, NoSuchAlgorithmException, java.security.cert.CertificateException, FileNotFoundException, UnrecoverableEntryException, CertificateException, IOException {
+			throws Exception {
 		UBLExtensionsType ublExtensionsType = new UBLExtensionsType();
 		
 		UBLExtensionType extensionTypeDian = new UBLExtensionType();
@@ -867,7 +848,7 @@ public class InvoiceGeneratorUtils {
 	// FUNCIONES INVOLUCRADAS EN UBLExtensions
 	//-------------------------------------------------------------
 	
-	private static Element dianExtension(Documento documento, Empresa empresa) throws JAXBException, ParserConfigurationException {		
+	private static Element dianExtension(Documento documento, Empresa empresa) throws Exception {		
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setNamespaceAware(true);
         DocumentBuilder builder = dbf.newDocumentBuilder();
@@ -885,7 +866,7 @@ public class InvoiceGeneratorUtils {
 	}
 	
 	private static Element signature(Empresa empresa) 
-			throws ParserConfigurationException, JAXBException, CertificateException, KeyStoreException, NoSuchAlgorithmException, java.security.cert.CertificateException, FileNotFoundException, UnrecoverableEntryException, IOException  {
+			throws Exception  {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setNamespaceAware(true);
         DocumentBuilder builder = dbf.newDocumentBuilder();
@@ -902,7 +883,7 @@ public class InvoiceGeneratorUtils {
 		return (Element)invoice;
 	}
 	
-	private static SignatureType signatureType(Empresa empresa) throws CertificateException, KeyStoreException, NoSuchAlgorithmException, java.security.cert.CertificateException, UnrecoverableEntryException, IOException, ParserConfigurationException, JAXBException {
+	private static SignatureType signatureType(Empresa empresa) throws Exception {
 		SignatureType signatureType= new SignatureType();
 		signatureType.setId("xmldsig-1c324973-9df9-412b-bc75-46e0669e1254");
 		signatureType.setSignedInfo(signedInfoType());
@@ -913,13 +894,13 @@ public class InvoiceGeneratorUtils {
 		
 	}
 	
-	private static ObjectType objectType() throws ParserConfigurationException, JAXBException {			
+	private static ObjectType objectType() throws Exception {			
 		ObjectType objectType= new ObjectType();
 		objectType.getContent().add(qualifyingPropertiesType());
 		return objectType;
 	}
 	
-	private static Element qualifyingPropertiesType() throws JAXBException, ParserConfigurationException {
+	private static Element qualifyingPropertiesType() throws Exception {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setNamespaceAware(true);
         DocumentBuilder builder = dbf.newDocumentBuilder();
@@ -1038,7 +1019,7 @@ public class InvoiceGeneratorUtils {
 		return signatureValueType;
 	}
 	
-	private static KeyInfoType keyInfoType(String StringCertificado) throws CertificateException, KeyStoreException, NoSuchAlgorithmException, java.security.cert.CertificateException, FileNotFoundException, IOException, UnrecoverableEntryException {
+	private static KeyInfoType keyInfoType(String StringCertificado) throws Exception {
 		KeyInfoType keyInfoType = new KeyInfoType();
 		X509DataType x509DataType = new X509DataType() ;
 		X509IssuerSerialType x509IssuerSerialType = new X509IssuerSerialType();

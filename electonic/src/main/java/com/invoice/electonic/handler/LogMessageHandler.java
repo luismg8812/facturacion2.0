@@ -25,6 +25,7 @@ public class LogMessageHandler implements SOAPHandler<SOAPMessageContext> {
     public boolean handleMessage(SOAPMessageContext context) {
         SOAPMessage msg = context.getMessage(); //Line 1
         try {
+            System.out.println("Mensaje Encontrado");
             msg.writeTo(System.out);  //Line 3
             System.out.println();
         } catch (Exception ex) {

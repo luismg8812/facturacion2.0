@@ -1,4 +1,3 @@
-
 package com.invoice.electonic.controller;
 
 import java.io.File;
@@ -10,9 +9,9 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
+import java.util.Date;
 import java.util.List;
 
-import javax.activation.DataHandler;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -73,7 +72,9 @@ public class Invoice2Controller {
 			marshaller.setProperty("com.sun.xml.bind.xmlHeaders","<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>");
 			for (Documento documento : documentos) {
 				String nombreFactura = InvoiceGeneratorUtils.nombrarFacturaXML(documento, empresa);
+				
 				log.info("se crea documento: " + nombreFactura);				
+				
 				InvoiceType invoice = createInvoice(documento, empresa, marshaller);
 				marshaller.marshal(invoice, System.out);
 				
@@ -88,9 +89,10 @@ public class Invoice2Controller {
 				//creacion del ZIP para enviar a la DIAN
 				//ZipManager.ZipFileTradicional(RUTA_FACTURAS_XML, nombreFactura);
 				ZipManager.ZipFileZip4j(RUTA_FACTURAS_XML + nombreFactura);
+				
 				nombreFactura = nombreFactura.replaceAll(".xml", ".zip");
-
-				InvoiceWSClient.envioSWDIAN2(RUTA_FACTURAS_XML + nombreFactura, empresa.getNit(), invoice.getID().getValue());	//envio factura DIAN
+				
+				InvoiceWSClient.envioSWDIAN2(RUTA_FACTURAS_XML + nombreFactura, empresa.getNit(), invoice.getID().getValue(), documento.getFechaRegistro());	//envio factura DIAN
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -99,7 +101,7 @@ public class Invoice2Controller {
 	}
 
 	private InvoiceType createInvoice(Documento documento, Empresa empresa, Marshaller marshaller) 
-			throws KeyStoreException, NoSuchAlgorithmException, CertificateException, FileNotFoundException, UnrecoverableEntryException, JAXBException, ParserConfigurationException, javax.security.cert.CertificateException, IOException {
+			throws Exception {
 		Receptor receptor = receptorService.getById(documento.getReceptorId());
 
 		List<DocumentoDetalle> ListaDocumentoDetalle = documentoDetalleService.getByDocumentId(documento.getDocumentoId());
