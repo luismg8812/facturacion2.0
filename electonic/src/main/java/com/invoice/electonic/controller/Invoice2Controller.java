@@ -63,7 +63,7 @@ public class Invoice2Controller {
 			
 			// se traen las facturas sin procesar
 			List<Documento> documentos = documentoService.getByEstado(1l);
-			log.info("se encuentran : " + documentos.size() + " para procesar");
+			System.out.println("se encuentran : " + documentos.size() + " para procesar");
 			JAXBContext contexto = JAXBContext.newInstance("co.gov.dian.contratos.facturaelectronica.v1");
 			Marshaller marshaller = contexto.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -73,10 +73,10 @@ public class Invoice2Controller {
 			for (Documento documento : documentos) {
 				String nombreFactura = InvoiceGeneratorUtils.nombrarFacturaXML(documento, empresa);
 				
-				log.info("se crea documento: " + nombreFactura);				
+				System.out.println("se crea documento: " + nombreFactura);				
 				
 				InvoiceType invoice = createInvoice(documento, empresa, marshaller);
-				marshaller.marshal(invoice, System.out);
+				//marshaller.marshal(invoice, System.out);
 				
 				//creacion del archivo fisico xml
 				File folder = new File(RUTA_FACTURAS_XML);
@@ -88,7 +88,7 @@ public class Invoice2Controller {
 				
 				//creacion del ZIP para enviar a la DIAN
 				//ZipManager.ZipFileTradicional(RUTA_FACTURAS_XML, nombreFactura);
-				ZipManager.ZipFileZip4j(RUTA_FACTURAS_XML + nombreFactura);
+				//ZipManager.ZipFileZip4j(RUTA_FACTURAS_XML + nombreFactura);
 				
 				nombreFactura = nombreFactura.replaceAll(".xml", ".zip");
 				
@@ -124,6 +124,7 @@ public class Invoice2Controller {
 		invoice = InvoiceGeneratorUtils.OrderingTaxesAndLegalMonetaryTotal(documento, invoice, ListaDocumentoDetalle);
 		
 		//Elemento InvoiceLine, el ultimito que se crea
+		System.out.println(ListaDocumentoDetalle.size());
 		invoice = InvoiceGeneratorUtils.OrderingInvoiceLines(ListaDocumentoDetalle, invoice);
 
 		invoice.setUUID(InvoiceGeneratorUtils.cufe(documento, invoice));
