@@ -1,17 +1,14 @@
 package com.invoice.electonic.utils;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.util.Zip4jConstants;
 
@@ -48,6 +45,24 @@ public class ZipManager {
 		parametros.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
 		
 		ZipFactura.addFile(new File(ruta), parametros);
+	}
+	
+	// Metodo para Compresion de factura via ZIP, se debe instalar WINRAR 
+	// para ser usado, esta es la ruta en donde esta instalado el aplicativo
+	// por medio de Java arroja un error null por parte de la DIAN
+	public static void ZipFileViaCmd(String ruta, String nombreFacturaXML, String nombreFacturaZip) throws Exception{
+		String[] ComandoCMD = {
+				"\"C:\\Program Files (x86)\\Winrar\\winrar\"", 
+				"a", 
+				"-afzip", 
+				ruta + nombreFacturaZip, 
+				nombreFacturaXML};
+		
+		ProcessBuilder process = new ProcessBuilder(ComandoCMD);
+		
+		process.directory(new File(ruta));
+		
+		process.start();
 	}
 }
 
