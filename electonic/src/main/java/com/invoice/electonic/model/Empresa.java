@@ -85,6 +85,9 @@ public class Empresa {
 	@Column(name="CERTIFICADO")
 	private byte[] Certificado;
 	
+	@Column(name="RESOLUCION_NUMERACION")
+	private String ResolucionNumeracion;
+	
 	public Long getEmpresaId() {
 		return empresaId;
 	}
@@ -259,5 +262,13 @@ public class Empresa {
 
 	public void setCertificado(byte[] certificado) {
 		Certificado = certificado;
+	}
+
+	public String getResolucionNumeracion() {
+		return ResolucionNumeracion;
+	}
+
+	public void setResolucionNumeracion(String resolucionNumeracion) {
+		ResolucionNumeracion = resolucionNumeracion;
 	}
 }

@@ -330,10 +330,10 @@ public class InvoiceGeneratorUtils {
 		CUFEValue += invoice.getLegalMonetaryTotal().getPayableAmount().getValue().toString() + ";";	//total
 		
 		CUFEValue += invoice.getAccountingSupplierParty().getParty().getPartyIdentification().get(0).getID().getValue() + ";";	//emisor
-		CUFEValue += invoice.getAccountingCustomerParty().getParty().getPartyIdentification().get(0).getID().getSchemeID() + ";";	//tipo emisor
+		CUFEValue += invoice.getAccountingCustomerParty().getParty().getPartyIdentification().get(0).getID().getSchemeID() + ";";	//tipo emisor REVISAR ESTE CON DETENIMIENTO
 		CUFEValue += invoice.getAccountingCustomerParty().getParty().getPartyIdentification().get(0).getID().getValue() + ";";	//receptor
 		
-		CUFEValue += "Luismg8812";	//llave tecnica
+		CUFEValue += "Luismg8812";	//llave tecnica REVISAR ESTE CON DETENIMIENTO
 		
 		System.out.println(CUFEValue);
 		
@@ -1122,9 +1122,9 @@ public class InvoiceGeneratorUtils {
 		periodType.setEndDate(endDateType);
 		textType.setValue(documento.getPrefijo());
 		authrorizedInvoices.setPrefix(documento.getPrefijo());
-		authrorizedInvoices.setFrom(Long.parseLong(empresa.getAutorizacionDesde()));	//FECHA DESDE Y HASTA QUE ESTA EN TABLA EMPRESA
+		authrorizedInvoices.setFrom(Long.parseLong(empresa.getAutorizacionDesde()));	//RANGO DESDE Y HASTA DE LA NUMERACION
 		authrorizedInvoices.setTo(Integer.parseInt(empresa.getAutorizacionHasta()));
-		invoiceControl.setInvoiceAuthorization(new  BigDecimal("1234567890"));			//NI IDEA ESTE REGISTRO
+		invoiceControl.setInvoiceAuthorization(new BigDecimal(empresa.getResolucionNumeracion()));			//RESOLUCION DE LA FACTURA
 		invoiceControl.setAuthorizationPeriod(periodType);
 		invoiceControl.setAuthorizedInvoices(authrorizedInvoices);	
 		return invoiceControl;
