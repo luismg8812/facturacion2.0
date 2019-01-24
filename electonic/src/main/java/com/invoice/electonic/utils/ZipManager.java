@@ -67,5 +67,24 @@ public class ZipManager {
 		
 		ZipFactura.addFile(new File(ruta), parametros);
 	}
+	
+	// Metodo para Compresion de factura via ZIP, se debe instalar WINRAR para ser utilizado.
+	// La ruta quemada en ZipFileViaCMD es la ruta en donde esta instalado WINRAR. Por medio 
+	// de Java arroja un error null por parte de la DIAN, ese fue el motivo por el cual se 
+	// escogio usar CMD para generar ZIPs
+	public static void ZipFileViaCmd(String ruta, String nombreFacturaXML, String nombreFacturaZip) throws Exception{
+		String[] ComandoCMD = {
+				"\"C:\\Program Files (x86)\\Winrar\\winrar\"", 
+				"a", 
+				"-afzip", 
+				ruta + nombreFacturaZip, 
+				nombreFacturaXML};
+		
+		ProcessBuilder process = new ProcessBuilder(ComandoCMD);
+		
+		process.directory(new File(ruta));
+		
+		process.start();
+	}
 }
 

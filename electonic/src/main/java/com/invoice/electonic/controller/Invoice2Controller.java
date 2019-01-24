@@ -1,22 +1,12 @@
 package com.invoice.electonic.controller;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableEntryException;
-import java.security.cert.CertificateException;
-import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -85,14 +75,12 @@ public class Invoice2Controller {
 				
 				//se escribe el XML DIAN
 				marshaller.marshal(invoice, facturaFisica);
-				
+				facturaFisica.close();				
 				//creacion del ZIP para enviar a la DIAN
-				//ZipManager.ZipFileTradicional(RUTA_FACTURAS_XML, nombreFactura);
-				//ZipManager.ZipFileZip4j(RUTA_FACTURAS_XML + nombreFactura);
+				String nombreFacturaZip = nombreFactura.replaceAll(".xml", ".zip");
+				ZipManager.ZipFileViaCmd(RUTA_FACTURAS_XML, nombreFactura, nombreFacturaZip);
 				
-				nombreFactura = nombreFactura.replaceAll(".xml", ".zip");
-				
-				InvoiceWSClient.envioSWDIAN2(RUTA_FACTURAS_XML + nombreFactura, empresa.getNit(), invoice.getID().getValue(), documento.getFechaRegistro());	//envio factura DIAN
+				InvoiceWSClient.envioSWDIAN2(RUTA_FACTURAS_XML + nombreFacturaZip, empresa.getNit(), invoice.getID().getValue(), documento.getFechaRegistro());	//envio factura DIAN
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
