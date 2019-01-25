@@ -148,7 +148,8 @@ public class EmpalmeDeltaController {
 			restResponse.setMessage("documento "+documento.getDocumentoId()+" agregado correctamente");
 			return new ResponseEntity<RestResponse>(restResponse, HttpStatus.OK);
 		} catch (Exception e) {
-			restResponse.setMessage("Error en la estructura del body");
+			e.printStackTrace();
+			restResponse.setMessage("Error en la estructura del body, para mayor info revisar log empalme");
 			restResponse.setResponseCode(500);
 			if(documento.getDocumentoId()!=null) {
 				documentoInvoiceService.delete(documento);
