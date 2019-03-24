@@ -60,6 +60,7 @@ public class Invoice2Controller {
 			marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", new DefaultNamespacePrefixMapper());
 			marshaller.setProperty("com.sun.xml.bind.xmlDeclaration", Boolean.FALSE);
 			marshaller.setProperty("com.sun.xml.bind.xmlHeaders","<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>");
+			
 			for (Documento documento : documentos) {
 				String nombreFactura = InvoiceGeneratorUtils.nombrarFacturaXML(documento, empresa);
 				
@@ -115,7 +116,7 @@ public class Invoice2Controller {
 		System.out.println(ListaDocumentoDetalle.size());
 		invoice = InvoiceGeneratorUtils.OrderingInvoiceLines(ListaDocumentoDetalle, invoice);
 
-		invoice.setUUID(InvoiceGeneratorUtils.cufe(documento, invoice));
+		invoice.setUUID(InvoiceGeneratorUtils.cufe(documento, invoice, empresa));
 		
 		//se arman de ultimo los extension
 		invoice.setUBLExtensions(InvoiceGeneratorUtils.ublExtensions(documento, empresa, marshaller));

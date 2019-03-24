@@ -295,7 +295,7 @@ public class InvoiceGeneratorUtils {
 	}
 		
 	//revisar calculo de cufe, parece estar malo
-	public static UUIDType cufe(Documento documento, InvoiceType invoice) {
+	public static UUIDType cufe(Documento documento, InvoiceType invoice, Empresa empresa) {
         UUIDType uuidType = new UUIDType();	
         uuidType.setSchemeName("CUFE");        	         
 		String CUFEValue = "";
@@ -333,7 +333,7 @@ public class InvoiceGeneratorUtils {
 		CUFEValue += invoice.getAccountingCustomerParty().getParty().getPartyIdentification().get(0).getID().getSchemeID() + ";";	//tipo emisor REVISAR ESTE CON DETENIMIENTO
 		CUFEValue += invoice.getAccountingCustomerParty().getParty().getPartyIdentification().get(0).getID().getValue() + ";";	//receptor
 		
-		CUFEValue += "Luismg8812";	//llave tecnica REVISAR ESTE CON DETENIMIENTO
+		CUFEValue += empresa.getClaveTecnicaCufe();	//llave tecnica REVISAR ESTE CON DETENIMIENTO
 		
 		System.out.println(CUFEValue);
 		

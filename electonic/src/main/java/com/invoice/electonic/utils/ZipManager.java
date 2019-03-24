@@ -74,7 +74,8 @@ public class ZipManager {
 	// escogio usar CMD para generar ZIPs
 	public static void ZipFileViaCmd(String ruta, String nombreFacturaXML, String nombreFacturaZip) throws Exception{
 		String[] ComandoCMD = {
-				"\"C:\\Program Files (x86)\\Winrar\\winrar\"", 
+				//"\"C:\\Program Files (x86)\\Winrar\\winrar\"", 
+				"\"C:\\Program Files\\Winrar\\winrar\"", 
 				"a", 
 				"-afzip", 
 				ruta + nombreFacturaZip, 
