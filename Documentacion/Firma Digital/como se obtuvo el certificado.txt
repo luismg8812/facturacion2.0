@@ -1,0 +1,16 @@
+Clave = Luismg8812
+
+ - Se instala el .p12 usando la clave 
+ - En internet explorer se ingresa a opciones de internet
+	- pestaña contenido
+		- pestaña certificados
+		- se importa el certificado .cer en base 64
+ - con el archivo descargado se abre el archivo
+	- en detalles aparece toda la informacion pertinente del archivo
+	- obtener datos:
+		-sujeto
+			- serial (dentro de sujeto)
+		-valido desde
+		-valido hasta
+ 	- se convierte el archivo .cer a string base64 para ser subido a BD 
+		- Tabla firma, columna certificado

@@ -36,11 +36,9 @@ public class InvoiceWSClient{
         c.setTime(FechaRegistro);
         XMLGregorianCalendar date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
 
-        //FacturaPeticion.setIssueDate(Calculos.toCalendar(new Date()));
         FacturaPeticion.setIssueDate(date2);
         
         DataHandler document = new DataHandler(new FileDataSource(ruta));
-        //byte[] binaryDocument = org.apache.commons.io.IOUtils.toByteArray(document.getInputStream());
         
         FacturaPeticion.setDocument(document);
         

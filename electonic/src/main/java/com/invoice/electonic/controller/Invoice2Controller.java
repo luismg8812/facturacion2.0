@@ -118,7 +118,7 @@ public class Invoice2Controller {
 
 		invoice.setUUID(InvoiceGeneratorUtils.cufe(documento, invoice, empresa));
 		
-		//se arman de ultimo los extension
+		//se arman de ultimo los extension (firma, numeracion)
 		invoice.setUBLExtensions(InvoiceGeneratorUtils.ublExtensions(documento, empresa, marshaller));
 		return invoice;
 	}

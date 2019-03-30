@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -81,13 +83,22 @@ public class Empresa {
 
 	@Column(name="CLAVE_TECNICA_CUFE")
 	private String ClaveTecnicaCufe;
-	
-	@Column(name="CERTIFICADO")
-	private byte[] Certificado;
-	
+		
 	@Column(name="RESOLUCION_NUMERACION")
 	private String ResolucionNumeracion;
 	
+	@ManyToOne
+	@JoinColumn(name="FIRMA_ID")
+	private Firma firma;
+	
+	public Firma getFirma() {
+		return firma;
+	}
+
+	public void setFirma(Firma firma) {
+		this.firma = firma;
+	}
+
 	public Long getEmpresaId() {
 		return empresaId;
 	}
@@ -255,15 +266,7 @@ public class Empresa {
 	public void setClaveTecnicaCufe(String claveTecnicaCufe) {
 		ClaveTecnicaCufe = claveTecnicaCufe;
 	}
-
-	public byte[] getCertificado() {
-		return Certificado;
-	}
-
-	public void setCertificado(byte[] certificado) {
-		Certificado = certificado;
-	}
-
+	
 	public String getResolucionNumeracion() {
 		return ResolucionNumeracion;
 	}

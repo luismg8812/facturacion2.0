@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -56,6 +57,7 @@ import com.invoice.electonic.controller.InvoiceController;
 import com.invoice.electonic.model.Documento;
 import com.invoice.electonic.model.DocumentoDetalle;
 import com.invoice.electonic.model.Empresa;
+import com.invoice.electonic.model.Firma;
 import com.invoice.electonic.model.Receptor;
 
 import co.gov.dian.contratos.facturaelectronica.v1.AddressType;
@@ -300,9 +302,8 @@ public class InvoiceGeneratorUtils {
         uuidType.setSchemeName("CUFE");        	         
 		String CUFEValue = "";
 		
-		CUFEValue += documento.getPrefijo();
-		CUFEValue += documento.getNumeroDocumento() + ";";	//nuemro factura
-		CUFEValue += new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ";";	//fecha factura
+		CUFEValue += invoice.getID().getValue() + ";";	//numero factura
+		CUFEValue += new SimpleDateFormat("yyyyMMddHHmmss").format(documento.getFechaRegistro()) + ";";	//fecha factura
 		CUFEValue += invoice.getLegalMonetaryTotal().getLineExtensionAmount().getValue() + ".00" + ";";	//gravado
 
 		BigDecimal tax1 = new BigDecimal("0");
@@ -328,6 +329,7 @@ public class InvoiceGeneratorUtils {
 		CUFEValue += "03;" + tax3.toString() + ".00" + ";";		//tax3
 		
 		CUFEValue += invoice.getLegalMonetaryTotal().getPayableAmount().getValue().toString() + ";";	//total
+		//CUFEValue += invoice.getLegalMonetaryTotal().getTaxInclusiveAmount().getValue().toString() + ";";	//total
 		
 		CUFEValue += invoice.getAccountingSupplierParty().getParty().getPartyIdentification().get(0).getID().getValue() + ";";	//emisor
 		CUFEValue += invoice.getAccountingCustomerParty().getParty().getPartyIdentification().get(0).getID().getSchemeID() + ";";	//tipo emisor REVISAR ESTE CON DETENIMIENTO
@@ -335,9 +337,15 @@ public class InvoiceGeneratorUtils {
 		
 		CUFEValue += empresa.getClaveTecnicaCufe();	//llave tecnica REVISAR ESTE CON DETENIMIENTO
 		
-		System.out.println(CUFEValue);
+		System.out.println("CUFE con ';' sin cifrar: " + CUFEValue);
+		//CUFEValue = CUFEValue.replace(';', '\u0000');
+
+		//System.out.println("CUFE sin cifrar: " + CUFEValue);
 		
 		uuidType.setValue(Calculos.byteArrayToHexString(DigestUtils.sha1(CUFEValue)));        
+		
+		System.out.println("CUFE cifrado: " + uuidType.getValue());
+		
 		return uuidType;
 	}	
 	
@@ -443,7 +451,8 @@ public class InvoiceGeneratorUtils {
 		
 		//seteos
 		payableAmountType.setCurrencyID(CurrencyCodeContentType.COP);
-		payableAmountType.setValue(new BigDecimal(TotalTaxableAmoung + TotalTaxAmoung - documento.getExcento()));	//revisar estos valores
+		payableAmountType.setValue(new BigDecimal(TotalTaxableAmoung + TotalTaxAmoung));
+		//payableAmountType.setValue(new BigDecimal(TotalTaxableAmoung + TotalTaxAmoung - documento.getExcento()));	//revisar estos valores
 		
 		allowanceTotalAmountType.setCurrencyID(CurrencyCodeContentType.COP);
 		allowanceTotalAmountType.setValue(new BigDecimal("0.000"));		//no aplica
@@ -877,23 +886,25 @@ public class InvoiceGeneratorUtils {
 	}
 	
 	private static SignatureType signatureType(Empresa empresa) throws Exception {
+		Firma firma = empresa.getFirma();
+		
 		SignatureType signatureType= new SignatureType();
 		signatureType.setId("xmldsig-1c324973-9df9-412b-bc75-46e0669e1254");
-		signatureType.setSignedInfo(signedInfoType());
-		signatureType.setSignatureValue(signatureValueType());
-		signatureType.setKeyInfo(keyInfoType(Calculos.byteArrayToHexString(empresa.getCertificado())));
-		signatureType.getObject().add(objectType());
+		signatureType.setSignedInfo(signedInfoType(firma));
+		signatureType.setSignatureValue(signatureValueType(firma));
+		signatureType.setKeyInfo(keyInfoType(Calculos.byteArrayToHexString(firma.getCertificado())));
+		signatureType.getObject().add(objectType(firma));
 		return signatureType;
 		
 	}
 	
-	private static ObjectType objectType() throws Exception {			
+	private static ObjectType objectType(Firma firma) throws Exception {			
 		ObjectType objectType= new ObjectType();
-		objectType.getContent().add(qualifyingPropertiesType());
+		objectType.getContent().add(qualifyingPropertiesType(firma));
 		return objectType;
 	}
 	
-	private static Element qualifyingPropertiesType() throws Exception {
+	private static Element qualifyingPropertiesType(Firma firma) throws Exception {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setNamespaceAware(true);
         DocumentBuilder builder = dbf.newDocumentBuilder();
@@ -906,7 +917,7 @@ public class InvoiceGeneratorUtils {
 		
 		SignedPropertiesType signedPropertiesType = new SignedPropertiesType();
 		signedPropertiesType.setId("xmldsig-9ba23b0d-66d0-41de-94b8-d4403c002553-signedprops");
-		signedPropertiesType.setSignedSignatureProperties(signedSignaturePropertiesType());
+		signedPropertiesType.setSignedSignatureProperties(signedSignaturePropertiesType(firma));
 		QualifyingPropertiesType qualifyingPropertiesType =  new QualifyingPropertiesType();
 		qualifyingPropertiesType.setSignedProperties(signedPropertiesType);
 		qualifyingPropertiesType.setTarget("#xmldsig-9ba23b0d-66d0-41de-94b8-d4403c002553");
@@ -915,7 +926,7 @@ public class InvoiceGeneratorUtils {
 		return  (Element) invoce;
 	}
 	
-	private static SignedSignaturePropertiesType signedSignaturePropertiesType() {
+	private static SignedSignaturePropertiesType signedSignaturePropertiesType(Firma firma) {
 		GregorianCalendar c = new GregorianCalendar();
 		c.setTime(new Date());
 		XMLGregorianCalendar date2 = null;
@@ -927,8 +938,8 @@ public class InvoiceGeneratorUtils {
 		
 		SignedSignaturePropertiesType signedSignaturePropertiesType = new SignedSignaturePropertiesType();
 		signedSignaturePropertiesType.setSigningTime(date2);
-		signedSignaturePropertiesType.setSigningCertificate(certIDListType());
-		signedSignaturePropertiesType.setSignaturePolicyIdentifier(signaturePolicyIdentifierType());
+		signedSignaturePropertiesType.setSigningCertificate(certIDListType(firma));
+		signedSignaturePropertiesType.setSignaturePolicyIdentifier(signaturePolicyIdentifierType(firma));
 		signedSignaturePropertiesType.setSignerRole(signerRoleType());
 		return signedSignaturePropertiesType;
 	}
@@ -943,7 +954,7 @@ public class InvoiceGeneratorUtils {
 		return signerRoleType;
 	}
 	
-	private static SignaturePolicyIdentifierType signaturePolicyIdentifierType() {
+	private static SignaturePolicyIdentifierType signaturePolicyIdentifierType(Firma firma) {
 		org.etsi.uri._01903.v1_3.IdentifierType identifierType = new org.etsi.uri._01903.v1_3.IdentifierType();
 		SignaturePolicyIdentifierType signaturePolicyIdentifierType= new SignaturePolicyIdentifierType();
 		SignaturePolicyIdType signaturePolicyIdType = new SignaturePolicyIdType();
@@ -953,7 +964,7 @@ public class InvoiceGeneratorUtils {
 		digestMethodType.setAlgorithm("http://www.w3.org/2001/04/xmlenc#sha256");
 		digestAlgAndValueType.setDigestMethod(digestMethodType);
 		digestAlgAndValueType.setDigestValue(new byte[30 / 2]);
-		identifierType.setValue("https://facturaelectronica.dian.gov.co/politicadefirma/v1/politicadefirmav1.pdf");
+		identifierType.setValue(firma.getIdentificador());
 		objectIdentifierType.setIdentifier(identifierType);
 		signaturePolicyIdType.setSigPolicyId(objectIdentifierType);
 		signaturePolicyIdType.setSigPolicyHash(digestAlgAndValueType);
@@ -961,14 +972,14 @@ public class InvoiceGeneratorUtils {
 		return signaturePolicyIdentifierType ;
 	}
 	
-	private static CertIDListType certIDListType() {
+	private static CertIDListType certIDListType(Firma firma) {
 		DigestAlgAndValueType digestAlgAndValueType = new DigestAlgAndValueType();
 		CertIDListType certIDListType = new CertIDListType();
 		CertIDType certIDType = new CertIDType();
 		X509IssuerSerialType1 issuerSerialType1 = new X509IssuerSerialType1();
 		DigestMethodType digestMethodType = new DigestMethodType();
-		issuerSerialType1.setX509IssuerName("CN=carvajal.com,C=CO,ST=Valle del Cauca,L=Cali,1.2.840.113549.1.9.1=#161b64616e6e792e7a616d6f72616e6f4063617276616a616c2e636f6d,OU=EBusiness,O=Carvajal Test");
-		issuerSerialType1.setX509SerialNumber(new BigInteger("10823412393224411129"));
+		issuerSerialType1.setX509IssuerName(firma.getSujeto());
+		issuerSerialType1.setX509SerialNumber(new BigInteger(firma.getNumeroSerial()));
 		digestMethodType.setAlgorithm("http://www.w3.org/2001/04/xmlenc#sha256");
 		digestAlgAndValueType.setDigestValue(new byte[30 / 2]);
 		digestAlgAndValueType.setDigestMethod(digestMethodType);
@@ -978,7 +989,7 @@ public class InvoiceGeneratorUtils {
 		return certIDListType;
 	}
 	
-	private static SignedInfoType signedInfoType() {
+	private static SignedInfoType signedInfoType(Firma firma) {
 		byte[] dato =  new byte[30 / 2]; 
 		SignedInfoType infoType = new SignedInfoType();
 		ReferenceType referenceType1= new ReferenceType();
@@ -1005,7 +1016,7 @@ public class InvoiceGeneratorUtils {
 		return infoType;
 	}
 	
-	private static SignatureValueType signatureValueType() {
+	private static SignatureValueType signatureValueType(Firma firma) {
 		SignatureValueType signatureValueType = new SignatureValueType();
 		signatureValueType.setId("xmldsig-9ba23b0d-66d0-41de-94b8-d4403c002553-sigvalue");
 		signatureValueType.setValue(new byte[30 / 2]);
